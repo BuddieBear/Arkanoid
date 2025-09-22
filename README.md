@@ -1,2 +1,2 @@
-# Arkanoid-
+# Arkanoid
 Arkanoid Group Project (OOP)

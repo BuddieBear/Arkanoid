@@ -3,6 +3,63 @@ import java.util.Scanner;
 public class Hangman {
     static char[] playerGuess;
     static String answer;
+    static final int guessTotal = 7;
+    static final String[] hangman = {
+                                "     ----------       \n"+
+                                "     |                \n"+
+                                "     |                \n"+
+                                "     |                \n"+
+                                "     |                \n"+
+                                "     |                \n"+
+                                "-----------            ",
+                                "     ----------       \n"+
+                                "     |         |      \n"+
+                                "     |                \n"+
+                                "     |                \n"+
+                                "     |                \n"+
+                                "-----------            ",
+                                "     ----------       \n"+
+                                "     |         |      \n"+
+                                "     |         O      \n"+
+                                "     |                \n"+
+                                "     |                \n"+
+                                "     |                \n"+
+                                "-----------            ",
+                                "     ----------       \n"+
+                                "     |         |      \n"+
+                                "     |         O      \n"+
+                                "     |         |      \n"+
+                                "     |                \n"+
+                                "     |                \n"+
+                                "-----------            ",
+                                "     ----------       \n"+
+                                "     |         |      \n"+
+                                "     |         O      \n"+
+                                "     |        /|      \n"+
+                                "     |                \n"+
+                                "     |                \n"+
+                                "-----------            ",
+                                "     ----------       \n"+
+                                "     |         |      \n"+
+                                "     |         O      \n"+
+                                "     |        /|\\    \n"+
+                                "     |                \n"+
+                                "     |                \n"+
+                                "-----------            ",
+                                "     ----------       \n"+
+                                "     |         |      \n"+
+                                "     |         O      \n"+
+                                "     |        /|\\    \n"+
+                                "     |        /       \n"+
+                                "     |                \n"+
+                                "-----------            ",
+                                "     ----------       \n"+
+                                "     |         |      \n"+
+                                "     |         O      \n"+
+                                "     |        /|\\    \n"+
+                                "     |        / \\    \n"+
+                                "     |                \n"+
+                                "-----------            ",};
 
     public Hangman(String ans) {
         answer = ans;
@@ -14,16 +71,19 @@ public class Hangman {
 
     public static void playHangman(Scanner scan) { //Lives: 6 ->TODO
         boolean win = false;
+        int wrong = 0;
         while (true) {
             if (answer.equals(new String(playerGuess))) {
                 win = true;
                 break;
             }
+            drawHangman(wrong);
 
             //Draw -> TODO
             //drawHangman();
 
             // Show repeated letter  -> TODO
+            if (wrong == guessTotal) break;
 
             System.out.println("Current word: " + new String(playerGuess));
 
@@ -39,12 +99,15 @@ public class Hangman {
                 System.out.println("Correct letter!");
             } else {
                 System.out.println("Wrong letter!");
+                wrong++;
             }
             System.out.println();
         }
 
         if (win) {
             System.out.println("You Win!");
+        }else {
+            System.out.println("You Loss");
         }
     }
 
@@ -63,8 +126,8 @@ public class Hangman {
     }
 
     //Draw Hangman
-    public static void drawHangman() { // placeholder thay doi tuy theo y muon
-
+    public static void drawHangman(int index) { // placeholder thay doi tuy theo y muon
+        System.out.println(hangman[index]);
     }
 
     //Repeated Letter

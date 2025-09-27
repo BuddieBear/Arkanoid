@@ -14,12 +14,17 @@ public class Hangman {
 
     public static void playHangman(Scanner scan) { //Lives: 6 ->TODO
         boolean win = false;
+        int lives = 6;
+
         while (true) {
             if (answer.equals(new String(playerGuess))) {
                 win = true;
                 break;
             }
 
+            if (lives == 0) {
+                break;
+            }
             //Draw -> TODO
             //drawHangman();
 
@@ -38,6 +43,7 @@ public class Hangman {
             if (checkGuess(guess)) {
                 System.out.println("Correct letter!");
             } else {
+                lives--;
                 System.out.println("Wrong letter!");
             }
             System.out.println();

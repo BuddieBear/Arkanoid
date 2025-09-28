@@ -5,4 +5,4 @@ Arkanoid Group Project (OOP)
 - Nguyễn Thành Long 24020210
 - Trần Doãn Hải Đăng 24020057
 
-Start date: 29/9/2025
+Start date: 29/9/2025.

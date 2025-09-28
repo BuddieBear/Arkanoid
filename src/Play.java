@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class main {
+public class Play {
     public static void main(String[] args) {
         String answer = "whatever";
         Scanner scan = new Scanner(System.in);

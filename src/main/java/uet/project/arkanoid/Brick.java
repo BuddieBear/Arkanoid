@@ -19,8 +19,4 @@ public class Brick {
     public boolean isDestroy() {
         return hitPoints <= 0;
     }
-
-    public String getType() {
-        return type;
-    }
 }

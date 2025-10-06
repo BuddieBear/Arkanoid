@@ -3,10 +3,10 @@ package uet.project.arkanoid;
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class GameObject {
-    public int x;
-    public int y;
-    public int width;
-    public int height;
+    private int x;
+    private int y;
+    private int width;
+    private int height;
 
     public GameObject(int x, int y, int width, int height) {
         this.x = x;

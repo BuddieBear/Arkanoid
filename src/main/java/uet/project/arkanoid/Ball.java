@@ -10,7 +10,20 @@ public class Ball extends MovableObject {
     public boolean bounceOff(GameObject other) {
         return false;
     }
+
     public boolean checkCollision(GameObject other) {
         return false;
+    }
+
+    public void move(){
+
+    }
+
+    public void render(){
+
+    }
+
+    public void update(){
+
     }
 }

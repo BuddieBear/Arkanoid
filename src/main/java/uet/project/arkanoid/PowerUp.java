@@ -10,8 +10,8 @@ public class PowerUp {
         SLOW_DOWN
     }
 
-    private PowerUpType type;
-    private double duration;
+    private final PowerUpType type;
+    private final double duration;
 
     public PowerUp(PowerUpType type, double duration) {
         this.type = type;

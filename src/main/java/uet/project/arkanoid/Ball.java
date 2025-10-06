@@ -1,6 +1,8 @@
 package uet.project.arkanoid;
 
-public class Ball {
+import java.awt.event.MouseAdapter;
+
+public class Ball extends MouseAdapter {
     private int speed = 0;
     private int directionX = 0;
     private int directionY = 0;

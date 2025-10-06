@@ -1,6 +1,6 @@
 package uet.project.arkanoid;
 
-public class Paddle {
+public class Paddle extends MovableObject {
     private int speed = 0;
     private PowerUp currenPowerUp = null;
 
@@ -8,7 +8,7 @@ public class Paddle {
 
     }
 
-    public void moveRigth() {
+    public void moveRight() {
 
     }
 }

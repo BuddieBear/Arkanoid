@@ -12,6 +12,8 @@ public class Brick {
     public int takeHit() {
         if (hitPoints > 0) {
             hitPoints--;
+        } else {
+            hitPoints = 0;
         }
         return hitPoints;
     }

@@ -10,8 +10,6 @@ public class Brick extends GameObject{
         this.type = type;
     }
 
-     //TODO: Setter
-
     public void setHitPoints(int hitPoints) {
         this.hitPoints = hitPoints;
     }

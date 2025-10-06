@@ -29,7 +29,11 @@ public class GameManager extends Application {
     private final List<Paddle> paddles = new ArrayList<>();
     private final List<PowerUp> powerUps = new ArrayList<>();
 
+    // GameState
     public GameState currentState = GameState.GAME_TEST;
+
+    // Renderer for each GameState
+    GameView renderGame; // For stages
 
     public static void main(String[] args) {
         Application.launch(GameManager.class);
@@ -58,6 +62,9 @@ public class GameManager extends Application {
         root.getChildren().add(canvas);
         render();
 
+        // Set up renderers
+        renderGame = new GameView(bricks, balls, paddles, powerUps);
+
         // Game loop
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
@@ -72,7 +79,9 @@ public class GameManager extends Application {
     }
 
     public void update() {
-
+        if(currentState == GameState.GAME_TEST) {
+            // TODO: Runs update() on every GameObject.
+        }
     }
 
     public void stop() {
@@ -81,7 +90,6 @@ public class GameManager extends Application {
 
     public void render(/*GraphicsContext gc*/) {
         if(currentState == GameState.GAME_TEST) {
-            GameView renderGame = new GameView(bricks, balls, paddles, powerUps);
             renderGame.onDraw(gc);
         }
     }

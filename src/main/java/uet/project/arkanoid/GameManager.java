@@ -19,16 +19,16 @@ public class GameManager extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-            Label label = new Label("Hello, JavaFX!");
+        Label label = new Label("Hello, JavaFX!");
 
-            // Create a layout (root node)
-            StackPane root = new StackPane(label);
+        // Create a layout (root node)
+        StackPane root = new StackPane(label);
 
-            // Create a scene with width=400, height=300
-            Scene scene = new Scene(root, 400, 300);
+        // Create a scene with width=400, height=300
+        Scene scene = new Scene(root, 400, 300);
 
         // Set up the main window (stage)
-        primaryStage.setTitle("My JavaFX Window");
+        primaryStage.setTitle("Arkanoid");
         primaryStage.setScene(scene);
         primaryStage.show(); // 👈 SHOW the window
     }

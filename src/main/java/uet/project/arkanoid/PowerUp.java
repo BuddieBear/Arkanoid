@@ -1,6 +1,6 @@
 package uet.project.arkanoid;
 
-public class PowerUp {
+public class PowerUp extends GameObject {
     public enum PowerUpType {
         EXPAND_PADDLE,
         SHRINK_PADDLE,
@@ -13,7 +13,8 @@ public class PowerUp {
     private final PowerUpType type;
     private final double duration;
 
-    public PowerUp(PowerUpType type, double duration) {
+    public PowerUp(int x, int y, int width, int height, PowerUpType type, double duration) {
+        super(x, y, width, height);
         this.type = type;
         this.duration = duration;
     }
@@ -31,5 +32,13 @@ public class PowerUp {
 
     public double getDuration() {
         return duration;
+    }
+
+    public void update() {
+
+    }
+
+    public void render() {
+
     }
 }

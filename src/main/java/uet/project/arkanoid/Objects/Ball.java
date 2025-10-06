@@ -1,11 +1,10 @@
-package uet.project.arkanoid;
+package uet.project.arkanoid.Objects;
 
 public class Ball extends MovableObject {
     private int speed = 0;
     private int directionX = 0;
     private int directionY = 0;
 
-    //TODO: Setter and constructor and move(), render(), update(),...
 
     public void setSpeed(int speed) {
         this.speed = speed;

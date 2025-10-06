@@ -1,4 +1,4 @@
-package uet.project.arkanoid;
+package uet.project.arkanoid.Objects;
 
 public class Paddle extends MovableObject {
     private int speed = 0;
@@ -8,7 +8,6 @@ public class Paddle extends MovableObject {
         super(x, y, width, height);
     }
 
-    //TODO: Setter
     public int getSpeed() {
         return this.speed;
     }

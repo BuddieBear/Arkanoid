@@ -1,6 +1,38 @@
 package uet.project.arkanoid;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import uet.project.arkanoid.Objects.Ball;
+import uet.project.arkanoid.Objects.Brick;
+import uet.project.arkanoid.Objects.Paddle;
+import uet.project.arkanoid.Objects.PowerUp;
+
+import java.util.List;
+
 public class GameView {
-    public void onDraw() {
+    private List<Brick> bricks;
+    private List<Ball> balls;
+    private List<Paddle> paddles;
+    private List<PowerUp> powerUps;
+
+    // Reference every object in the game
+    public GameView(List<Brick> bricks,
+                    List<Ball> balls,
+                    List<Paddle> paddles,
+                    List<PowerUp> powerUps) {
+        this.bricks = bricks;
+        this.balls = balls;
+        this.paddles = paddles;
+        this.powerUps = powerUps;
+    }
+
+    // Render objects and background in the stages
+    public void onDraw(GraphicsContext gc) {
+        //Background
+        gc.setFill(Color.BLACK);
+        gc.fillRect(Basis.STAGE_TEST_X, Basis.STAGE_TEST_Y, Basis.STAGE_TEST_WIDTH, Basis.STAGE_TEST_HEIGHT);
+
+        //TODO: Run render() on every objects in game.
+
     }
 }

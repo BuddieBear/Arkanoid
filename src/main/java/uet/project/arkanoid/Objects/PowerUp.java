@@ -1,4 +1,4 @@
-package uet.project.arkanoid;
+package uet.project.arkanoid.Objects;
 
 public class PowerUp extends GameObject {
     public enum PowerUpType {

@@ -9,6 +9,18 @@ public class Paddle extends MovableObject {
     }
 
     //TODO: Setter
+    public int getSpeed() {
+        return this.speed;
+    }
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+    public PowerUp getCurrentPowerUp() {
+        return this.currentPowerUp;
+    }
+    public void setCurrentPowerUp(PowerUp current) {
+        this.currentPowerUp = current;
+    }
 
     public void moveLeft() {
 

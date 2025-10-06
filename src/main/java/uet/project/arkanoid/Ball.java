@@ -19,8 +19,9 @@ public class Ball extends MovableObject {
         this.directionY = directionY;
     }
 
-    public Ball(int x, int y, int width, int height) {
+    public Ball(int x, int y, int width, int height, int speed) {
         super(x, y, width, height);
+        this.speed = speed;
     }
 
     public boolean bounceOff(GameObject other) {

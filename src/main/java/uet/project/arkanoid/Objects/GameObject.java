@@ -1,6 +1,4 @@
-package uet.project.arkanoid;
-
-import javafx.scene.canvas.GraphicsContext;
+package uet.project.arkanoid.Objects;
 
 public abstract class GameObject {
     private int x;

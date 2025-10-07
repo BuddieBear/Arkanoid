@@ -94,8 +94,15 @@ public class GameManager extends Application {
         }
     }
 
-    private void handleInput() {
+    private void handleInput(Scene scene) {
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case A -> paddles.get(0).moveLeft();
+                case D -> paddles.get(0).moveRight();
+            }
+        });
 
+        scene.setOnKeyReleased(event -> paddles.get(0).setDx(0));
     }
 
     /*private void checkCollisions() {

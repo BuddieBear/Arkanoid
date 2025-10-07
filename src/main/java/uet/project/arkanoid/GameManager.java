@@ -45,7 +45,7 @@ public class GameManager extends Application {
      * This method is automatically called when the JavaFX application launches.
      * It sets up the {@link Scene} and {@link Canvas} for drawing,
      * and runs the {@link AnimationTimer} game loop.
-     *</p>
+     * </p>
      *
      * @param primaryStage the primary window (stage) for the application
      */
@@ -61,8 +61,14 @@ public class GameManager extends Application {
         // Set up canvas for drawing
         root.getChildren().add(canvas);
 
+        // Set up input
+        handleInput(scene);
+
         // Set up renderers
         renderGame = new GameView(bricks, balls, paddles, powerUps);
+
+        // Set up stage
+        GameSetup stage = new GameSetup(bricks, balls, paddles, powerUps, currentState);
 
         // Game loop
         AnimationTimer gameLoop = new AnimationTimer() {
@@ -79,8 +85,11 @@ public class GameManager extends Application {
     }
 
     public void update() {
-        if(currentState == GameState.GAME_TEST) {
+        if (currentState == GameState.GAME_TEST) {
             // TODO: Runs update() on every GameObject.
+            for (Paddle paddle : paddles) {
+                paddle.update();
+            }
         }
     }
 
@@ -89,7 +98,7 @@ public class GameManager extends Application {
     }
 
     public void render(/*GraphicsContext gc*/) {
-        if(currentState == GameState.GAME_TEST) {
+        if (currentState == GameState.GAME_TEST) {
             renderGame.onDraw(gc);
         }
     }

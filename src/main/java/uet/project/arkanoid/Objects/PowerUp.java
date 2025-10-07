@@ -1,18 +1,10 @@
 package uet.project.arkanoid.Objects;
 
-public class PowerUp extends GameObject {
-    public enum PowerUpType {
-        EXPAND_PADDLE,
-        SHRINK_PADDLE,
-        EXTRA_LIFE,
-        MULTI_BALL,
-        SPEED_UP,
-        SLOW_DOWN
-    }
+import javafx.scene.canvas.GraphicsContext;
 
+public class PowerUp extends GameObject {
     private final PowerUpType type;
     private final double duration;
-
     public PowerUp(int x, int y, int width, int height, PowerUpType type, double duration) {
         super(x, y, width, height);
         this.type = type;
@@ -38,7 +30,16 @@ public class PowerUp extends GameObject {
 
     }
 
-    public void render() {
+    public void render(GraphicsContext gc) {
 
+    }
+
+    public enum PowerUpType {
+        EXPAND_PADDLE,
+        SHRINK_PADDLE,
+        EXTRA_LIFE,
+        MULTI_BALL,
+        SPEED_UP,
+        SLOW_DOWN
     }
 }

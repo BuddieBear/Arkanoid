@@ -1,6 +1,8 @@
 package uet.project.arkanoid.Objects;
 
-public class Brick extends GameObject{
+import javafx.scene.canvas.GraphicsContext;
+
+public class Brick extends GameObject {
     private int hitPoints;
     private String type;
 
@@ -10,20 +12,20 @@ public class Brick extends GameObject{
         this.type = type;
     }
 
-    public void setHitPoints(int hitPoints) {
-        this.hitPoints = hitPoints;
-    }
-
-    public void setType(String type){
-        this.type = type;
-    }
-
-    public String getType(){
+    public String getType() {
         return type;
     }
 
-    public int getHitPoints(){
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getHitPoints() {
         return hitPoints;
+    }
+
+    public void setHitPoints(int hitPoints) {
+        this.hitPoints = hitPoints;
     }
 
     public int takeHit() {
@@ -39,7 +41,7 @@ public class Brick extends GameObject{
         return hitPoints <= 0;
     }
 
-    public void render() {
+    public void render(GraphicsContext gc) {
 
     }
 

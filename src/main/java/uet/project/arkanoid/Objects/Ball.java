@@ -1,10 +1,17 @@
 package uet.project.arkanoid.Objects;
 
+import javafx.scene.canvas.GraphicsContext;
+
 public class Ball extends MovableObject {
     private int speed = 0;
     private int directionX = 0;
     private int directionY = 0;
 
+
+    public Ball(int x, int y, int width, int height, int speed) {
+        super(x, y, width, height);
+        this.speed = speed;
+    }
 
     public void setSpeed(int speed) {
         this.speed = speed;
@@ -18,11 +25,6 @@ public class Ball extends MovableObject {
         this.directionY = directionY;
     }
 
-    public Ball(int x, int y, int width, int height, int speed) {
-        super(x, y, width, height);
-        this.speed = speed;
-    }
-
     public boolean bounceOff(GameObject other) {
         return false;
     }
@@ -31,15 +33,15 @@ public class Ball extends MovableObject {
         return false;
     }
 
-    public void move(){
+    public void move() {
 
     }
 
-    public void render(){
+    public void render(GraphicsContext gc) {
 
     }
 
-    public void update(){
+    public void update() {
 
     }
 }

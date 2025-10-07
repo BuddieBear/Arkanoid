@@ -32,7 +32,19 @@ public class GameView {
         gc.setFill(Color.BLACK);
         gc.fillRect(Basis.STAGE_TEST_X, Basis.STAGE_TEST_Y, Basis.STAGE_TEST_WIDTH, Basis.STAGE_TEST_HEIGHT);
 
-        //TODO: Run render() on every objects in game.
+        //Run render() on every objects in game.
+        for (Brick brick : bricks) {
+            brick.render(gc);
+        }
+        for (Ball ball : balls) {
+            ball.render(gc);
+        }
+        for (Paddle paddle : paddles) {
+            paddle.render(gc);
+        }
+        for (PowerUp powerUp : powerUps) {
+            powerUp.render(gc);
+        }
 
     }
 }

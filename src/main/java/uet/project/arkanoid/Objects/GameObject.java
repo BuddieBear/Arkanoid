@@ -13,6 +13,14 @@ public abstract class GameObject {
         this.height = height;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int X) {
+        this.x = x;
+    }
+
     public abstract void update();
     public abstract void render(/*GraphicsContext gc*/);
 

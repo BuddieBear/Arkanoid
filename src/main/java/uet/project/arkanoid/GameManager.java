@@ -20,7 +20,7 @@ import java.util.List;
 public class GameManager extends Application {
     // Places to render objects
     private final Group root = new Group();
-    private final Canvas canvas = new Canvas(Basis.SCREEN_WIDTH, Basis.SCREEN_HEIGHT);;
+    private final Canvas canvas = new Canvas(Basis.SCREEN_WIDTH, Basis.SCREEN_HEIGHT);
     private final GraphicsContext gc = canvas.getGraphicsContext2D();
 
     // Object lists
@@ -60,7 +60,6 @@ public class GameManager extends Application {
 
         // Set up canvas for drawing
         root.getChildren().add(canvas);
-        render();
 
         // Set up renderers
         renderGame = new GameView(bricks, balls, paddles, powerUps);
@@ -74,6 +73,7 @@ public class GameManager extends Application {
             }
         };
 
+        render();
         gameLoop.start(); //Run Game Loop
         primaryStage.show();
     }

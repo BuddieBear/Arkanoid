@@ -22,15 +22,16 @@ public class Paddle extends MovableObject {
     }
 
     public void moveLeft() {
-
+        setDx(-speed);
     }
 
     public void moveRight() {
-
+        setDx(speed);
     }
 
+    @Override
     public void move() {
-
+        setX(getX() + getDx());
     }
 
     public void render() {

@@ -20,8 +20,8 @@ public class Basis {
     public static final Image BALL_TEXTURE;
 
     static {
-        PADDLE_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/Objects/Paddle_1.png")).toExternalForm());
-        BALL_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/Objects/Ball_3.png")).toExternalForm());
+        PADDLE_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Paddle_1.png")).toExternalForm());
+        BALL_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Ball_1.png")).toExternalForm());
     }
 
 

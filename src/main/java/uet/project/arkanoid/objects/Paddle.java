@@ -1,10 +1,7 @@
-package uet.project.arkanoid.Objects;
+package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import uet.project.arkanoid.Basis;
-
-import java.util.Objects;
 
 public class Paddle extends MovableObject {
     private int speed;

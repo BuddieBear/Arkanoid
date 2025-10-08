@@ -1,11 +1,8 @@
-package uet.project.arkanoid.Objects;
+package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import uet.project.arkanoid.Basis;
 import uet.project.arkanoid.GameManager;
-
-import java.util.List;
-import java.util.ArrayList;
 
 public class Ball extends MovableObject {
     private int speed = 0;
@@ -42,7 +39,6 @@ public class Ball extends MovableObject {
         Paddle paddleMain = GameManager.getPaddle();
         if (paddleMain.getX() + 33 != Basis.STAGE_TEST_X 
         && paddleMain.getX() + paddleMain.getWidth() != Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH + 33) {   // 33 is the padding of the paddle.
-
             setX(paddleMain.getDx() + getX());
         }
         if (! back) {
@@ -60,7 +56,6 @@ public class Ball extends MovableObject {
         move();
 
         if (this.getX() >= GameManager.getPaddle().getX() + GameManager.getPaddle().getWidth() - this.getWidth() - 33) {  // 33 is the padding of the paddle.
-
             back = true;
         } else if (this.getX() <= GameManager.getPaddle().getX() + 33){
             back = false;

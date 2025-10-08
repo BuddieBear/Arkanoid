@@ -6,12 +6,11 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import uet.project.arkanoid.Objects.Ball;
-import uet.project.arkanoid.Objects.Brick;
-import uet.project.arkanoid.Objects.Paddle;
-import uet.project.arkanoid.Objects.PowerUp;
+import uet.project.arkanoid.objects.Ball;
+import uet.project.arkanoid.objects.Brick;
+import uet.project.arkanoid.objects.Paddle;
+import uet.project.arkanoid.objects.PowerUp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +25,7 @@ public class GameManager extends Application {
     // Object lists
     private static final List<Ball> balls = new ArrayList<>();
     private static final List<Brick> bricks = new ArrayList<>();
+
     private static final List<Paddle> paddles = new ArrayList<>();
     private static final List<PowerUp> powerUps = new ArrayList<>();
 

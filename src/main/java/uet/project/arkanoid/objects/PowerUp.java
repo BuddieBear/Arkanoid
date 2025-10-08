@@ -1,4 +1,4 @@
-package uet.project.arkanoid.Objects;
+package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
 

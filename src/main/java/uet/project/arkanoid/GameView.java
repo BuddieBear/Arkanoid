@@ -2,10 +2,10 @@ package uet.project.arkanoid;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import uet.project.arkanoid.Objects.Ball;
-import uet.project.arkanoid.Objects.Brick;
-import uet.project.arkanoid.Objects.Paddle;
-import uet.project.arkanoid.Objects.PowerUp;
+import uet.project.arkanoid.objects.Ball;
+import uet.project.arkanoid.objects.Brick;
+import uet.project.arkanoid.objects.Paddle;
+import uet.project.arkanoid.objects.PowerUp;
 
 import java.util.List;
 

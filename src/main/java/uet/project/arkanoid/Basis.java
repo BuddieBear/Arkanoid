@@ -17,10 +17,11 @@ public class Basis {
     //Textures
     public static final Image PADDLE_TEXTURE;
     public static final Image BRICK_TEXTURE = null;
-    public static final Image BALL_TEXTURE = null;
+    public static final Image BALL_TEXTURE;
 
     static {
         PADDLE_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/Objects/Paddle_1.png")).toExternalForm());
+        BALL_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/Objects/Ball_3.png")).toExternalForm());
     }
 
 

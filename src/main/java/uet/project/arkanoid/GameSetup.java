@@ -27,6 +27,8 @@ public class GameSetup {
         //Test here
         if (currentState == GameState.GAME_TEST) {
             paddles.add(new Paddle(Basis.STAGE_TEST_X, 720 - 70, 210, 56, 6));
+            Paddle paddleMain = paddles.get(0);
+            balls.add(new Ball(paddleMain.getX() + paddleMain.getWidth() / 2 - 25, paddleMain.getY() - 20, 50, 40, 0));
         }
 
     }

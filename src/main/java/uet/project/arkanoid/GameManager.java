@@ -24,10 +24,14 @@ public class GameManager extends Application {
     private final GraphicsContext gc = canvas.getGraphicsContext2D();
 
     // Object lists
-    private final List<Ball> balls = new ArrayList<>();
-    private final List<Brick> bricks = new ArrayList<>();
-    private final List<Paddle> paddles = new ArrayList<>();
-    private final List<PowerUp> powerUps = new ArrayList<>();
+    private static final List<Ball> balls = new ArrayList<>();
+    private static final List<Brick> bricks = new ArrayList<>();
+    private static final List<Paddle> paddles = new ArrayList<>();
+    private static final List<PowerUp> powerUps = new ArrayList<>();
+
+    public static Paddle getPaddle () {     // Used to pass the paddle to other classes.
+        return paddles.get(0);
+    }
 
     // GameState
     public GameState currentState = GameState.GAME_TEST;
@@ -89,6 +93,9 @@ public class GameManager extends Application {
             // TODO: Runs update() on every GameObject.
             for (Paddle paddle : paddles) {
                 paddle.update();
+            }
+            for (Ball ball : balls) {
+                ball.update();
             }
         }
     }

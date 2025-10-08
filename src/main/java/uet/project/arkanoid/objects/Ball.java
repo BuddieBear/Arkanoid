@@ -36,6 +36,7 @@ public class Ball extends MovableObject {
     }
 
     public void move() {
+
         Paddle paddleMain = GameManager.getPaddle();
         if (paddleMain.getX() + 33 != Basis.STAGE_TEST_X 
         && paddleMain.getX() + paddleMain.getWidth() != Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH + 33) {   // 33 is the padding of the paddle.
@@ -46,6 +47,7 @@ public class Ball extends MovableObject {
         } else {
             setX(getX() - getDx());
         }
+
     }
 
     public void render(GraphicsContext gc) {
@@ -61,4 +63,5 @@ public class Ball extends MovableObject {
             back = false;
         }
     }
+
 }

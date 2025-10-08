@@ -121,8 +121,9 @@ public class GameManager extends Application {
         scene.setOnKeyReleased(event -> paddles.get(0).setDx(0));
     }
 
-    /*private void checkCollisions() {
+    private void checkCollisions() {
+        return;
     }
-    */
+
 
 }

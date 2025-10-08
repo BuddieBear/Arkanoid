@@ -24,10 +24,14 @@ public class GameManager extends Application {
     private final GraphicsContext gc = canvas.getGraphicsContext2D();
 
     // Object lists
-    private final List<Ball> balls = new ArrayList<>();
-    private final List<Brick> bricks = new ArrayList<>();
-    private final List<Paddle> paddles = new ArrayList<>();
-    private final List<PowerUp> powerUps = new ArrayList<>();
+    private static final List<Ball> balls = new ArrayList<>();
+    private static final List<Brick> bricks = new ArrayList<>();
+    private static final List<Paddle> paddles = new ArrayList<>();
+    private static final List<PowerUp> powerUps = new ArrayList<>();
+
+    public static Paddle getPaddle () {     // Used to pass the paddle to other classes.
+        return paddles.get(0);
+    }
 
     // GameState
     public GameState currentState = GameState.GAME_TEST;
@@ -45,7 +49,7 @@ public class GameManager extends Application {
      * This method is automatically called when the JavaFX application launches.
      * It sets up the {@link Scene} and {@link Canvas} for drawing,
      * and runs the {@link AnimationTimer} game loop.
-     *</p>
+     * </p>
      *
      * @param primaryStage the primary window (stage) for the application
      */
@@ -61,8 +65,14 @@ public class GameManager extends Application {
         // Set up canvas for drawing
         root.getChildren().add(canvas);
 
+        // Set up input
+        handleInput(scene);
+
         // Set up renderers
         renderGame = new GameView(bricks, balls, paddles, powerUps);
+
+        // Set up stage
+        GameSetup stage = new GameSetup(bricks, balls, paddles, powerUps, currentState);
 
         // Game loop
         AnimationTimer gameLoop = new AnimationTimer() {
@@ -79,8 +89,14 @@ public class GameManager extends Application {
     }
 
     public void update() {
-        if(currentState == GameState.GAME_TEST) {
+        if (currentState == GameState.GAME_TEST) {
             // TODO: Runs update() on every GameObject.
+            for (Paddle paddle : paddles) {
+                paddle.update();
+            }
+            for (Ball ball : balls) {
+                ball.update();
+            }
         }
     }
 
@@ -89,13 +105,20 @@ public class GameManager extends Application {
     }
 
     public void render(/*GraphicsContext gc*/) {
-        if(currentState == GameState.GAME_TEST) {
+        if (currentState == GameState.GAME_TEST) {
             renderGame.onDraw(gc);
         }
     }
 
-    private void handleInput() {
+    private void handleInput(Scene scene) {
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case A -> paddles.get(0).moveLeft();
+                case D -> paddles.get(0).moveRight();
+            }
+        });
 
+        scene.setOnKeyReleased(event -> paddles.get(0).setDx(0));
     }
 
     /*private void checkCollisions() {

@@ -45,7 +45,11 @@ public class Brick extends GameObject {
 
     }
 
+    @Override
     public void update() {
-
+        int a;
+        a = a +1;
+        System.out.println(a);
+        return;
     }
 }

@@ -11,8 +11,8 @@ public class Paddle extends MovableObject {
     private PowerUp currentPowerUp = null;
 
 
-    public Paddle(int x, int y, int width, int height, int speed) {
-        super(x, y, width, height);
+    public Paddle(int x, int y, int width, int height, int speed, int dx, int dy) {
+        super(x, y, width, height, dx, dy);
         this.speed = speed;
     }
 
@@ -55,10 +55,12 @@ public class Paddle extends MovableObject {
         move();
 
         // Prevent paddle from leaving stage boundaries
-        if (getX() < Basis.STAGE_TEST_X) {
-            setX(Basis.STAGE_TEST_X);
-        } else if (getX() + this.width > Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH) {
-            setX(Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH - this.width);
+        // 33 is the padding of the paddle.
+
+        if (getX() <= Basis.STAGE_TEST_X - 33) {
+            setX(Basis.STAGE_TEST_X - 33);
+        } else if (getX() + this.width - 33 >= Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH) {
+            setX(Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH - this.width + 33);
         }
     }
 }

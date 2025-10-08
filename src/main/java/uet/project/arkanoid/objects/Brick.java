@@ -46,7 +46,5 @@ public class Brick extends GameObject {
     }
 
     public void update() {
-        //WTFAFADSADa
-        return;
     }
 }

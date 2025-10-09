@@ -2,6 +2,7 @@ package uet.project.arkanoid;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import uet.project.arkanoid.objects.Arrow;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
@@ -14,16 +15,19 @@ public class GameView {
     private List<Ball> balls;
     private List<Paddle> paddles;
     private List<PowerUp> powerUps;
+    private Arrow arrow;
 
     // Reference every object in the game
     public GameView(List<Brick> bricks,
                     List<Ball> balls,
                     List<Paddle> paddles,
-                    List<PowerUp> powerUps) {
+                    List<PowerUp> powerUps,
+                    Arrow arrow) {
         this.bricks = bricks;
         this.balls = balls;
         this.paddles = paddles;
         this.powerUps = powerUps;
+        this.arrow = arrow;
     }
 
     // Render objects and background in the stages
@@ -45,6 +49,6 @@ public class GameView {
         for (PowerUp powerUp : powerUps) {
             powerUp.render(gc);
         }
-
+        arrow.render(gc);
     }
 }

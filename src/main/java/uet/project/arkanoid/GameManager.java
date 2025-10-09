@@ -6,7 +6,9 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import uet.project.arkanoid.objects.Arrow;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
@@ -28,6 +30,7 @@ public class GameManager extends Application {
 
     private static final List<Paddle> paddles = new ArrayList<>();
     private static final List<PowerUp> powerUps = new ArrayList<>();
+    private static final Arrow arrow = new Arrow(0, 0, 0, 0, 0, 0, 0);
 
     public static Paddle getPaddle () {     // Used to pass the paddle to other classes.
         return paddles.get(0);
@@ -69,10 +72,10 @@ public class GameManager extends Application {
         handleInput(scene);
 
         // Set up renderers
-        renderGame = new GameView(bricks, balls, paddles, powerUps);
+        renderGame = new GameView(bricks, balls, paddles, powerUps, arrow);
 
         // Set up stage
-        GameSetup stage = new GameSetup(bricks, balls, paddles, powerUps, currentState);
+        GameSetup stage = new GameSetup(bricks, balls, paddles, powerUps, arrow, currentState);
 
         // Game loop
         AnimationTimer gameLoop = new AnimationTimer() {
@@ -80,6 +83,10 @@ public class GameManager extends Application {
             public void handle(long time) { //Can set up delta time
                 update();
                 render();
+                gc.setStroke(Color.WHITE);
+                gc.strokeLine(balls.get(0).getX(), balls.get(0).getY(), balls.get(0).getX() + 50, balls.get(0).getY());
+
+                gc.strokeLine(arrow.getX() + 10, arrow.getY() + arrow.getHeight(), arrow.getX() + 50 + 10, arrow.getY() + arrow.getHeight());
             }
         };
 
@@ -97,6 +104,7 @@ public class GameManager extends Application {
             for (Ball ball : balls) {
                 ball.update();
             }
+            arrow.update();
         }
     }
 

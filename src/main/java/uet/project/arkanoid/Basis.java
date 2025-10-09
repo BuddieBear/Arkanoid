@@ -18,10 +18,12 @@ public class Basis {
     public static final Image PADDLE_TEXTURE;
     public static final Image BRICK_TEXTURE = null;
     public static final Image BALL_TEXTURE;
+    public static final Image ARROW_TEXTURE;
 
     static {
         PADDLE_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Paddle_1.png")).toExternalForm());
         BALL_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Ball_1.png")).toExternalForm());
+        ARROW_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Arrow.png")).toExternalForm());
     }
 
 

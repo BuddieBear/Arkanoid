@@ -31,7 +31,7 @@ public class GameView {
     }
 
     // Render objects and background in the stages
-    public void onDraw(GraphicsContext gc) {
+    public void onDraw(GraphicsContext gc, boolean gun) {
         //Background
         gc.setFill(Color.BLACK);
         gc.fillRect(Basis.STAGE_TEST_X, Basis.STAGE_TEST_Y, Basis.STAGE_TEST_WIDTH, Basis.STAGE_TEST_HEIGHT);
@@ -48,6 +48,9 @@ public class GameView {
         }
         for (PowerUp powerUp : powerUps) {
             powerUp.render(gc);
+        }
+        if (gun) {
+            return;
         }
         arrow.render(gc);
     }

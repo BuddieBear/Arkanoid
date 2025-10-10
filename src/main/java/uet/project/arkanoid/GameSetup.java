@@ -32,7 +32,7 @@ public class GameSetup {
         if (currentState == GameState.GAME_TEST) {
             paddles.add(new Paddle(Basis.STAGE_TEST_X - 33, 720 - 70, 210, 56, 6, 0, 0));  // 33 is the padding of the paddle.
             Paddle paddleMain = paddles.get(0);
-            balls.add(new Ball(paddleMain.getX() + paddleMain.getWidth() / 2 - 25, paddleMain.getY() - 20, 50, 40, 0, 0, 0));
+            balls.add(new Ball(paddleMain.getX() + paddleMain.getWidth() / 2 - 25, paddleMain.getY() - 20, 50, 40, 5, 0, 0));
             Ball ballMain = balls.get(0);
             arrow.setUpArrow(ballMain.getX() - 10, ballMain.getY() - 50, 70, 60, 0, 0, 0);
         }

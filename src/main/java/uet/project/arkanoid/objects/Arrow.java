@@ -7,7 +7,7 @@ import uet.project.arkanoid.GameManager;
 
 public class Arrow extends MovableObject{
     private int speed = 0;
-    private int angle = 0;
+    private static int angle = 0;
     private boolean back = false;
 
     public Arrow(int x, int y, int width, int height, int speed, int dx, int dy) {
@@ -23,6 +23,10 @@ public class Arrow extends MovableObject{
         this.speed = speed;
     }
 
+    public static int getAngle() {
+        return angle;
+    }
+
     public void setUpArrow(int x, int y, int width, int height, int speed, int dx, int dy) {
         this.setX(x);
         this.setY(y);
@@ -36,6 +40,8 @@ public class Arrow extends MovableObject{
     public void move() {
         Ball ballMain = GameManager.getBall();
         setX(ballMain.getX() - 10);
+        // The arrow’s coordinates are always equal to the ball’s coordinates.
+        // 10 is the padding of the arow image.
     }
 
     public void render(GraphicsContext gc) {
@@ -44,8 +50,7 @@ public class Arrow extends MovableObject{
         gc.translate(getX() + getWidth() / 2, getY() + getHeight() - 10);
         gc.rotate(angle);
         gc.drawImage(Basis.ARROW_TEXTURE, -35, -50, this.width, this.height);
-        gc.setStroke(Color.GREEN);
-        gc.strokeLine(-50, 0, 50, 0);
+        // Used to rotate the arrow.
 
         gc.restore();
         if (! back) {
@@ -57,6 +62,7 @@ public class Arrow extends MovableObject{
                 back = false;
             }
         }
+        // Used to increase the arrow’s angle.
     }
 
     public void update(){

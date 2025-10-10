@@ -32,15 +32,23 @@ public class GameManager extends Application {
     private static final List<PowerUp> powerUps = new ArrayList<>();
     private static final Arrow arrow = new Arrow(0, 0, 0, 0, 0, 0, 0);
 
+    private static boolean gun = false;  // When "gun" is true, the arrow will stop displaying.
+    private static String resultCollecsion = "";  // The result of the "checkCollision" function will be stored here.
+
     public static Paddle getPaddle () {     // Used to pass the paddle to other classes.
         return paddles.get(0);
     }
 
     public static Ball getBall() {
-        if (balls.size() != 0) {
-            return balls.get(0);
-        }
-        return null;
+        return balls.get(0);
+    }
+
+    public static boolean getGun() {
+        return gun;
+    }
+
+    public static String getResultCollecsion() {
+        return resultCollecsion;
     }
 
     // GameState
@@ -88,12 +96,12 @@ public class GameManager extends Application {
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long time) { //Can set up delta time
+                resultCollecsion = checkCollisions();
+                if (! resultCollecsion.equals("")) {
+                    balls.get(0).setFirst(false);
+                }
                 update();
                 render();
-                gc.setStroke(Color.WHITE);
-                gc.strokeLine(balls.get(0).getX(), balls.get(0).getY(), balls.get(0).getX() + 50, balls.get(0).getY());
-
-                gc.strokeLine(arrow.getX() + 10, arrow.getY() + arrow.getHeight(), arrow.getX() + 50 + 10, arrow.getY() + arrow.getHeight());
             }
         };
 
@@ -111,6 +119,9 @@ public class GameManager extends Application {
             for (Ball ball : balls) {
                 ball.update();
             }
+            if (gun) {  
+                return;  // Stop updating the arrow.
+            }
             arrow.update();
         }
     }
@@ -121,7 +132,7 @@ public class GameManager extends Application {
 
     public void render(/*GraphicsContext gc*/) {
         if (currentState == GameState.GAME_TEST) {
-            renderGame.onDraw(gc);
+            renderGame.onDraw(gc, gun);
         }
     }
 
@@ -130,14 +141,33 @@ public class GameManager extends Application {
             switch (event.getCode()) {
                 case A -> paddles.get(0).moveLeft();
                 case D -> paddles.get(0).moveRight();
+                case W -> {
+                    gun = true;
+                    balls.get(0).setFirst(true);
+                }
             }
         });
 
         scene.setOnKeyReleased(event -> paddles.get(0).setDx(0));
     }
 
-    /*private void checkCollisions() {
+    private String checkCollisions() {
+        Ball ballMain = balls.get(0);
+        Paddle paddleMain = paddles.get(0);
+        int testX = ballMain.getX() + ballMain.getWidth() / 2;
+        int testY = ballMain.getY() + ballMain.getHeight() - paddleMain.getY();
+        if (ballMain.getX() + ballMain.getWidth() >= Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH) {
+            return "Right";
+        } else if (ballMain.getX() <= Basis.STAGE_TEST_X) {
+            return "Left";
+        } else if (ballMain.getY() <= Basis.STAGE_TEST_Y){
+            return "Up";
+        } else if (testX <= paddleMain.getX() + paddleMain.getWidth() - 33
+                && testX >= paddleMain.getX() + 33
+                && testY >= 25) {
+            return "Paddle";
+        }
+        // 33 and 25 are the padding of the paddle.
+        return "";
     }
-    */
-
 }

@@ -36,8 +36,12 @@ public class Ball extends MovableObject {
         return false;
     }
 
-    public void move() {
+    public void glide() {
         setX(paddleMain.getX() + paddleMain.getWidth() / 2 - 25);
+    }
+
+    public void move() {
+
     }
 
     public void render(GraphicsContext gc) {
@@ -45,6 +49,6 @@ public class Ball extends MovableObject {
     }
 
     public void update() {
-        move();
+        glide();
     }
 }

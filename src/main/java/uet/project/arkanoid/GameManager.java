@@ -36,6 +36,13 @@ public class GameManager extends Application {
         return paddles.get(0);
     }
 
+    public static Ball getBall() {
+        if (balls.size() != 0) {
+            return balls.get(0);
+        }
+        return null;
+    }
+
     // GameState
     public GameState currentState = GameState.GAME_TEST;
 

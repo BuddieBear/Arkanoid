@@ -17,27 +17,27 @@ public class NormalBrick extends Brick {
         if (hitPoints == 1) {
             //brick texture 1 chỉ có 1 ảnh k cần mảng
             this.brickImage = Basis.BRICK_NORMAL_TEXTURE_1;
-            this.TextureType = TextureType.ONE;
+            this.type = TextureType.ONE;
         }
         else if (hitPoints == 2) {
             this.brickImage = Basis.BRICK_NORMAL_TEXTURE_2[0];
-            this.TextureType = TextureType.TWO;
+            this.type = TextureType.TWO;
         }
         else {
             this.brickImage = Basis.BRICK_NORMAL_TEXTURE_3[0];
-            this.TextureType = TextureType.THREE;
+            this.type = TextureType.THREE;
         }
     }
 
     @Override
     public void render(GraphicsContext gc) {
-        switch(this.TextureType){
+        switch(type){
             // case ONE only have 1 image no need fix
             case TWO:
-                this.brickImage = Basis.BRICK_NORMAL_TEXTURE_2[hitPoints-1];
+                this.brickImage = Basis.BRICK_NORMAL_TEXTURE_2[getHitPoints()-1];
                 break;
             case THREE:
-                this.brickImage = Basis.BRICK_NORMAL_TEXTURE_3[hitPoints-1];
+                this.brickImage = Basis.BRICK_NORMAL_TEXTURE_3[getHitPoints()-1];
                 break;
         }
         super.render(gc);

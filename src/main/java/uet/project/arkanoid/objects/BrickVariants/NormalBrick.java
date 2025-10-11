@@ -15,7 +15,6 @@ public class NormalBrick extends Brick {
     public NormalBrick(int x, int y, int width, int height, int hitPoints) {
         super(x, y, width, height, hitPoints, BrickType.NORMAL);
         if (hitPoints == 1) {
-            //brick texture 1 chỉ có 1 ảnh k cần mảng
             this.brickImage = Basis.BRICK_NORMAL_TEXTURE_1;
             this.type = TextureType.ONE;
         }
@@ -31,16 +30,18 @@ public class NormalBrick extends Brick {
 
     @Override
     public void render(GraphicsContext gc) {
+        int index = getHitPoints()-1;
         switch(type){
-            // case ONE only have 1 image no need fix
             case TWO:
-                this.brickImage = Basis.BRICK_NORMAL_TEXTURE_2[getHitPoints()-1];
+                this.brickImage = Basis.BRICK_NORMAL_TEXTURE_2[index];
                 break;
             case THREE:
-                this.brickImage = Basis.BRICK_NORMAL_TEXTURE_3[getHitPoints()-1];
+                if (index >= 3) {
+                    index = 2;
+                }
+                this.brickImage = Basis.BRICK_NORMAL_TEXTURE_3[index];
                 break;
         }
         super.render(gc);
     }
-
 }

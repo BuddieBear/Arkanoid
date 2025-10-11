@@ -43,7 +43,11 @@ public class Brick extends GameObject {
     }
 
     public int takeHit() {
+        if (hitPoints > 0) {
             hitPoints--;
+        } else {
+            hitPoints = 0;
+        }
         return hitPoints;
     }
 

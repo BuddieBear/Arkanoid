@@ -17,6 +17,7 @@ public class Basis {
 
     //Textures
     public static final Image PADDLE_TEXTURE;
+    public static final Image BRICK_TEXTURE = null;
     public static final Image BALL_TEXTURE;
     public static final Image BRICK_NORMAL_TEXTURE_1;
     public static final Image[] BRICK_NORMAL_TEXTURE_2 = new Image[2];

@@ -15,4 +15,6 @@ module uet.project.arkanoid {
     exports uet.project.arkanoid;
     exports uet.project.arkanoid.objects;
     opens uet.project.arkanoid.objects to javafx.fxml;
+    exports uet.project.arkanoid.objects.BrickVariants;
+    opens uet.project.arkanoid.objects.BrickVariants to javafx.fxml;
 }

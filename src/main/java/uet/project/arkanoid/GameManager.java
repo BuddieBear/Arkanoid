@@ -97,6 +97,11 @@ public class GameManager extends Application {
             for (Ball ball : balls) {
                 ball.update();
             }
+            for(Brick brick : bricks){
+                brick.update();
+            }
+            bricks.removeIf(Brick::isDestroy);//đây là tham chiếu method()
+            // balls.removeIf..... if 2+ balls
         }
     }
 

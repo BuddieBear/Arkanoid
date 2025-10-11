@@ -34,6 +34,15 @@ public class Brick extends GameObject {
     public void setType(BrickType type) {
         this.type = type;
     }
+
+    public int getMaxHp() {
+        return maxHp;
+    }
+
+    public void setMaxHp(int maxHp) {
+        this.maxHp = maxHp;
+    }
+
     public int getHitPoints() {
         return hitPoints;
     }

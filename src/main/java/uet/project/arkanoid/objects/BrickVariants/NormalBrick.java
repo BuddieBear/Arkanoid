@@ -36,8 +36,8 @@ public class NormalBrick extends Brick {
                 this.brickImage = Basis.BRICK_NORMAL_TEXTURE_2[index];
                 break;
             case THREE:
-                if (index >= 3) {
-                    index = 2;
+                if (getHitPoints() < getMaxHp() && index > 1) {
+                    index = 1;
                 }
                 this.brickImage = Basis.BRICK_NORMAL_TEXTURE_3[index];
                 break;

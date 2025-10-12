@@ -110,6 +110,10 @@ public class GameManager extends Application {
             for (Ball ball : balls) {
                 ball.update();
             }
+            for (Brick brick : bricks) {
+                brick.update(balls);
+            }
+            bricks.removeIf(Brick::isDestroy);
         }
     }
 

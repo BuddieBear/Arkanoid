@@ -51,13 +51,8 @@ public class Brick extends GameObject {
         this.hitPoints = hitPoints;
     }
 
-    public int takeHit() {
-        if (hitPoints > 0) {
+    public void takeHit() {
             hitPoints--;
-        } else {
-            hitPoints = 0;
-        }
-        return hitPoints;
     }
 
     public boolean isDestroy() {
@@ -67,8 +62,17 @@ public class Brick extends GameObject {
     public void render(GraphicsContext gc) {
         gc.drawImage(brickImage, getX(), getY(), this.width, this.height);
     }
-
+    @Override
     public void update() {
+        // overrided update because it need references gameobjects
+    }
+
+    public void update(List<? extends GameObject> others) {
+        for (GameObject other : others) {
+            if (this.checkCollisions(other)) {
+                takeHit();
+            }
+        }
     }
 }
 

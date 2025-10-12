@@ -34,7 +34,7 @@ public abstract class GameObject {
     public int getWidth() {
         return this.width;
     }
-    
+
     public void setWidth(int width) {
         this.width = width;
     }
@@ -45,6 +45,14 @@ public abstract class GameObject {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+
+    public boolean checkCollisions(GameObject Other) {
+        return this.getX() < Other.getX() + Other.getWidth()
+                && this.getX() + this.getWidth() > Other.getX()
+                && this.getY() < Other.getY() + Other.getHeight()
+                && this.getY() + this.getHeight() > Other.getY();
     }
 
     public abstract void update();

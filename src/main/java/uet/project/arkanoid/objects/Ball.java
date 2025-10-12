@@ -6,10 +6,10 @@ import uet.project.arkanoid.GameManager;
 
 public class Ball extends MovableObject {
     private int speed = 0;
-    private int directionX = 0;
-    private int directionY = 0;
     private int angle = 0;
-    private boolean first = false;  // Check if it’s the first shot.
+
+    private boolean hasLaunch = false;
+    private boolean back = false;
 
     Paddle paddleMain = GameManager.getPaddle();
 
@@ -22,18 +22,6 @@ public class Ball extends MovableObject {
         this.speed = speed;
     }
 
-    public void setDirectionX(int directionX) {
-        this.directionX = directionX;
-    }
-
-    public void setDirectionY(int directionY) {
-        this.directionY = directionY;
-    }
-
-    public void setFirst(boolean first) {
-        this.first = first;
-    }
-
     public boolean bounceOff(GameObject other) {
         return false;
     }
@@ -43,18 +31,31 @@ public class Ball extends MovableObject {
     }
 
     // Make the ball slide on the paddle.
-    public void glide() {
+    public void spawn() {
         setX(paddleMain.getX() + paddleMain.getWidth() / 2 - 25);
+        if (! back) {
+            if (++angle >= 75) {
+                back = true;
+            }
+        } else {
+            if (--angle <= -75) {
+                back = false;
+            }
+        }
+        System.out.println("Angle in the ball: " + this.angle);
+    }
+    // Set speed when launch
+    public void launch () {
+        angle = 90 - angle;
+        double angleRadian = Math.toRadians(angle);
+        setDx((int)(this.speed * Math.cos(angleRadian)));
+        setDy((int)(this.speed * Math.sin(angleRadian)));
+        hasLaunch = true;
     }
 
     public void move() {
-        if (first) {
-            this.angle = 90 - Arrow.getAngle();
-            double angleRadian = Math.toRadians(angle);
-            setDx((int)(this.speed * Math.cos(angleRadian)));
-            setDy((int)(this.speed * Math.sin(angleRadian)));
-            System.out.println("Angle in the ball: " + this.angle);
-        } else {
+        if (hasLaunch)
+        {
             System.out.println("This.angle: " + this.angle);
             String check = GameManager.getResultCollecsion();
             if (check.equals("Right") || check.equals("Left")) {
@@ -68,13 +69,23 @@ public class Ball extends MovableObject {
     }
 
     public void render(GraphicsContext gc) {
-        gc.drawImage(Basis.BALL_TEXTURE, getX(), getY(), this.width, this.height);
-    }
+        if (!hasLaunch) {
+            gc.save();
+            // Move origin to ball center
+            gc.translate(getX() + width / 2.0, getY() + height / 2.0);
+            // Rotate the arrow
+            gc.rotate(angle);
+            // Draw the arrow above the ball, centered horizontally
+            gc.drawImage(Basis.ARROW_TEXTURE, -Basis.ARROW_WIDTH / 2.0, -this.height / 2.0 - Basis.ARROW_HEIGHT, Basis.ARROW_WIDTH, Basis.ARROW_HEIGHT);
+            gc.restore();
+        }
 
+        // Always draw the ball itself
+        gc.drawImage(Basis.BALL_TEXTURE, getX(), getY(), width, height);
+    }
     public void update() {
-        boolean gun = GameManager.getGun();
-        if (! gun) {
-            glide();  // If "W" hasn’t been pressed yet, the ball moves along the paddle.
+        if (!hasLaunch) {
+            spawn();  // If "W" hasn’t been pressed yet, the ball moves along the paddle.
         } else {
             move();  // If "W" has been pressed, the ball starts bouncing.
         }

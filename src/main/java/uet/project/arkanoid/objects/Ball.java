@@ -101,5 +101,6 @@ public class Ball extends MovableObject {
             move();  // After launched
             isDead();
         }
+        System.out.println("BALL: " + getDx() + " " + getDy());
     }
 }

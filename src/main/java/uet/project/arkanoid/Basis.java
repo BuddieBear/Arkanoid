@@ -1,7 +1,6 @@
 package uet.project.arkanoid;
 
 import javafx.scene.image.Image;
-import uet.project.arkanoid.objects.Brick;
 
 import java.util.Objects;
 

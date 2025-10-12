@@ -16,12 +16,17 @@ import uet.project.arkanoid.objects.PowerUp;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 
 public class GameManager extends Application {
     // Places to render objects
     private final Group root = new Group();
     private final Canvas canvas = new Canvas(Basis.SCREEN_WIDTH, Basis.SCREEN_HEIGHT);
     private final GraphicsContext gc = canvas.getGraphicsContext2D();
+    private int lives = 3;
+    private int score = 0;
 
     // Object lists
     private static final List<Ball> balls = new ArrayList<>();
@@ -110,6 +115,24 @@ public class GameManager extends Application {
             for (Ball ball : balls) {
                 ball.update();
             }
+
+            // TODO: Check if ball is dead, reduce lives.
+            if (balls.get(0).getY() > Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT) {
+                lives--;
+                if (lives <= 0) {
+                    System.out.println("Game over!");
+                }
+            }
+
+            for (int i = bricks.size() - 1; i >= 0; i--) {
+                Brick brick = bricks.get(i);
+                if (brick.getHitPoints() <= 0 && brick.getMaxHp() > 0) {
+                    score += brick.getMaxHp() * 10;
+                    bricks.remove(i);
+                }
+            }
+
+            checkLevelComplete();
         }
     }
 
@@ -155,5 +178,28 @@ public class GameManager extends Application {
         }
         // 33 and 25 are the padding of the paddle.
         return "";
+    }
+
+    private void saveScoreForGame() {
+        try (FileWriter writer = new FileWriter("score_level_test.txt", true)) {
+            writer.write(score + "\n");
+        } catch (IOException e) {
+            System.out.println("Error saving score: " + e.getMessage());
+        }
+    }
+
+    public void checkLevelComplete() {
+        if (currentState == GameState.GAME_TEST) {
+            boolean levelComplete = true;
+            for (Brick brick : bricks) {
+                if (brick.getHitPoints() > 0) {
+                    levelComplete = false;
+                    break;
+                }
+            }
+            if (levelComplete) {
+                saveScoreForGame();
+            }
+        }
     }
 }

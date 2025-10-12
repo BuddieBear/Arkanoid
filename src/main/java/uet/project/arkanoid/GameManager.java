@@ -8,7 +8,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import uet.project.arkanoid.objects.Arrow;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
@@ -30,10 +29,8 @@ public class GameManager extends Application {
 
     private static final List<Paddle> paddles = new ArrayList<>();
     private static final List<PowerUp> powerUps = new ArrayList<>();
-    private static final Arrow arrow = new Arrow(0, 0, 0, 0, 0, 0, 0);
 
-    private static boolean gun = false;  // When "gun" is true, the arrow will stop displaying.
-    private static String resultCollecsion = "";  // The result of the "checkCollision" function will be stored here.
+    private static String resultCollection = "";  // The result of the "checkCollision" function will be stored here.
 
     public static Paddle getPaddle () {     // Used to pass the paddle to other classes.
         return paddles.get(0);
@@ -43,12 +40,9 @@ public class GameManager extends Application {
         return balls.get(0);
     }
 
-    public static boolean getGun() {
-        return gun;
-    }
 
     public static String getResultCollecsion() {
-        return resultCollecsion;
+        return resultCollection;
     }
 
     // GameState
@@ -87,19 +81,16 @@ public class GameManager extends Application {
         handleInput(scene);
 
         // Set up renderers
-        renderGame = new GameView(bricks, balls, paddles, powerUps, arrow);
+        renderGame = new GameView(bricks, balls, paddles, powerUps);
 
         // Set up stage
-        GameSetup stage = new GameSetup(bricks, balls, paddles, powerUps, arrow, currentState);
+        GameSetup stage = new GameSetup(bricks, balls, paddles, powerUps, currentState);
 
         // Game loop
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long time) { //Can set up delta time
-                resultCollecsion = checkCollisions();
-                if (! resultCollecsion.equals("")) {
-                    balls.get(0).setFirst(false);
-                }
+                resultCollection = checkCollisions();
                 update();
                 render();
             }
@@ -119,10 +110,6 @@ public class GameManager extends Application {
             for (Ball ball : balls) {
                 ball.update();
             }
-            if (gun) {  
-                return;  // Stop updating the arrow.
-            }
-            arrow.update();
         }
     }
 
@@ -132,7 +119,7 @@ public class GameManager extends Application {
 
     public void render(/*GraphicsContext gc*/) {
         if (currentState == GameState.GAME_TEST) {
-            renderGame.onDraw(gc, gun);
+            renderGame.onDraw(gc);
         }
     }
 
@@ -141,12 +128,10 @@ public class GameManager extends Application {
             switch (event.getCode()) {
                 case A -> paddles.get(0).moveLeft();
                 case D -> paddles.get(0).moveRight();
-                case W -> {
-                    gun = true;
-                    balls.get(0).setFirst(true);
+                case SPACE -> balls.get(0).launch();
                 }
             }
-        });
+        );
 
         scene.setOnKeyReleased(event -> paddles.get(0).setDx(0));
     }
@@ -156,6 +141,7 @@ public class GameManager extends Application {
         Paddle paddleMain = paddles.get(0);
         int testX = ballMain.getX() + ballMain.getWidth() / 2;
         int testY = ballMain.getY() + ballMain.getHeight() - paddleMain.getY();
+
         if (ballMain.getX() + ballMain.getWidth() >= Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH) {
             return "Right";
         } else if (ballMain.getX() <= Basis.STAGE_TEST_X) {

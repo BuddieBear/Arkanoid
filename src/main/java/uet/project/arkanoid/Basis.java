@@ -8,13 +8,17 @@ public class Basis {
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
 
-    //Testing stage
+    // Testing stage
     public static final int STAGE_TEST_WIDTH = 640;
     public static final int STAGE_TEST_HEIGHT = 720;
     public static final int STAGE_TEST_X = 320;
     public static final int STAGE_TEST_Y = 0;
 
-    //Textures
+    // Fixed width, height
+    public static final int ARROW_WIDTH = 45;
+    public static final int ARROW_HEIGHT = 90;
+
+    // Textures
     public static final Image PADDLE_TEXTURE;
     public static final Image BRICK_TEXTURE = null;
     public static final Image BALL_TEXTURE;

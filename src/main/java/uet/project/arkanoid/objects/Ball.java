@@ -30,9 +30,10 @@ public class Ball extends MovableObject {
         return false;
     }
 
-    // Make the ball slide on the paddle.
-    public void spawn() {
+    // Set the ball on the paddle waiting to be launched
+    public void prepareLaunch() {
         setX(paddleMain.getX() + paddleMain.getWidth() / 2 - 25);
+        setY(paddleMain.getY() - this.height + 20);
         if (! back) {
             if (++angle >= 75) {
                 back = true;
@@ -53,6 +54,14 @@ public class Ball extends MovableObject {
         hasLaunch = true;
     }
 
+    public void isDead() {
+        if (this.getY() > Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT) {
+            hasLaunch = false;
+            setDx(0);
+            setDy(0);
+        }
+    }
+
     public void move() {
         if (hasLaunch)
         {
@@ -69,6 +78,7 @@ public class Ball extends MovableObject {
     }
 
     public void render(GraphicsContext gc) {
+        // Draw Arrows if not launched
         if (!hasLaunch) {
             gc.save();
             // Move origin to ball center
@@ -83,11 +93,13 @@ public class Ball extends MovableObject {
         // Always draw the ball itself
         gc.drawImage(Basis.BALL_TEXTURE, getX(), getY(), width, height);
     }
+
     public void update() {
         if (!hasLaunch) {
-            spawn();  // If "W" hasn’t been pressed yet, the ball moves along the paddle.
+            prepareLaunch();  // Spawn until launched
         } else {
-            move();  // If "W" has been pressed, the ball starts bouncing.
+            move();  // After launched
+            isDead();
         }
     }
 }

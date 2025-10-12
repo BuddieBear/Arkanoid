@@ -30,7 +30,7 @@ public class GameManager extends Application {
     private static final List<Paddle> paddles = new ArrayList<>();
     private static final List<PowerUp> powerUps = new ArrayList<>();
 
-    private static String resultCollecsion = "";  // The result of the "checkCollision" function will be stored here.
+    private static String resultCollection = "";  // The result of the "checkCollision" function will be stored here.
 
     public static Paddle getPaddle () {     // Used to pass the paddle to other classes.
         return paddles.get(0);
@@ -42,7 +42,7 @@ public class GameManager extends Application {
 
 
     public static String getResultCollecsion() {
-        return resultCollecsion;
+        return resultCollection;
     }
 
     // GameState
@@ -90,7 +90,7 @@ public class GameManager extends Application {
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long time) { //Can set up delta time
-                resultCollecsion = checkCollisions();
+                resultCollection = checkCollisions();
                 update();
                 render();
             }

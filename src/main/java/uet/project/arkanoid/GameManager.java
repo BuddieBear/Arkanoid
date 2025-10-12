@@ -6,6 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
@@ -29,8 +30,19 @@ public class GameManager extends Application {
     private static final List<Paddle> paddles = new ArrayList<>();
     private static final List<PowerUp> powerUps = new ArrayList<>();
 
+    private static String resultCollection = "";  // The result of the "checkCollision" function will be stored here.
+
     public static Paddle getPaddle () {     // Used to pass the paddle to other classes.
         return paddles.get(0);
+    }
+
+    public static Ball getBall() {
+        return balls.get(0);
+    }
+
+
+    public static String getResultCollecsion() {
+        return resultCollection;
     }
 
     // GameState
@@ -78,6 +90,7 @@ public class GameManager extends Application {
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long time) { //Can set up delta time
+                resultCollection = checkCollisions();
                 update();
                 render();
             }
@@ -115,14 +128,32 @@ public class GameManager extends Application {
             switch (event.getCode()) {
                 case A -> paddles.get(0).moveLeft();
                 case D -> paddles.get(0).moveRight();
+                case SPACE -> balls.get(0).launch();
+                }
             }
-        });
+        );
 
         scene.setOnKeyReleased(event -> paddles.get(0).setDx(0));
     }
 
-    /*private void checkCollisions() {
-    }
-    */
+    private String checkCollisions() {
+        Ball ballMain = balls.get(0);
+        Paddle paddleMain = paddles.get(0);
+        int testX = ballMain.getX() + ballMain.getWidth() / 2;
+        int testY = ballMain.getY() + ballMain.getHeight() - paddleMain.getY();
 
+        if (ballMain.getX() + ballMain.getWidth() >= Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH) {
+            return "Right";
+        } else if (ballMain.getX() <= Basis.STAGE_TEST_X) {
+            return "Left";
+        } else if (ballMain.getY() <= Basis.STAGE_TEST_Y){
+            return "Up";
+        } else if (testX <= paddleMain.getX() + paddleMain.getWidth() - 33
+                && testX >= paddleMain.getX() + 33
+                && testY >= 25) {
+            return "Paddle";
+        }
+        // 33 and 25 are the padding of the paddle.
+        return "";
+    }
 }

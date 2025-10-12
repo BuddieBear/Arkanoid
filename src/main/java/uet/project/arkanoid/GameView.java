@@ -45,6 +45,5 @@ public class GameView {
         for (PowerUp powerUp : powerUps) {
             powerUp.render(gc);
         }
-
     }
 }

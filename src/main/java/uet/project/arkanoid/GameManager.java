@@ -109,9 +109,10 @@ public class GameManager extends Application {
             }
             for (Ball ball : balls) {
                 ball.update();
+                ball.Collision(bricks);
             }
             for (Brick brick : bricks) {
-                brick.update(balls);
+                brick.update();
             }
             bricks.removeIf(Brick::isDestroy);
         }

@@ -7,7 +7,7 @@ import uet.project.arkanoid.GameManager;
 import java.util.List;
 
 public class Ball extends MovableObject {
-    private int speed = 0;
+    private int speed = 5;
     private int angle = 0;
 
     private boolean hasLaunch = false;
@@ -20,6 +20,9 @@ public class Ball extends MovableObject {
         this.speed = speed;
     }
 
+    public boolean getLaunchState() {
+        return hasLaunch;
+    }
     public void setSpeed(int speed) {
         this.speed = speed;
     }
@@ -37,9 +40,12 @@ public class Ball extends MovableObject {
 
         // Calculate overlaps on each side
         int overlapLeft = right_axis - other_left;
-        int overlapRight = other_right - other_left;
+        int overlapRight = other_right - left_axis;
         int overlapTop = bot_axis - other_top;
         int overlapBottom = other_bottom - bot_axis;
+
+        setX(getX() - getDx());
+        setY(getY() - getDy());
 
         int minimalOverlap = Math.min(Math.min(overlapLeft, overlapRight), Math.min(overlapTop, overlapBottom));
 
@@ -64,11 +70,13 @@ public class Ball extends MovableObject {
     public void Collision(List<? extends GameObject> others) {
         for (GameObject Obj : others) {
             if (this.checkCollision(Obj)) {
-                bounceOff(Obj);
-                if (Obj instanceof Brick) { // Check for Bricks
+                if (Obj instanceof Brick && !((Brick) Obj).getProtection()) { // Check for Bricks
                     ((Brick) Obj).takeHit();
+                    ((Brick) Obj).setProtection(true);
+                    bounceOff(Obj);
                 }
                 else if (Obj instanceof Paddle) {
+                    bounceOff(Obj);
                 }
             }
         }
@@ -76,8 +84,8 @@ public class Ball extends MovableObject {
 
     // Set the ball on the paddle waiting to be launched
     public void prepareLaunch() {
-        setX(paddleMain.getX() + paddleMain.getWidth() / 2 - 25);
-        setY(paddleMain.getY() - this.height + 20);
+        setX(paddleMain.getX() + paddleMain.getWidth() / 2 -25);
+        setY(paddleMain.getY() - this.height);
         if (! back) {
             if (++angle >= 75) {
                 back = true;
@@ -91,10 +99,13 @@ public class Ball extends MovableObject {
     }
     // Set speed when launch
     public void launch () {
+        if (hasLaunch) {
+            return;
+        }
         angle = 90 - angle;
         double angleRadian = Math.toRadians(angle);
         setDx((int)(this.speed * Math.cos(angleRadian)));
-        setDy((int)(this.speed * Math.sin(angleRadian)));
+        setDy((int)(-this.speed * Math.sin(angleRadian)));
         hasLaunch = true;
     }
 
@@ -118,7 +129,7 @@ public class Ball extends MovableObject {
             }
         }
         setX(getX() + getDx());
-        setY(getY() - getDy());
+        setY(getY() + getDy());
     }
 
     public void render(GraphicsContext gc) {

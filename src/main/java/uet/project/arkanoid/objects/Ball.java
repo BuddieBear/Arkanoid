@@ -4,6 +4,8 @@ import javafx.scene.canvas.GraphicsContext;
 import uet.project.arkanoid.Basis;
 import uet.project.arkanoid.GameManager;
 
+import java.util.List;
+
 public class Ball extends MovableObject {
     private int speed = 0;
     private int angle = 0;
@@ -23,11 +25,53 @@ public class Ball extends MovableObject {
     }
 
     public boolean bounceOff(GameObject other) {
-        return false;
+        int top_axis = getY();
+        int bot_axis = getY() + getHeight();
+        int left_axis = getX();
+        int right_axis = getX() + getWidth();
+
+        int other_top = other.getY();
+        int other_bottom = other.getY() + other.getHeight();
+        int other_left = other.getX();
+        int other_right = other.getX() + other.getWidth();
+
+        // Calculate overlaps on each side
+        int overlapLeft = right_axis - other_left;
+        int overlapRight = other_right - other_left;
+        int overlapTop = bot_axis - other_top;
+        int overlapBottom = other_bottom - bot_axis;
+
+        int minimalOverlap = Math.min(Math.min(overlapLeft, overlapRight), Math.min(overlapTop, overlapBottom));
+
+        if (minimalOverlap == overlapLeft || minimalOverlap == overlapRight) {
+            setDx(-getDx());
+        }
+        else if (minimalOverlap == overlapTop || minimalOverlap == overlapBottom) {
+            setDy(-getDy());
+        }
+
+        //TODO: For paddle, changes the angle of the ball depending on the position it landed on the paddle.
+        return true;
     }
 
     public boolean checkCollision(GameObject other) {
-        return false;
+        return this.getX() < other.getX() + other.getWidth()
+                && this.getX() + this.getWidth() > other.getX()
+                && this.getY() < other.getY() + other.getHeight()
+                && this.getY() + this.getHeight() > other.getY();
+    }
+
+    public void Collision(List<? extends GameObject> others) {
+        for (GameObject Obj : others) {
+            if (this.checkCollision(Obj)) {
+                bounceOff(Obj);
+                if (Obj instanceof Brick) { // Check for Bricks
+                    ((Brick) Obj).takeHit();
+                }
+                else if (Obj instanceof Paddle) {
+                }
+            }
+        }
     }
 
     // Set the ball on the paddle waiting to be launched
@@ -43,7 +87,7 @@ public class Ball extends MovableObject {
                 back = false;
             }
         }
-        System.out.println("Angle in the ball: " + this.angle);
+        System.out.println("Angle of the ball: " + this.angle);
     }
     // Set speed when launch
     public void launch () {

@@ -28,35 +28,40 @@ public class Ball extends MovableObject {
     }
 
     public boolean bounceOff(GameObject other) {
-        int top_axis = getY();
-        int bot_axis = getY() + getHeight();
-        int left_axis = getX();
-        int right_axis = getX() + getWidth();
+        int ballLeft = getX();
+        int ballRight = getX() + getWidth();
+        int ballTop = getY();
+        int ballBottom = getY() + getHeight();
 
-        int other_top = other.getY();
-        int other_bottom = other.getY() + other.getHeight();
-        int other_left = other.getX();
-        int other_right = other.getX() + other.getWidth();
+        int otherLeft = other.getX();
+        int otherRight = other.getX() + other.getWidth();
+        int otherTop = other.getY();
+        int otherBottom = other.getY() + other.getHeight();
 
-        // Calculate overlaps on each side
-        int overlapLeft = right_axis - other_left;
-        int overlapRight = other_right - left_axis;
-        int overlapTop = bot_axis - other_top;
-        int overlapBottom = other_bottom - bot_axis;
+        // Calculate overlaps
+        int overlapLeft = ballRight - otherLeft;
+        int overlapRight = otherRight - ballLeft;
+        int overlapTop = ballBottom - otherTop;
+        int overlapBottom = otherBottom - ballTop;
 
-        setX(getX() - getDx());
-        setY(getY() - getDy());
+        // Find smallest positive overlap
+        int minOverlap = Math.min(Math.min(overlapLeft, overlapRight), Math.min(overlapTop, overlapBottom));
 
-        int minimalOverlap = Math.min(Math.min(overlapLeft, overlapRight), Math.min(overlapTop, overlapBottom));
-
-        if (minimalOverlap == overlapLeft || minimalOverlap == overlapRight) {
-            setDx(-getDx());
+        // Now separate the ball and reflect its velocity
+        if (minOverlap == overlapLeft) {          // Hit from left
+            setX(getX() - overlapLeft);
+            setDx(-Math.abs(getDx()));
+        } else if (minOverlap == overlapRight) {  // Hit from right
+            setX(getX() + overlapRight);
+            setDx(Math.abs(getDx()));
+        } else if (minOverlap == overlapTop) {    // Hit from top
+            setY(getY() - overlapTop);
+            setDy(-Math.abs(getDy()));
+        } else {                                  // Hit from bottom
+            setY(getY() + overlapBottom);
+            setDy(Math.abs(getDy()));
         }
-        else if (minimalOverlap == overlapTop || minimalOverlap == overlapBottom) {
-            setDy(-getDy());
-        }
-
-        //TODO: For paddle, changes the angle of the ball depending on the position it landed on the paddle.
+        //TODO: Paddle Ball Angle changes
         return true;
     }
 

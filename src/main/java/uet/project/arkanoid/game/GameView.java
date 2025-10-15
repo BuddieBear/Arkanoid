@@ -1,12 +1,11 @@
-package uet.project.arkanoid;
+        package uet.project.arkanoid.game;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
 import uet.project.arkanoid.objects.PowerUp;
-import uet.project.arkanoid.userInterface.gameUI;
+import uet.project.arkanoid.ui.gameUI;
 
 import java.util.List;
 

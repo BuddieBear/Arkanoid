@@ -1,4 +1,4 @@
-package uet.project.arkanoid;
+package uet.project.arkanoid.game;
 
 public enum GameState {
     MAIN_MENU,

@@ -1,4 +1,4 @@
-package uet.project.arkanoid;
+package uet.project.arkanoid.utils;
 
 import javafx.scene.image.Image;
 

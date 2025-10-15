@@ -1,9 +1,8 @@
 package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
-import uet.project.arkanoid.Basis;
+import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.GameManager;
-import uet.project.arkanoid.GameSetup;
 
 import java.util.List;
 
@@ -126,7 +125,7 @@ public class Ball extends MovableObject {
     public void move() {
         if (hasLaunch)
         {
-            String check = GameManager.getResultCollecsion();
+            String check = GameManager.getResultCollection();
             if (check.equals("Right") || check.equals("Left")) {
                 setDx(-getDx());
             } else if (check.equals("Up") || check.equals("Paddle")) {

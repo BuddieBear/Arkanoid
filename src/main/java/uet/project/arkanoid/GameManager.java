@@ -6,15 +6,14 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import uet.project.arkanoid.game.GameSetup;
+import uet.project.arkanoid.game.GameState;
+import uet.project.arkanoid.game.GameView;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
-import uet.project.arkanoid.objects.PowerUp;
-
-import java.util.ArrayList;
-import java.util.List;
+import uet.project.arkanoid.utils.Basis;
 
 
 public class GameManager extends Application {
@@ -25,7 +24,7 @@ public class GameManager extends Application {
 
     private static String resultCollection = "";  // TODO: Rework this into ball
 
-    public static String getResultCollecsion() {
+    public static String getResultCollection() {
         return resultCollection;
     }
 
@@ -107,18 +106,18 @@ public class GameManager extends Application {
     public void update() {
         if (currentState == GameState.GAME_TEST) {
             // TODO: Runs update() on every GameObject.
-            for (Paddle paddle : stage.paddles) {
+            for (Paddle paddle : stage.getPaddles()) {
                 paddle.update();
             }
-            for (Ball ball : stage.balls) {
+            for (Ball ball : stage.getBalls()) {
                 ball.update();
-                ball.Collision(stage.bricks);
-                ball.Collision(stage.paddles);
+                ball.Collision(stage.getBricks());
+                ball.Collision(stage.getPaddles());
             }
-            for (Brick brick : stage.bricks) {
+            for (Brick brick : stage.getBricks()) {
                 brick.update();
             }
-            stage.bricks.removeIf(Brick::isDestroy);
+            stage.getBricks().removeIf(Brick::isDestroy);
         }
     }
 
@@ -130,7 +129,7 @@ public class GameManager extends Application {
         double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;
         double scaleY = canvas.getHeight() / Basis.SCREEN_HEIGHT;
 
-        gc.save(); // 🟢 Save current state
+        gc.save();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         gc.scale(scaleX, scaleY);
 
@@ -143,9 +142,9 @@ public class GameManager extends Application {
     private void handleInput(Scene scene) {
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
-                case A -> stage.paddles.get(0).moveLeft();
-                case D -> stage.paddles.get(0).moveRight();
-                case SPACE -> stage.balls.get(0).launch();
+                case A -> stage.getPaddles().get(0).moveLeft();
+                case D -> stage.getPaddles().get(0).moveRight();
+                case SPACE -> stage.getBalls().get(0).launch();
                 }
             }
         );
@@ -156,12 +155,12 @@ public class GameManager extends Application {
             System.out.println("Mouse clicked at: (" + mouseX + ", " + mouseY + ")");
         });
 
-        scene.setOnKeyReleased(event -> stage.paddles.get(0).setDx(0));
+        scene.setOnKeyReleased(event -> stage.getPaddles().get(0).setDx(0));
     }
 
     private String checkCollisions() { //TODO: Rework this to call checkCollision of different objects (if exists)
-        Ball ballMain = stage.balls.get(0);
-        Paddle paddleMain = stage.paddles.get(0);
+        Ball ballMain = stage.getBalls().get(0);
+        Paddle paddleMain = stage.getPaddles().get(0);
         int testX = ballMain.getX() + ballMain.getWidth() / 2;
         int testY = ballMain.getY() + ballMain.getHeight() - paddleMain.getY();
 

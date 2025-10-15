@@ -1,7 +1,7 @@
-package uet.project.arkanoid.userInterface;
+package uet.project.arkanoid.ui;
 
 import javafx.scene.canvas.GraphicsContext;
-import uet.project.arkanoid.Basis;
+import uet.project.arkanoid.utils.Basis;
 
 public class gameUI {
 

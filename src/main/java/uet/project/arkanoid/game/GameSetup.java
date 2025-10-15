@@ -1,5 +1,6 @@
-package uet.project.arkanoid;
+package uet.project.arkanoid.game;
 
+import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;

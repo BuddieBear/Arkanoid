@@ -23,30 +23,15 @@ public class GameManager extends Application {
     private final Canvas canvas = new Canvas(Basis.SCREEN_WIDTH, Basis.SCREEN_HEIGHT);
     private final GraphicsContext gc = canvas.getGraphicsContext2D();
 
-    // Object lists
-    private static final List<Ball> balls = new ArrayList<>();
-    private static final List<Brick> bricks = new ArrayList<>();
-
-    private static final List<Paddle> paddles = new ArrayList<>();
-    private static final List<PowerUp> powerUps = new ArrayList<>();
-
-    private static String resultCollection = "";  // The result of the "checkCollision" function will be stored here.
-
-    public static Paddle getPaddle () {     // Used to pass the paddle to other classes.
-        return paddles.get(0);
-    }
-
-    public static Ball getBall() {
-        return balls.get(0);
-    }
-
+    private static String resultCollection = "";  // TODO: Rework this into ball
 
     public static String getResultCollecsion() {
         return resultCollection;
     }
 
-    // GameState
+    // Game and Stage setup
     public GameState currentState = GameState.GAME_TEST;
+    GameSetup stage;
 
     // Renderer for each GameState
     GameView renderGame; // For stages
@@ -70,26 +55,44 @@ public class GameManager extends Application {
         // Create a scene
         Scene scene = new Scene(root, Basis.SCREEN_WIDTH, Basis.SCREEN_HEIGHT);
 
-        // Set up the main window (stage)
+        // Set up the main window
         primaryStage.setTitle("Arkanoid");
         primaryStage.setScene(scene);
+        primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
+            double newWidth = newVal.doubleValue();
+            double newHeight = newWidth * 9.0 / 16.0;  // Keep 16:9
+            primaryStage.setHeight(newHeight);
+        });
+
+        primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
+            double newHeight = newVal.doubleValue();
+            double newWidth = newHeight * 16.0 / 9.0;  // Keep 16:9
+            primaryStage.setWidth(newWidth);
+        });
 
         // Set up canvas for drawing
         root.getChildren().add(canvas);
+        canvas.widthProperty().bind(scene.widthProperty());
+        canvas.heightProperty().bind(scene.heightProperty());
 
         // Set up input
         handleInput(scene);
 
-        // Set up renderers
-        renderGame = new GameView(bricks, balls, paddles, powerUps);
-
         // Set up stage
-        GameSetup stage = new GameSetup(bricks, balls, paddles, powerUps, currentState);
+        stage = new GameSetup(currentState);
+
+        // Set up renderers
+        renderGame = new GameView(
+                stage.getBricks(),
+                stage.getBalls(),
+                stage.getPaddles(),
+                stage.getPowerUps()
+        );
 
         // Game loop
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
-            public void handle(long time) { //Can set up delta time
+            public void handle(long time) { //TODO: Set up delta time
                 resultCollection = checkCollisions();
                 update();
                 render();
@@ -104,18 +107,18 @@ public class GameManager extends Application {
     public void update() {
         if (currentState == GameState.GAME_TEST) {
             // TODO: Runs update() on every GameObject.
-            for (Paddle paddle : paddles) {
+            for (Paddle paddle : stage.paddles) {
                 paddle.update();
             }
-            for (Ball ball : balls) {
+            for (Ball ball : stage.balls) {
                 ball.update();
-                ball.Collision(bricks);
-                ball.Collision(paddles);
+                ball.Collision(stage.bricks);
+                ball.Collision(stage.paddles);
             }
-            for (Brick brick : bricks) {
+            for (Brick brick : stage.bricks) {
                 brick.update();
             }
-            bricks.removeIf(Brick::isDestroy);
+            stage.bricks.removeIf(Brick::isDestroy);
         }
     }
 
@@ -124,27 +127,41 @@ public class GameManager extends Application {
     }
 
     public void render(/*GraphicsContext gc*/) {
+        double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;
+        double scaleY = canvas.getHeight() / Basis.SCREEN_HEIGHT;
+
+        gc.save(); // 🟢 Save current state
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        gc.scale(scaleX, scaleY);
+
         if (currentState == GameState.GAME_TEST) {
             renderGame.onDraw(gc);
         }
+        gc.restore();
     }
 
     private void handleInput(Scene scene) {
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
-                case A -> paddles.get(0).moveLeft();
-                case D -> paddles.get(0).moveRight();
-                case SPACE -> balls.get(0).launch();
+                case A -> stage.paddles.get(0).moveLeft();
+                case D -> stage.paddles.get(0).moveRight();
+                case SPACE -> stage.balls.get(0).launch();
                 }
             }
         );
 
-        scene.setOnKeyReleased(event -> paddles.get(0).setDx(0));
+        scene.setOnMouseClicked(event -> {
+            double mouseX = event.getX();
+            double mouseY = event.getY();
+            System.out.println("Mouse clicked at: (" + mouseX + ", " + mouseY + ")");
+        });
+
+        scene.setOnKeyReleased(event -> stage.paddles.get(0).setDx(0));
     }
 
-    private String checkCollisions() {
-        Ball ballMain = balls.get(0);
-        Paddle paddleMain = paddles.get(0);
+    private String checkCollisions() { //TODO: Rework this to call checkCollision of different objects (if exists)
+        Ball ballMain = stage.balls.get(0);
+        Paddle paddleMain = stage.paddles.get(0);
         int testX = ballMain.getX() + ballMain.getWidth() / 2;
         int testY = ballMain.getY() + ballMain.getHeight() - paddleMain.getY();
 
@@ -158,5 +175,9 @@ public class GameManager extends Application {
 
         // 33 and 25 are the padding of the paddle.
         return "";
+    }
+
+    public GameSetup getStage() {
+        return stage;
     }
 }

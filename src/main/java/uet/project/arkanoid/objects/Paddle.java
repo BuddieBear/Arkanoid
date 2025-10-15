@@ -40,7 +40,6 @@ public class Paddle extends MovableObject {
     @Override
     public void move() {
         setX(getX() + getDx());
-        System.out.println("Paddle X = " + getX() + " | DX = " + getDx());
     }
 
     public void render(GraphicsContext gc) {

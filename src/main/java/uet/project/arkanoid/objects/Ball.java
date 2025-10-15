@@ -3,6 +3,7 @@ package uet.project.arkanoid.objects;
 import javafx.scene.canvas.GraphicsContext;
 import uet.project.arkanoid.Basis;
 import uet.project.arkanoid.GameManager;
+import uet.project.arkanoid.GameSetup;
 
 import java.util.List;
 
@@ -13,11 +14,12 @@ public class Ball extends MovableObject {
     private boolean hasLaunch = false;
     private boolean back = false;
 
-    Paddle paddleMain = GameManager.getPaddle();
+    private final Paddle paddleMain;
 
-    public Ball(int x, int y, int width, int height, int speed, int dx, int dy) {
+    public Ball(int x, int y, int width, int height, int speed, int dx, int dy, Paddle paddleMain) {
         super(x, y, width, height, dx, dy);
         this.speed = speed;
+        this.paddleMain = paddleMain;
     }
 
     public boolean getLaunchState() {
@@ -27,7 +29,7 @@ public class Ball extends MovableObject {
         this.speed = speed;
     }
 
-    public boolean bounceOff(GameObject other) {
+    public void bounceOff(GameObject other) {
         int ballLeft = getX();
         int ballRight = getX() + getWidth();
         int ballTop = getY();
@@ -62,7 +64,7 @@ public class Ball extends MovableObject {
             setDy(Math.abs(getDy()));
         }
         //TODO: Paddle Ball Angle changes
-        return true;
+        return;
     }
 
     public boolean checkCollision(GameObject other) {
@@ -100,7 +102,6 @@ public class Ball extends MovableObject {
                 back = false;
             }
         }
-        System.out.println("Angle of the ball: " + this.angle);
     }
     // Set speed when launch
     public void launch () {
@@ -125,7 +126,6 @@ public class Ball extends MovableObject {
     public void move() {
         if (hasLaunch)
         {
-            System.out.println("This.angle: " + this.angle);
             String check = GameManager.getResultCollecsion();
             if (check.equals("Right") || check.equals("Left")) {
                 setDx(-getDx());
@@ -161,6 +161,5 @@ public class Ball extends MovableObject {
             move();  // After launched
             isDead();
         }
-        System.out.println("BALL: " + getDx() + " " + getDy());
     }
 }

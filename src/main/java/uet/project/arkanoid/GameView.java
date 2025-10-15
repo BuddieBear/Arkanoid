@@ -6,6 +6,7 @@ import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
 import uet.project.arkanoid.objects.PowerUp;
+import uet.project.arkanoid.userInterface.gameUI;
 
 import java.util.List;
 
@@ -29,8 +30,7 @@ public class GameView {
     // Render objects and background in the stages
     public void onDraw(GraphicsContext gc) {
         //Background
-        gc.setFill(Color.BLACK);
-        gc.fillRect(Basis.STAGE_TEST_X, Basis.STAGE_TEST_Y, Basis.STAGE_TEST_WIDTH, Basis.STAGE_TEST_HEIGHT);
+        gameUI.render(gc);
 
         //Run render() on every objects in game.
         for (Brick brick : bricks) {

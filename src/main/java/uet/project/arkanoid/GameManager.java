@@ -109,7 +109,13 @@ public class GameManager extends Application {
             }
             for (Ball ball : balls) {
                 ball.update();
+                ball.Collision(bricks);
+                ball.Collision(paddles);
             }
+            for (Brick brick : bricks) {
+                brick.update();
+            }
+            bricks.removeIf(Brick::isDestroy);
         }
     }
 
@@ -148,11 +154,8 @@ public class GameManager extends Application {
             return "Left";
         } else if (ballMain.getY() <= Basis.STAGE_TEST_Y){
             return "Up";
-        } else if (testX <= paddleMain.getX() + paddleMain.getWidth() - 33
-                && testX >= paddleMain.getX() + 33
-                && testY >= 25) {
-            return "Paddle";
         }
+
         // 33 and 25 are the padding of the paddle.
         return "";
     }

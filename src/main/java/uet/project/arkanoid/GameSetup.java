@@ -31,7 +31,7 @@ public class GameSetup {
             paddles.add(new Paddle(Basis.STAGE_TEST_X - 33, 720 - 70, 210, 56, 6, 0, 0));  // 33 is the padding of the paddle.
             Paddle paddleMain = paddles.get(0);
 
-            balls.add(new Ball(paddleMain.getX() + paddleMain.getWidth() / 2 - 25, paddleMain.getY() - 20, 50, 50, 6, 0, 0));
+            balls.add(new Ball(paddleMain.getX() + paddleMain.getWidth() / 2 - 25, paddleMain.getY() - 20, 35, 35, 8, 0, 0));
 
             bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 50, Basis.STAGE_TEST_Y+ 75, 100, 75, 1));
             bricks.add(new IndestructibleBrick(Basis.STAGE_TEST_X + 150, Basis.STAGE_TEST_Y+ 150, 100, 75));

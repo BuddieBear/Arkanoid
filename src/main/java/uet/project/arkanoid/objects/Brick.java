@@ -14,6 +14,9 @@ public class Brick extends GameObject {
     private int maxHp;
     private BrickType type;
     protected Image brickImage;
+    private boolean protection = false;
+    private int timer = 0;
+    private int protectedTime = 5;
 
     public enum BrickType {
         INDESTRUCTIBLE,
@@ -51,13 +54,16 @@ public class Brick extends GameObject {
         this.hitPoints = hitPoints;
     }
 
-    public int takeHit() {
-        if (hitPoints > 0) {
-            hitPoints--;
-        } else {
-            hitPoints = 0;
-        }
-        return hitPoints;
+    public void setProtection(boolean protect) {
+        this.protection = protect;
+    }
+
+    public boolean getProtection() {
+        return protection;
+    }
+
+    public void takeHit() {
+        hitPoints--;
     }
 
     public boolean isDestroy() {
@@ -68,7 +74,15 @@ public class Brick extends GameObject {
         gc.drawImage(brickImage, getX(), getY(), this.width, this.height);
     }
 
+    @Override
     public void update() {
+        if (protection) {
+            if (timer > protectedTime) {
+                this.protection = false;
+                timer = 0;
+            }
+            timer ++;
+        }
     }
 }
 

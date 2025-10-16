@@ -31,7 +31,7 @@ public class GameView {
         for (Paddle paddle : stage.getPaddles()) {
             paddle.render(gc);
         }
-        for (PowerUp powerUp : stage.getPaddles()) {
+        for (PowerUp powerUp : stage.getPowerUps()) {
             powerUp.render(gc);
         }
 

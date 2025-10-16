@@ -45,8 +45,16 @@ public class GameSetup {
     }
 
     // Getter methods to access lists
-    public List<Brick> getBricks() { return bricks; }
-    public List<Ball> getBalls() { return balls; }
-    public List<Paddle> getPaddles() { return paddles; }
-    public List<PowerUp> getPowerUps() { return powerUps; }
+    public List<Brick> getBricks() {
+        return bricks;
+    }
+    public List<Ball> getBalls() {
+        return balls;
+    }
+    public List<Paddle> getPaddles() {
+        return paddles;
+    }
+    public List<PowerUp> getPowerUps() {
+        return powerUps;
+    }
 }

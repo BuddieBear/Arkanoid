@@ -17,7 +17,7 @@ public class Basis {
     // Fixed width, height
     public static final int ARROW_WIDTH = 45;
     public static final int ARROW_HEIGHT = 90;
-
+public static final int BASE_BRICK_WIDTH = 55
     // Textures
     public static final Image PADDLE_TEXTURE;
     public static final Image BALL_TEXTURE;

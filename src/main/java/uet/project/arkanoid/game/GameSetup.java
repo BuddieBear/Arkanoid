@@ -19,7 +19,7 @@ public class GameSetup {
 
     // Constructor initializes all lists and adds test objects
     public GameSetup(GameState currentState) {
-        // Initialize the lists (don’t shadow with local variables!)
+        // Initialize the lists
         bricks = new ArrayList<>();
         balls = new ArrayList<>();
         paddles = new ArrayList<>();

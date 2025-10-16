@@ -81,12 +81,7 @@ public class GameManager extends Application {
         stage = new GameSetup(currentState);
 
         // Set up renderers
-        renderGame = new GameView(
-                stage.getBricks(),
-                stage.getBalls(),
-                stage.getPaddles(),
-                stage.getPowerUps()
-        );
+        renderGame = new GameView(stage);
 
         // Game loop
         AnimationTimer gameLoop = new AnimationTimer() {

@@ -10,20 +10,10 @@ import uet.project.arkanoid.ui.gameUI;
 import java.util.List;
 
 public class GameView {
-    private List<Brick> bricks;
-    private List<Ball> balls;
-    private List<Paddle> paddles;
-    private List<PowerUp> powerUps;
-
+    private GameSetup stage;
     // Reference every object in the game
-    public GameView(List<Brick> bricks,
-                    List<Ball> balls,
-                    List<Paddle> paddles,
-                    List<PowerUp> powerUps) {
-        this.bricks = bricks;
-        this.balls = balls;
-        this.paddles = paddles;
-        this.powerUps = powerUps;
+    public GameView(GameSetup stage) {
+        this.stage = stage;
     }
 
     // Render objects and background in the stages
@@ -32,17 +22,18 @@ public class GameView {
         gameUI.render(gc);
 
         //Run render() on every objects in game.
-        for (Brick brick : bricks) {
+        for (Brick brick : stage.getBricks()) {
             brick.render(gc);
         }
-        for (Ball ball : balls) {
+        for (Ball ball : stage.getBalls()) {
             ball.render(gc);
         }
-        for (Paddle paddle : paddles) {
+        for (Paddle paddle : stage.getPaddles()) {
             paddle.render(gc);
         }
-        for (PowerUp powerUp : powerUps) {
+        for (PowerUp powerUp : stage.getPaddles()) {
             powerUp.render(gc);
         }
+
     }
 }

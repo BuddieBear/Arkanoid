@@ -14,10 +14,21 @@ public class Basis {
     public static final int STAGE_TEST_X = 32;
     public static final int STAGE_TEST_Y = 32;
 
+
     // Fixed width, height
     public static final int ARROW_WIDTH = 45;
     public static final int ARROW_HEIGHT = 90;
     public static final int BALL_DIAMETER = 40;
+    public static final int OBJECTIVE_BOARD_WIDTH = 180;
+    public static final int OBJECTIVE_BOARD_HEIGHT = 360;
+    public static final int HEART_WIDTH = 20;
+    public static final int HEART_HEIGHT = 20;
+
+    // Fixed location
+    public static final int OBJECTIVE_BOARD_X = 1080;
+    public static final int OBJECTIVE_BOARD_Y = 230;
+    public static final int HEART_X = 1130;
+    public static final int HEART_Y = 280;
 
     // Base stats
     public static final int BALL_SPEED = 8;
@@ -32,6 +43,7 @@ public class Basis {
     public static final Image[] BRICK_NORMAL_TEXTURE_3 = new Image[3];
     public static final Image BRICK_INDESTRUCTIBLE_TEXTURE;
     public static final Image GAME_BACKGROUND;
+    public static final Image OBJECTIVE_BOARD_TEXTURE;
 
     static {
         // Paddle + Ball
@@ -50,5 +62,6 @@ public class Basis {
 
         // UI elements
         GAME_BACKGROUND = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/InGame/Background_Arkanoid.jpg")).toExternalForm());
+        OBJECTIVE_BOARD_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/InGame/Objective_Board.jpg")).toExternalForm());
     }
 }

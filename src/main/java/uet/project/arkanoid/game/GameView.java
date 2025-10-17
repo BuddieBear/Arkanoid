@@ -19,7 +19,7 @@ public class GameView {
     // Render objects and background in the stages
     public void onDraw(GraphicsContext gc) {
         //Background
-        gameUI.render(gc);
+        gameUI.render(gc, stage);
 
         //Run render() on every objects in game.
         for (Brick brick : stage.getBricks()) {

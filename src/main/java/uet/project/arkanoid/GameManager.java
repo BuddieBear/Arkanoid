@@ -37,6 +37,7 @@ public class GameManager extends Application {
     // Renderer for each GameState
     GameView renderGame; // For stages
 
+
     public static void main(String[] args) {
         Application.launch(GameManager.class);
     }
@@ -89,6 +90,7 @@ public class GameManager extends Application {
          gameLoop = new AnimationTimer() {
             @Override
             public void handle(long time) { //TODO: Set up delta time
+
                 resultCollection = checkCollisions();
                 render();
                 update();
@@ -130,6 +132,8 @@ public class GameManager extends Application {
     }
 
     public void render() {
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
         double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;
         double scaleY = canvas.getHeight() / Basis.SCREEN_HEIGHT;
 
@@ -155,7 +159,7 @@ public class GameManager extends Application {
             }
         );
 
-        scene.setOnMouseClicked(event -> {
+        canvas.setOnMouseClicked(event -> {
             double mouseX = event.getX();
             double mouseY = event.getY();
             System.out.println("Mouse clicked at: (" + mouseX + ", " + mouseY + ")");

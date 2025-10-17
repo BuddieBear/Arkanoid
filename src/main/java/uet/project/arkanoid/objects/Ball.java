@@ -1,6 +1,7 @@
 package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
+import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.GameManager;
 
@@ -14,11 +15,13 @@ public class Ball extends MovableObject {
     private boolean back = false;
 
     private final Paddle paddleMain;
+    private final GameSetup stage;
 
-    public Ball(int x, int y, int width, int height, int speed, int dx, int dy, Paddle paddleMain) {
-        super(x, y, width, height, dx, dy);
+    public Ball(int x, int y, int width, int height, int speed, GameSetup stage) {
+        super(x, y, width, height);
         this.speed = speed;
-        this.paddleMain = paddleMain;
+        this.stage = stage;
+        this.paddleMain = stage.getPaddles().get(0);
     }
 
     public boolean getLaunchState() {
@@ -119,6 +122,8 @@ public class Ball extends MovableObject {
             hasLaunch = false;
             setDx(0);
             setDy(0);
+            angle = 0;
+            stage.setLives(stage.getLives() - 1);
         }
     }
 

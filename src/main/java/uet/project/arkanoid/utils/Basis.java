@@ -17,6 +17,11 @@ public class Basis {
     // Fixed width, height
     public static final int ARROW_WIDTH = 45;
     public static final int ARROW_HEIGHT = 90;
+    public static final int BALL_DIAMETER = 40;
+
+    // Base stats
+    public static final int BALL_SPEED = 8;
+    public static final int PADDLE_SPEED = 6;
 
     // Textures
     public static final Image PADDLE_TEXTURE;

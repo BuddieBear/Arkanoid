@@ -21,6 +21,7 @@ public class GameManager extends Application {
     private final Group root = new Group();
     private final Canvas canvas = new Canvas(Basis.SCREEN_WIDTH, Basis.SCREEN_HEIGHT);
     private final GraphicsContext gc = canvas.getGraphicsContext2D();
+    AnimationTimer gameLoop;
 
     private static String resultCollection = "";  // TODO: Rework this into ball
 
@@ -29,7 +30,8 @@ public class GameManager extends Application {
     }
 
     // Game and Stage setup
-    public GameState currentState = GameState.GAME_TEST;
+    public GameState currentState = GameState.PLAYING;
+    public GameState.Stage currentStage = GameState.Stage.STAGE_TEST;
     GameSetup stage;
 
     // Renderer for each GameState
@@ -78,18 +80,18 @@ public class GameManager extends Application {
         handleInput(scene);
 
         // Set up stage
-        stage = new GameSetup(currentState);
+        stage = new GameSetup(currentStage); // TODO: Only update when currentState is playing
 
         // Set up renderers
-        renderGame = new GameView(stage);
+        renderGame = new GameView(stage); // TODO: similar to stage
 
         // Game loop
-        AnimationTimer gameLoop = new AnimationTimer() {
+         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long time) { //TODO: Set up delta time
                 resultCollection = checkCollisions();
-                update();
                 render();
+                update();
             }
         };
 
@@ -99,7 +101,11 @@ public class GameManager extends Application {
     }
 
     public void update() {
-        if (currentState == GameState.GAME_TEST) {
+        if (currentState == GameState.PLAYING) {
+            if (stage.gameWin() || stage.gameLose()) {
+                gameLoop.stop();
+                return;
+            }
             // TODO: Runs update() on every GameObject.
             for (Paddle paddle : stage.getPaddles()) {
                 paddle.update();
@@ -111,6 +117,9 @@ public class GameManager extends Application {
             }
             for (Brick brick : stage.getBricks()) {
                 brick.update();
+                if (brick.isDestroy()) {
+                    stage.addScore(brick.getMaxHp()*10);
+                }
             }
             stage.getBricks().removeIf(Brick::isDestroy);
         }
@@ -120,7 +129,7 @@ public class GameManager extends Application {
 
     }
 
-    public void render(/*GraphicsContext gc*/) {
+    public void render() {
         double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;
         double scaleY = canvas.getHeight() / Basis.SCREEN_HEIGHT;
 
@@ -128,9 +137,11 @@ public class GameManager extends Application {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         gc.scale(scaleX, scaleY);
 
-        if (currentState == GameState.GAME_TEST) {
+        if (currentState == GameState.PLAYING) {
             renderGame.onDraw(gc);
+            System.out.println("Score: " + stage.getScore() + "| Lives: " + stage.getLives());
         }
+
         gc.restore();
     }
 

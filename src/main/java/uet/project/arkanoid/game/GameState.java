@@ -1,8 +1,12 @@
 package uet.project.arkanoid.game;
 
 public enum GameState {
-    MAIN_MENU,
-    GAME_TEST,
-    GAME_STAGE1,
-    GAME_STAGE2,
+    MENU,
+    PLAYING;
+
+    public enum Stage {
+        STAGE_TEST,
+        STAGE_1,
+        STAGE_2
+    }
 }

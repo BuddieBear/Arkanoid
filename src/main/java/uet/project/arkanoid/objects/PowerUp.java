@@ -41,9 +41,9 @@ public class PowerUp extends GameObject {
         if (checkCollision(paddle) && !catchedPowerUp) {
             catchedPowerUp = true;
             applyEffect(paddle);
-            duration = System.currentTimeMillis() / 1000.0;
+            duration = System.currentTimeMillis();
         }
-        if (!catchedPowerUp && System.currentTimeMillis() - duration >= Basis.POWERUP_DURATION) {
+        if (!catchedPowerUp && (System.currentTimeMillis() - duration) / 1000.0 >= Basis.POWERUP_DURATION) {
             removeEffect(paddle);
         }
     }

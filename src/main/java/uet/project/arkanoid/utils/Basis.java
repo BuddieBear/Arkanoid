@@ -46,7 +46,7 @@ public class Basis {
     public static final Image GAME_BACKGROUND;
     public static final Image OBJECTIVE_BOARD_TEXTURE;
     // duration
-    public static final int POWERUP_DURATION = 5;
+    public static final int POWERUP_DURATION = 5000;
     static {
         // Paddle + Ball
         PADDLE_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Paddle_1.png")).toExternalForm());

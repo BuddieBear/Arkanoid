@@ -31,7 +31,7 @@ public class Basis {
     public static final int HEART_Y = 280;
 
     // Base stats
-    public static final int BALL_SPEED = 8;
+    public static final int BALL_SPEED = 7;
     public static final int PADDLE_SPEED = 6;
 
     // Textures

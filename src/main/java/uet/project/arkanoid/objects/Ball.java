@@ -31,7 +31,18 @@ public class Ball extends MovableObject {
         this.speed = speed;
     }
 
+    public void updateVelocity() {
+        double angleRad = Math.toRadians(angle);
+        setDx((int) (speed * Math.cos(angleRad)));
+        setDy((int) (speed * Math.sin(angleRad)));
+    }
     public void bounceOff(GameObject other) {
+        // Paddle collision: custom bounce
+        if (other instanceof Paddle paddle) {
+            handlePaddleCollision(paddle);
+            return;
+        }
+
         int ballLeft = getX();
         int ballRight = getX() + getWidth();
         int ballTop = getY();
@@ -67,6 +78,29 @@ public class Ball extends MovableObject {
         }
         //TODO: Paddle Ball Angle changes
         return;
+    }
+
+    private void handlePaddleCollision(Paddle paddle) {
+        // Compute centers
+        double paddleCenter = paddle.getX() + paddle.getWidth() / 2.0;
+        double ballCenter = getX() + getWidth() / 2.0;
+
+        // Relative hit position (-1 → left edge, +1 → right edge)
+        double hitPos = (ballCenter - paddleCenter) / (paddle.getWidth() / 2.0);
+        hitPos = Math.max(-1.0, Math.min(1.0, hitPos));
+
+        // Define max deviation from vertical (e.g. ±60°)
+        double maxBounce = 60.0;
+
+        // Base upward = 270°, adjust left/right
+        double newAngle = 270.0 + hitPos * maxBounce;
+
+        // Clamp — never let the ball go too horizontal
+        if (newAngle > 345.0) newAngle = 345.0; // up-right limit
+        if (newAngle < 195.0) newAngle = 195.0; // up-left limit
+
+        this.angle = (int) newAngle;
+        updateVelocity();
     }
 
     public boolean checkCollision(GameObject other) {

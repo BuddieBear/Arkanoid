@@ -1,15 +1,15 @@
 package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
-import uet.project.arkanoid.Basis;
+import uet.project.arkanoid.utils.Basis;
 
 public class Paddle extends MovableObject {
     private int speed;
     private PowerUp currentPowerUp = null;
 
 
-    public Paddle(int x, int y, int width, int height, int speed, int dx, int dy) {
-        super(x, y, width, height, dx, dy);
+    public Paddle(int x, int y, int width, int height, int speed) {
+        super(x, y, width, height);
         this.speed = speed;
     }
 
@@ -40,7 +40,6 @@ public class Paddle extends MovableObject {
     @Override
     public void move() {
         setX(getX() + getDx());
-        System.out.println("Paddle X = " + getX() + " | DX = " + getDx());
     }
 
     public void render(GraphicsContext gc) {

@@ -1,7 +1,7 @@
 package uet.project.arkanoid.objects.BrickVariants;
 
 import javafx.scene.canvas.GraphicsContext;
-import uet.project.arkanoid.Basis;
+import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.objects.Brick;
 
 public class NormalBrick extends Brick {

@@ -43,3 +43,6 @@ mvnw
 mvnw.cmd
 # Ignores the Maven Wrapper settings folder
 .mvn/
+
+# Save files
+Saves/

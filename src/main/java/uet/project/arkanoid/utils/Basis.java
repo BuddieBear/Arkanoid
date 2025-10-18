@@ -38,13 +38,15 @@ public class Basis {
     public static final Image PADDLE_TEXTURE;
     public static final Image BALL_TEXTURE;
     public static final Image ARROW_TEXTURE;
+    public static final Image POWERUP_TEXTURE;
     public static final Image BRICK_NORMAL_TEXTURE_1;
     public static final Image[] BRICK_NORMAL_TEXTURE_2 = new Image[2];
     public static final Image[] BRICK_NORMAL_TEXTURE_3 = new Image[3];
     public static final Image BRICK_INDESTRUCTIBLE_TEXTURE;
     public static final Image GAME_BACKGROUND;
     public static final Image OBJECTIVE_BOARD_TEXTURE;
-
+    // duration
+    public static final int POWERUP_DURATION = 5;
     static {
         // Paddle + Ball
         PADDLE_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Paddle_1.png")).toExternalForm());
@@ -59,6 +61,9 @@ public class Basis {
         BRICK_NORMAL_TEXTURE_3[1] = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Brick_3_2.png")).toExternalForm());
         BRICK_NORMAL_TEXTURE_3[0] = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Brick_3_1.png")).toExternalForm());
         BRICK_INDESTRUCTIBLE_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Brick_Indestructible.png")).toExternalForm());
+
+        // powerup
+        POWERUP_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/powerUpImage.png")).toExternalForm());
 
         // UI elements
         GAME_BACKGROUND = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/InGame/Background_Arkanoid.jpg")).toExternalForm());

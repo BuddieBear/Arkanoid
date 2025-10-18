@@ -13,6 +13,7 @@ import uet.project.arkanoid.game.GameView;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
+import uet.project.arkanoid.objects.PowerUp;
 import uet.project.arkanoid.utils.Basis;
 
 
@@ -32,7 +33,7 @@ public class GameManager extends Application {
     // Game and Stage setup
     public GameState currentState = GameState.PLAYING;
     public GameState.Stage currentStage = GameState.Stage.STAGE_TEST;
-    GameSetup stage;
+    static GameSetup stage;
 
     // Renderer for each GameState
     GameView renderGame; // For stages
@@ -117,6 +118,10 @@ public class GameManager extends Application {
                 ball.Collision(stage.getBricks());
                 ball.Collision(stage.getPaddles());
             }
+            stage.addPowerUp(stage.getBricks());
+            for (PowerUp powerUp : stage.getPowerUps()) {
+                powerUp.update(stage.getPaddle());
+            }
             for (Brick brick : stage.getBricks()) {
                 brick.update();
                 if (brick.isDestroy()) {
@@ -124,6 +129,7 @@ public class GameManager extends Application {
                 }
             }
             stage.getBricks().removeIf(Brick::isDestroy);
+            stage.getPowerUps().removeIf(PowerUp::isDead);
         }
     }
 

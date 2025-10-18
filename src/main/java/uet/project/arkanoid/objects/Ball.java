@@ -69,13 +69,6 @@ public class Ball extends MovableObject {
         return;
     }
 
-    public boolean checkCollision(GameObject other) {
-        return this.getX() < other.getX() + other.getWidth()
-                && this.getX() + this.getWidth() > other.getX()
-                && this.getY() < other.getY() + other.getHeight()
-                && this.getY() + this.getHeight() > other.getY();
-    }
-
     public void Collision(List<? extends GameObject> others) {
         for (GameObject Obj : others) {
             if (this.checkCollision(Obj)) {
@@ -162,7 +155,7 @@ public class Ball extends MovableObject {
         if (!hasLaunch) {
             prepareLaunch();  // Spawn until launched
         } else {
-            move();  // After launched
+            move();
             isDead();
         }
     }

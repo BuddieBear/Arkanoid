@@ -1,12 +1,9 @@
 package uet.project.arkanoid.game;
 
+import uet.project.arkanoid.objects.*;
 import uet.project.arkanoid.utils.Basis;
-import uet.project.arkanoid.objects.Ball;
-import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
 import uet.project.arkanoid.objects.BrickVariants.NormalBrick;
-import uet.project.arkanoid.objects.Paddle;
-import uet.project.arkanoid.objects.PowerUp;
 import uet.project.arkanoid.utils.FileManager;
 
 import java.util.ArrayList;
@@ -46,6 +43,15 @@ public class GameSetup {
             bricks.add(new IndestructibleBrick(Basis.STAGE_TEST_X + 150, Basis.STAGE_TEST_Y + 150, 100, 75));
             bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 250, Basis.STAGE_TEST_Y + 225, 100, 75, 2));
             bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 350, Basis.STAGE_TEST_Y + 300, 100, 75, 3));
+
+        }
+    }
+
+    public void addPowerUp(List<? extends Brick> bricks1) {
+        for(Brick brick : bricks1) {
+            if (brick.isDestroy()) {
+                powerUps.add(new PowerUp(brick, 30, 30));
+            }
         }
     }
 
@@ -80,6 +86,10 @@ public class GameSetup {
 
     public List<Paddle> getPaddles() {
         return paddles;
+    }
+
+    public Paddle getPaddle() {
+        return paddles.get(0);
     }
 
     public List<PowerUp> getPowerUps() {

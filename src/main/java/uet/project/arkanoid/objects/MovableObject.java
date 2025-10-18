@@ -1,6 +1,6 @@
 package uet.project.arkanoid.objects;
 
-public abstract class MovableObject extends GameObject{
+public abstract class MovableObject extends GameObject {
     private int dx = 0;
     private int dy = 0;
 

@@ -47,6 +47,13 @@ public abstract class GameObject {
         this.height = height;
     }
 
+    public boolean checkCollision(GameObject other) {
+        return this.getX() < other.getX() + other.getWidth()
+                && this.getX() + this.getWidth() > other.getX()
+                && this.getY() < other.getY() + other.getHeight()
+                && this.getY() + this.getHeight() > other.getY();
+    }
+
     public abstract void update();
 
     public abstract void render(GraphicsContext gc);

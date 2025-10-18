@@ -5,8 +5,8 @@ import uet.project.arkanoid.utils.Basis;
 
 import java.util.List;
 
-public class PowerUp extends GameObject {
-    private final PowerUpType type;
+public abstract class PowerUp extends GameObject {
+    protected PowerUpType type;
     private double duration = 10; // so it wont check isDead
     private boolean catchedPowerUp = false;
 
@@ -16,17 +16,18 @@ public class PowerUp extends GameObject {
         EXTRA_LIFE,
         MULTI_BALL,
         SPEED_UP,
+        DAMAGE_BRICK,
+        SMALL_BRICK,
+        HARDER_BRICK,
         SLOW_DOWN
     }
 
     public PowerUp(GameObject object, int width, int height) {
         super(object.getX() + object.getWidth() / 2 - width,
                 object.getY(), width, height);
-        type = null;
     }
 
-    public void applyEffect(GameObject paddle) {
-    }
+    public abstract void applyEffect(GameObject paddle);
 
     public void removeEffect(GameObject paddle) {
         duration = 0;
@@ -38,12 +39,12 @@ public class PowerUp extends GameObject {
 
     public void update(GameObject object) {
         setY(getY() + 10);
-        if (checkCollision(paddle) && !catchedPowerUp) {
+        if (checkCollision(object) && !catchedPowerUp) {
             catchedPowerUp = true;
             applyEffect(object);
             duration = System.currentTimeMillis();
         }
-        if (!catchedPowerUp && (System.currentTimeMillis() - duration) / 1000.0 >= Basis.POWERUP_DURATION) {
+        if (catchedPowerUp && (System.currentTimeMillis() - duration) / 1000.0 >= Basis.POWERUP_DURATION) {
             removeEffect(object);
         }
     }

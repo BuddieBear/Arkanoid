@@ -29,7 +29,7 @@ public class NormalBrick extends Brick {
     }
 
     @Override
-    public void render(GraphicsContext gc) {
+  public void render(GraphicsContext gc) {
         int index = getHitPoints()-1;
         switch(type){
             case TWO:

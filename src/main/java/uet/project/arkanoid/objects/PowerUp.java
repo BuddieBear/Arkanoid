@@ -19,9 +19,9 @@ public class PowerUp extends GameObject {
         SLOW_DOWN
     }
 
-    public PowerUp(Brick brick, int width, int height) {
-        super(brick.getX() + brick.getWidth() / 2 - width,
-                brick.getY(), width, height);
+    public PowerUp(GameObject object, int width, int height) {
+        super(object.getX() + object.getWidth() / 2 - width,
+                object.getY(), width, height);
         type = null;
     }
 
@@ -36,15 +36,15 @@ public class PowerUp extends GameObject {
         return this.getY() > Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT && duration != 0;
     }
 
-    public void update(Paddle paddle) {
+    public void update(GameObject object) {
         setY(getY() + 10);
         if (checkCollision(paddle) && !catchedPowerUp) {
             catchedPowerUp = true;
-            applyEffect(paddle);
+            applyEffect(object);
             duration = System.currentTimeMillis();
         }
         if (!catchedPowerUp && (System.currentTimeMillis() - duration) / 1000.0 >= Basis.POWERUP_DURATION) {
-            removeEffect(paddle);
+            removeEffect(object);
         }
     }
 

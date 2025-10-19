@@ -17,7 +17,7 @@ public class Ball extends MovableObject {
     private final Paddle paddleMain;
     private final GameSetup stage;
 
-    public Ball(int x, int y, int width, int height, int speed, GameSetup stage) {
+    public Ball(int x, int y, double width, double height, int speed, GameSetup stage) {
         super(x, y, width, height);
         this.speed = speed;
         this.stage = stage;
@@ -33,14 +33,14 @@ public class Ball extends MovableObject {
 
     public void bounceOff(GameObject other) {
         int ballLeft = getX();
-        int ballRight = getX() + getWidth();
+        int ballRight = getX() + (int)getWidth();
         int ballTop = getY();
-        int ballBottom = getY() + getHeight();
+        int ballBottom = getY() + (int)getHeight();
 
         int otherLeft = other.getX();
-        int otherRight = other.getX() + other.getWidth();
+        int otherRight = other.getX() + (int)other.getWidth();
         int otherTop = other.getY();
-        int otherBottom = other.getY() + other.getHeight();
+        int otherBottom = other.getY() + (int)other.getHeight();
 
         // Calculate overlaps
         int overlapLeft = ballRight - otherLeft;
@@ -86,8 +86,8 @@ public class Ball extends MovableObject {
 
     // Set the ball on the paddle waiting to be launched
     public void prepareLaunch() {
-        setX(paddleMain.getX() + paddleMain.getWidth() / 2 -25);
-        setY(paddleMain.getY() - this.height);
+        setX((int) (paddleMain.getX() + paddleMain.getWidth() / 2 -25));
+        setY((int) (paddleMain.getY() - this.height));
         if (! back) {
             if (++angle >= 75) {
                 back = true;

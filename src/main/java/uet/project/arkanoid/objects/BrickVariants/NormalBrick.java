@@ -12,7 +12,7 @@ public class NormalBrick extends Brick {
         THREE
     }
 
-    public NormalBrick(int x, int y, int width, int height, int hitPoints) {
+    public NormalBrick(int x, int y, double width, double height, int hitPoints) {
         super(x, y, width, height, hitPoints, BrickType.NORMAL);
         if (hitPoints == 1) {
             this.brickImage = Basis.BRICK_NORMAL_TEXTURE_1;
@@ -33,13 +33,18 @@ public class NormalBrick extends Brick {
         int index = getHitPoints()-1;
         switch(type){
             case TWO:
-                this.brickImage = Basis.BRICK_NORMAL_TEXTURE_2[index];
+                if(index < 2) {
+                    this.brickImage = Basis.BRICK_NORMAL_TEXTURE_2[index];
+                } else {
+                    this.brickImage = Basis.BRICK_NORMAL_TEXTURE_2[1];
+                }
                 break;
             case THREE:
-                if (getHitPoints() < getMaxHp() && index > 1) {
-                    index = 1;
+                if(index < 3) {
+                    this.brickImage = Basis.BRICK_NORMAL_TEXTURE_3[index];
+                } else {
+                    this.brickImage = Basis.BRICK_NORMAL_TEXTURE_3[2];
                 }
-                this.brickImage = Basis.BRICK_NORMAL_TEXTURE_3[index];
                 break;
         }
         super.render(gc);

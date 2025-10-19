@@ -1,6 +1,7 @@
 package uet.project.arkanoid.game;
 
 import uet.project.arkanoid.objects.*;
+import uet.project.arkanoid.objects.DeBuffVariants.HarderBrickPowerDown;
 import uet.project.arkanoid.objects.PowerUpVariants.SmallBrickPowerUp;
 import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
@@ -35,7 +36,7 @@ public class GameSetup {
             paddles.add(new Paddle(Basis.STAGE_TEST_X - 33, 720 - 70, 210, 56, Basis.PADDLE_SPEED));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
             balls.add(new Ball(
-                    paddleMain.getX() + paddleMain.getWidth() / 2 - 25,
+                    paddleMain.getX() + (int)paddleMain.getWidth() / 2 - 25,
                     paddleMain.getY() - 20, Basis.BALL_DIAMETER, Basis.BALL_DIAMETER,
                     Basis.BALL_SPEED, this
             ));

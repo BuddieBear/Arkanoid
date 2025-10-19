@@ -3,12 +3,12 @@ package uet.project.arkanoid.objects;
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class GameObject {
-    protected int width;
-    protected int height;
+    protected double width;
+    protected double height;
     private int x;
     private int y;
 
-    public GameObject(int x, int y, int width, int height) {
+    public GameObject(int x, int y, double width, double height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -31,19 +31,19 @@ public abstract class GameObject {
         this.y = Y;
     }
 
-    public int getWidth() {
+    public double getWidth() {
         return this.width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(double width) {
         this.width = width;
     }
 
-    public int getHeight() {
+    public double getHeight() {
         return this.height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(double height) {
         this.height = height;
     }
 

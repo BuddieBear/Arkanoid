@@ -23,7 +23,7 @@ public class Brick extends GameObject {
         NORMAL
     }
 
-    public Brick(int x, int y, int width, int height, int hitPoints, BrickType type) {
+    public Brick(int x, int y, double width, double height, int hitPoints, BrickType type) {
         super(x, y, width, height);
         this.maxHp = hitPoints;
         this.hitPoints = hitPoints;

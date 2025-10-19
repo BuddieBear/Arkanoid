@@ -33,10 +33,9 @@ public class GameManager extends Application {
     // Game and Stage setup
     public GameState currentState = GameState.PLAYING;
     public GameState.Stage currentStage = GameState.Stage.STAGE_TEST;
-    static GameSetup stage;
 
     // Renderer for each GameState
-    GameView renderGame; // For stages
+    GameView renderGame; // For Basis.stages
 
 
     public static void main(String[] args) {
@@ -51,7 +50,7 @@ public class GameManager extends Application {
      * and runs the {@link AnimationTimer} game loop.
      * </p>
      *
-     * @param primaryStage the primary window (stage) for the application
+     * @param primaryStage the primary window (Basis.stage) for the application
      */
     @Override
     public void start(Stage primaryStage) {
@@ -81,11 +80,11 @@ public class GameManager extends Application {
         // Set up input
         handleInput(scene);
 
-        // Set up stage
-        stage = new GameSetup(currentStage); // TODO: Only update when currentState is playing
+        // Set up Basis.stage
+        Basis.stage = new GameSetup(currentStage); // TODO: Only update when currentState is playing
 
         // Set up renderers
-        renderGame = new GameView(stage); // TODO: similar to stage
+        renderGame = new GameView(Basis.stage); // TODO: similar to Basis.stage
 
         // Game loop
          gameLoop = new AnimationTimer() {
@@ -105,31 +104,31 @@ public class GameManager extends Application {
 
     public void update() {
         if (currentState == GameState.PLAYING) {
-            if (stage.gameWin() || stage.gameLose()) {
+            if (Basis.stage.gameWin() || Basis.stage.gameLose()) {
                 gameLoop.stop();
                 return;
             }
             // TODO: Runs update() on every GameObject.
-            for (Paddle paddle : stage.getPaddles()) {
+            for (Paddle paddle : Basis.stage.getPaddles()) {
                 paddle.update();
             }
-            for (Ball ball : stage.getBalls()) {
+            for (Ball ball : Basis.stage.getBalls()) {
                 ball.update();
-                ball.Collision(stage.getBricks());
-                ball.Collision(stage.getPaddles());
+                ball.Collision(Basis.stage.getBricks());
+                ball.Collision(Basis.stage.getPaddles());
             }
-            stage.addPowerUp(stage.getBricks());
-            for (PowerUp powerUp : stage.getPowerUps()) {
-                powerUp.update(stage.getPaddle());
+            Basis.stage.addPowerUp(Basis.stage.getBricks());
+            for (PowerUp powerUp : Basis.stage.getPowerUps()) {
+                powerUp.update();
             }
-            for (Brick brick : stage.getBricks()) {
+            for (Brick brick : Basis.stage.getBricks()) {
                 brick.update();
                 if (brick.isDestroy()) {
-                    stage.addScore(brick.getMaxHp()*10);
+                    Basis.stage.addScore(brick.getMaxHp()*10);
                 }
             }
-            stage.getBricks().removeIf(Brick::isDestroy);
-            stage.getPowerUps().removeIf(PowerUp::isDead);
+            Basis.stage.getBricks().removeIf(Brick::isDestroy);
+            Basis.stage.getPowerUps().removeIf(PowerUp::isDead);
         }
     }
 
@@ -149,7 +148,7 @@ public class GameManager extends Application {
 
         if (currentState == GameState.PLAYING) {
             renderGame.onDraw(gc);
-            System.out.println("Score: " + stage.getScore() + "| Lives: " + stage.getLives());
+            System.out.println("Score: " + Basis.stage.getScore() + "| Lives: " + Basis.stage.getLives());
         }
 
         gc.restore();
@@ -158,9 +157,9 @@ public class GameManager extends Application {
     private void handleInput(Scene scene) {
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
-                case A -> stage.getPaddles().get(0).moveLeft();
-                case D -> stage.getPaddles().get(0).moveRight();
-                case SPACE -> stage.getBalls().get(0).launch();
+                case A -> Basis.stage.getPaddles().get(0).moveLeft();
+                case D -> Basis.stage.getPaddles().get(0).moveRight();
+                case SPACE -> Basis.stage.getBalls().get(0).launch();
                 }
             }
         );
@@ -171,14 +170,14 @@ public class GameManager extends Application {
             System.out.println("Mouse clicked at: (" + mouseX + ", " + mouseY + ")");
         });
 
-        scene.setOnKeyReleased(event -> stage.getPaddles().get(0).setDx(0));
+        scene.setOnKeyReleased(event -> Basis.stage.getPaddles().get(0).setDx(0));
     }
 
     private String checkCollisions() { //TODO: Rework this to call checkCollision of different objects (if exists)
-        Ball ballMain = stage.getBalls().get(0);
-        Paddle paddleMain = stage.getPaddles().get(0);
-        int testX = ballMain.getX() + ballMain.getWidth() / 2;
-        int testY = ballMain.getY() + ballMain.getHeight() - paddleMain.getY();
+        Ball ballMain = Basis.stage.getBalls().get(0);
+        Paddle paddleMain = Basis.stage.getPaddles().get(0);
+        int testX = ballMain.getX() + (int) ballMain.getWidth() / 2;
+        int testY = ballMain.getY() + (int) ballMain.getHeight() - paddleMain.getY();
 
         if (ballMain.getX() + ballMain.getWidth() >= Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH) {
             return "Right";
@@ -193,6 +192,6 @@ public class GameManager extends Application {
     }
 
     public GameSetup getStage() {
-        return stage;
+        return Basis.stage;
     }
 }

@@ -1,4 +1,4 @@
-package uet.project.arkanoid.objects.PowerUpVariants;
+package uet.project.arkanoid.objects.DeBuffVariants;
 
 import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
 import uet.project.arkanoid.objects.GameObject;
@@ -6,17 +6,17 @@ import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.objects.PowerUp;
 import uet.project.arkanoid.objects.Brick;
 
-public class DamageBrickPowerUp extends PowerUp {
+public class HarderBrickPowerDown extends PowerUp {
 
-    public DamageBrickPowerUp(GameObject object, double width, double height) {
+    public HarderBrickPowerDown(GameObject object, double width, double height) {
         super(object, width, height);
         type = PowerUpType.DAMAGE_BRICK;
     }
 
     public void applyEffect() {
         for (Brick brick : Basis.stage.getBricks()) {
-            if (!(brick instanceof IndestructibleBrick)) { // 50 percent
-                brick.takeHit();
+            if (!(brick instanceof IndestructibleBrick)) {
+                brick.setHitPoints(brick.getHitPoints() + 1);
             }
         }
     }

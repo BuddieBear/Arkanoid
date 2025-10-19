@@ -1,6 +1,7 @@
 package uet.project.arkanoid.utils;
 
 import javafx.scene.image.Image;
+import uet.project.arkanoid.game.GameSetup;
 
 import java.util.Objects;
 
@@ -47,6 +48,8 @@ public class Basis {
     public static final Image OBJECTIVE_BOARD_TEXTURE;
     // duration
     public static final int POWERUP_DURATION = 5000;
+    // game setup
+    public static GameSetup stage;
     static {
         // Paddle + Ball
         PADDLE_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Paddle_1.png")).toExternalForm());

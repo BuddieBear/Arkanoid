@@ -7,7 +7,7 @@ import java.util.List;
 
 public abstract class PowerUp extends GameObject {
     protected PowerUpType type;
-    private double duration = 10; // so it wont check isDead
+    private long duration = 10; // so it wont check isDead
     private boolean catchedPowerUp = false;
 
     public enum PowerUpType {
@@ -22,30 +22,32 @@ public abstract class PowerUp extends GameObject {
         SLOW_DOWN
     }
 
-    public PowerUp(GameObject object, int width, int height) {
-        super(object.getX() + object.getWidth() / 2 - width,
+    public PowerUp(GameObject object, double width, double height) {
+        super( (int)(object.getX() + object.getWidth() / 2 - width),
                 object.getY(), width, height);
     }
 
-    public abstract void applyEffect(GameObject paddle);
+    public abstract void applyEffect();
 
-    public void removeEffect(GameObject paddle) {
+    public void removeEffect() {
         duration = 0;
     }
 
     public boolean isDead() {
-        return this.getY() > Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT && duration != 0;
+        return this.getY() > Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT || duration == 0;
     }
 
-    public void update(GameObject object) {
-        setY(getY() + 10);
-        if (checkCollision(object) && !catchedPowerUp) {
+    public void update() {
+        if(!catchedPowerUp) {
+            setY(getY() + 10);
+        }
+        if (checkCollision(Basis.stage.getPaddles().get(0)) && !catchedPowerUp) {
             catchedPowerUp = true;
-            applyEffect(object);
+            applyEffect();
             duration = System.currentTimeMillis();
         }
-        if (catchedPowerUp && (System.currentTimeMillis() - duration) / 1000.0 >= Basis.POWERUP_DURATION) {
-            removeEffect(object);
+        if (catchedPowerUp && (System.currentTimeMillis() - duration) >= 3000) {
+            removeEffect();
         }
     }
 
@@ -55,14 +57,11 @@ public abstract class PowerUp extends GameObject {
         }
     }
 
-    public void update() {
-
-    }
     public PowerUpType getType() {
         return type;
     }
 
-    public double getDuration() {
+    public long getDuration() {
         return duration;
     }
 

@@ -6,18 +6,14 @@ import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.objects.PowerUp;
 import uet.project.arkanoid.objects.Brick;
 
-public class DamageBrickPowerUp extends PowerUp {
+public class MultiBallPowerUp extends PowerUp {
 
-    public DamageBrickPowerUp(GameObject object, double width, double height) {
+    public MultiBallPowerUp(GameObject object, double width, double height) {
         super(object, width, height);
         type = PowerUpType.DAMAGE_BRICK;
     }
 
     public void applyEffect() {
-        for (Brick brick : Basis.stage.getBricks()) {
-            if (!(brick instanceof IndestructibleBrick)) { // 50 percent
-                brick.takeHit();
-            }
-        }
+
     }
 }

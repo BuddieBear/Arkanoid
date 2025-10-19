@@ -19,6 +19,8 @@ public abstract class PowerUp extends GameObject {
         DAMAGE_BRICK,
         SMALL_BRICK,
         HARDER_BRICK,
+        SUPER_BALL,
+        INVINCIBLE_BALL,
         SLOW_DOWN
     }
 

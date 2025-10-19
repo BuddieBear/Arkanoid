@@ -2,7 +2,7 @@ package uet.project.arkanoid.game;
 
 import uet.project.arkanoid.objects.*;
 import uet.project.arkanoid.objects.DeBuffVariants.HarderBrickPowerDown;
-import uet.project.arkanoid.objects.PowerUpVariants.SmallBrickPowerUp;
+import uet.project.arkanoid.objects.PowerUpVariants.*;
 import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
 import uet.project.arkanoid.objects.BrickVariants.NormalBrick;
@@ -46,22 +46,48 @@ public class GameSetup {
             bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 250, Basis.STAGE_TEST_Y + 225, 100, 75, 2));
             bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 350, Basis.STAGE_TEST_Y + 300, 100, 75, 3));
 
-            // five more
-            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 450, Basis.STAGE_TEST_Y + 375, 100, 75, 1));
-            bricks.add(new IndestructibleBrick(Basis.STAGE_TEST_X + 550, Basis.STAGE_TEST_Y + 450, 100, 75));
-            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 650, Basis.STAGE_TEST_Y + 525, 100, 75, 2));
-            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 750, Basis.STAGE_TEST_Y + 600, 100, 75, 3));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 450, Basis.STAGE_TEST_Y + 300, 100, 75, 1));
+            bricks.add(new IndestructibleBrick(Basis.STAGE_TEST_X + 550, Basis.STAGE_TEST_Y + 225, 100, 75));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 650, Basis.STAGE_TEST_Y + 150, 100, 75, 2));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 750, Basis.STAGE_TEST_Y + 75, 100, 75, 3));
+
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 250, Basis.STAGE_TEST_Y + 30, 100, 75, 1));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 350, Basis.STAGE_TEST_Y + 30, 100, 75, 2));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 450, Basis.STAGE_TEST_Y + 30, 100, 75, 2));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 550, Basis.STAGE_TEST_Y + 30, 100, 75, 3));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 650, Basis.STAGE_TEST_Y + 30, 100, 75, 1));
 
         }
     }
 
     public void addPowerUp(List<? extends Brick> bricks1) {
-        for(Brick brick : bricks1) {
+        for (Brick brick : bricks1) {
             if (brick.isDestroy()) {
-                powerUps.add(new SmallBrickPowerUp(brick, 30, 30));
+                int choice = (int)(Math.random() * 6); // 0 → 5
+                switch (choice) {
+                    case 0:
+                        powerUps.add(new DamageBrickPowerUp(brick, 30, 30));
+                        break;
+                    case 1:
+                        powerUps.add(new InvincibleBallPowerUp(brick, 30, 30));
+                        break;
+                    case 2:
+                        powerUps.add(new MultiBallPowerUp(brick, 30, 30));
+                        break;
+                    case 3:
+                        powerUps.add(new SmallBrickPowerUp(brick, 30, 30));
+                        break;
+                    case 4:
+                        powerUps.add(new SuperBallPowerUp(brick, 30, 30));
+                        break;
+                    case 5:
+                        powerUps.add(new HarderBrickPowerDown(brick, 30, 30));
+                        break;
+                }
             }
         }
     }
+
 
     public boolean gameLose() {
         if (lives > 0) {

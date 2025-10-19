@@ -15,7 +15,7 @@ public class DamageBrickPowerUp extends PowerUp {
 
     public void applyEffect() {
         for (Brick brick : Basis.stage.getBricks()) {
-            if (!(brick instanceof IndestructibleBrick)) { // 50 percent
+            if (!(brick instanceof IndestructibleBrick)) {
                 brick.takeHit();
             }
         }

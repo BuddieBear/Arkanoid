@@ -114,18 +114,14 @@ public class GameManager extends Application {
             }
             for (Ball ball : Basis.stage.getBalls()) {
                 ball.update();
-                ball.Collision(Basis.stage.getBricks());
-                ball.Collision(Basis.stage.getPaddles());
             }
             Basis.stage.addPowerUp(Basis.stage.getBricks());
+
             for (PowerUp powerUp : Basis.stage.getPowerUps()) {
                 powerUp.update();
             }
             for (Brick brick : Basis.stage.getBricks()) {
                 brick.update();
-                if (brick.isDestroy()) {
-                    Basis.stage.addScore(brick.getMaxHp()*10);
-                }
             }
             Basis.stage.getBricks().removeIf(Brick::isDestroy);
             Basis.stage.getPowerUps().removeIf(PowerUp::isDead);
@@ -154,14 +150,23 @@ public class GameManager extends Application {
         gc.restore();
     }
 
+    private Ball getInactiveBall() {
+        for (Ball ball : Basis.stage.getBalls()) {
+            if (!ball.getLaunchState() && ball.getDx() == 0 && ball.getDy() == 0) {
+                return ball;
+            }
+        }
+        return null;
+    } // bug
+
     private void handleInput(Scene scene) {
         scene.setOnKeyPressed(event -> {
-            switch (event.getCode()) {
-                case A -> Basis.stage.getPaddles().get(0).moveLeft();
-                case D -> Basis.stage.getPaddles().get(0).moveRight();
-                case SPACE -> Basis.stage.getBalls().get(0).launch();
+                    switch (event.getCode()) {
+                        case A -> Basis.stage.getPaddles().get(0).moveLeft();
+                        case D -> Basis.stage.getPaddles().get(0).moveRight();
+                        case SPACE -> Basis.stage.getBalls().get(0).launch();
+                    }
                 }
-            }
         );
 
         canvas.setOnMouseClicked(event -> {
@@ -174,20 +179,23 @@ public class GameManager extends Application {
     }
 
     private String checkCollisions() { //TODO: Rework this to call checkCollision of different objects (if exists)
-        Ball ballMain = Basis.stage.getBalls().get(0);
         Paddle paddleMain = Basis.stage.getPaddles().get(0);
-        int testX = ballMain.getX() + (int) ballMain.getWidth() / 2;
-        int testY = ballMain.getY() + (int) ballMain.getHeight() - paddleMain.getY();
 
-        if (ballMain.getX() + ballMain.getWidth() >= Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH) {
-            return "Right";
-        } else if (ballMain.getX() <= Basis.STAGE_TEST_X) {
-            return "Left";
-        } else if (ballMain.getY() <= Basis.STAGE_TEST_Y){
-            return "Up";
+        for (Ball ballMain : Basis.stage.getBalls()) {
+            int testX = ballMain.getX() + (int) ballMain.getWidth() / 2;
+            int testY = ballMain.getY() + (int) ballMain.getHeight() - paddleMain.getY();
+
+            if (ballMain.getX() + ballMain.getWidth() >= Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH) {
+                return "Right";
+            } else if (ballMain.getX() <= Basis.STAGE_TEST_X) {
+                return "Left";
+            } else if (ballMain.getY() <= Basis.STAGE_TEST_Y) {
+                return "Up";
+            }
+
+            // 33 and 25 are the padding of the paddle.
         }
 
-        // 33 and 25 are the padding of the paddle.
         return "";
     }
 

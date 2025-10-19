@@ -1,6 +1,7 @@
 package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.GameManager;
@@ -10,12 +11,12 @@ import java.util.List;
 public class Ball extends MovableObject {
     private int speed = 5;
     private int angle = 0;
-
+    private boolean invincible = false;
     private boolean hasLaunch = false;
     private boolean back = false;
-
     private final Paddle paddleMain;
     private final GameSetup stage;
+    private Image ballImage = Basis.BALL_TEXTURE;
 
     public Ball(int x, int y, double width, double height, int speed, GameSetup stage) {
         super(x, y, width, height);
@@ -24,9 +25,26 @@ public class Ball extends MovableObject {
         this.paddleMain = stage.getPaddles().get(0);
     }
 
+    public void setInvincible(boolean invincible) {
+        this.invincible = invincible;
+    }
+
     public boolean getLaunchState() {
         return hasLaunch;
     }
+
+    public void setBallImage(Image ballImage) {
+        this.ballImage = ballImage;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setHasLaunch(boolean hasLaunch) {
+        this.hasLaunch = hasLaunch;
+    }
+
     public void setSpeed(int speed) {
         this.speed = speed;
     }
@@ -73,9 +91,15 @@ public class Ball extends MovableObject {
         for (GameObject Obj : others) {
             if (this.checkCollision(Obj)) {
                 if (Obj instanceof Brick && !((Brick) Obj).getProtection()) { // Check for Bricks
-                    ((Brick) Obj).takeHit();
+                    if(!invincible) {
+                        ((Brick) Obj).takeHit();
+                    } else {
+                        ((Brick) Obj).setHitPoints(0);
+                    }
                     ((Brick) Obj).setProtection(true);
-                    bounceOff(Obj);
+                    if(!invincible) {
+                        bounceOff(Obj);
+                    }
                 }
                 else if (Obj instanceof Paddle) {
                     bounceOff(Obj);
@@ -110,8 +134,9 @@ public class Ball extends MovableObject {
         hasLaunch = true;
     }
 
-    public void isDead() {
-        if (this.getY() > Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT) {
+    public void ifDead() {
+        if (this.getY() > Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT &&
+                this == Basis.stage.getBalls().get(0)) {
             hasLaunch = false;
             setDx(0);
             setDy(0);
@@ -148,15 +173,17 @@ public class Ball extends MovableObject {
         }
 
         // Always draw the ball itself
-        gc.drawImage(Basis.BALL_TEXTURE, getX(), getY(), width, height);
+        gc.drawImage(ballImage, getX(), getY(), width, height);
     }
 
     public void update() {
         if (!hasLaunch) {
             prepareLaunch();  // Spawn until launched
         } else {
+            this.Collision(stage.getBricks());
+            this.Collision(stage.getPaddles());
             move();
-            isDead();
+            ifDead();
         }
     }
 }

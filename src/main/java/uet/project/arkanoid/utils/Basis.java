@@ -38,6 +38,7 @@ public class Basis {
     // Textures
     public static final Image PADDLE_TEXTURE;
     public static final Image BALL_TEXTURE;
+    public static final Image MULTI_BALL_TEXTURE;
     public static final Image ARROW_TEXTURE;
     public static final Image POWERUP_TEXTURE;
     public static final Image BRICK_NORMAL_TEXTURE_1;
@@ -54,6 +55,8 @@ public class Basis {
         // Paddle + Ball
         PADDLE_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Paddle_1.png")).toExternalForm());
         BALL_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Ball_1.png")).toExternalForm());
+        MULTI_BALL_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Ball_3.png")).toExternalForm());
+
         ARROW_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Arrow.png")).toExternalForm());
 
         // Bricks

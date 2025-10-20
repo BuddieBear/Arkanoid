@@ -10,7 +10,7 @@ public class HarderBrickPowerDown extends PowerUp {
 
     public HarderBrickPowerDown(GameObject object, double width, double height) {
         super(object, width, height);
-        type = PowerUpType.DAMAGE_BRICK;
+        type = PowerUpType.HARDER_BRICK;
     }
 
     public void applyEffect() {
@@ -19,5 +19,8 @@ public class HarderBrickPowerDown extends PowerUp {
                 brick.setHitPoints(brick.getHitPoints() + 1);
             }
         }
+    }
+
+    public void removeEffect() {
     }
 }

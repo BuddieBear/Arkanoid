@@ -26,7 +26,6 @@ public class SmallBrickPowerUp extends PowerUp {
 
     @Override
     public void removeEffect() {
-        super.removeEffect();
         for (Brick brick : Basis.stage.getBricks()) {
             if (!(brick instanceof IndestructibleBrick)) {
                 brick.setX((int)(brick.getX() - getWidth() / 4));

@@ -32,7 +32,6 @@ public class SuperBallPowerUp extends PowerUp {
 
     @Override
     public void removeEffect() {
-        super.removeEffect();
         Ball ball = Basis.stage.getBalls().get(0);
         ball.setSpeed(oldSpeed);
         ball.setWidth(oldWidth);

@@ -17,7 +17,6 @@ public class InvincibleBallPowerUp extends PowerUp {
 
     @Override
     public void removeEffect() {
-        super.removeEffect();
         Basis.stage.getBalls().get(0).setInvincible(false);
     }
 }

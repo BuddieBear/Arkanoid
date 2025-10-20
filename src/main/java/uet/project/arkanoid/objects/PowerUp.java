@@ -31,9 +31,7 @@ public abstract class PowerUp extends GameObject {
 
     public abstract void applyEffect();
 
-    public void removeEffect() {
-        duration = 0;
-    }
+    public abstract void removeEffect();
 
     public boolean isDead() {
         return this.getY() > Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT || duration == 0;
@@ -49,6 +47,7 @@ public abstract class PowerUp extends GameObject {
             duration = System.currentTimeMillis();
         }
         if (catchedPowerUp && (System.currentTimeMillis() - duration) >= 3000) {
+            duration = 0;
             removeEffect();
         }
     }

@@ -43,7 +43,6 @@ public class MultiBallPowerUp extends PowerUp {
 
     @Override
     public void removeEffect() {
-        super.removeEffect();
         Basis.stage.getBalls().remove(b1);
         Basis.stage.getBalls().remove(b2);
     }

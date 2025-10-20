@@ -31,6 +31,7 @@ public class GameSetup {
         paddles = new ArrayList<>();
         powerUps = new ArrayList<>();
 
+        //TODO: Switch - Case to create different Stage
         // TEST setup
         if (currentStage == GameState.Stage.STAGE_TEST) {
             lives = 3;

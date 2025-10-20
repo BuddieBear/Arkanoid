@@ -8,6 +8,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import uet.project.arkanoid.game.GameSetup;
+import uet.project.arkanoid.game.Level;
 import uet.project.arkanoid.game.GameState;
 import uet.project.arkanoid.game.GameView;
 import uet.project.arkanoid.objects.Ball;
@@ -31,7 +32,8 @@ public class GameManager extends Application {
 
     // Game and Stage setup
     public GameState currentState = GameState.PLAYING;
-    public GameState.Stage currentStage = GameState.Stage.STAGE_TEST;
+    public Level currentLevel = Level.STAGE_TEST;
+
     GameSetup stage;
 
     // Renderer for each GameState

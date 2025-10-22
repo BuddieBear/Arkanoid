@@ -122,13 +122,6 @@ public class Ball extends MovableObject {
         updateVelocity();
     }
 
-    public boolean checkCollision(GameObject other) {
-        return this.getX() < other.getX() + other.getWidth()
-                && this.getX() + this.getWidth() > other.getX()
-                && this.getY() < other.getY() + other.getHeight()
-                && this.getY() + this.getHeight() > other.getY();
-    }
-
     public void Collision(List<? extends GameObject> others) {
         for (GameObject Obj : others) {
             if (this.checkCollision(Obj)) {
@@ -178,7 +171,7 @@ public class Ball extends MovableObject {
 
     public void ifDead() {
         if (this.getY() > Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT &&
-                this == Basis.stage.getBalls().get(0)) {
+                this == stage.getBalls().get(0)) {
             hasLaunch = false;
             setDx(0);
             setDy(0);

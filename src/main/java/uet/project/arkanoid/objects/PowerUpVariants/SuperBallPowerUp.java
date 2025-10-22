@@ -1,5 +1,6 @@
 package uet.project.arkanoid.objects.PowerUpVariants;
 
+import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
@@ -8,7 +9,7 @@ import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.objects.PowerUp;
 
 public class SuperBallPowerUp extends PowerUp {
-    Ball ball = Basis.stage.getBalls().get(0);
+    private Ball ball;
     private int oldSpeed = ball.getSpeed();
     private double oldWidth = ball.getWidth();
     private double oldHeight = ball.getHeight();
@@ -16,9 +17,10 @@ public class SuperBallPowerUp extends PowerUp {
     private int oldY;
 
     // remember it will bug if theres another powerUp affect speed
-    public SuperBallPowerUp(GameObject object, double width, double height) {
-        super(object, width, height);
+    public SuperBallPowerUp(GameObject object, double width, double height, GameSetup stage) {
+        super(object, width, height, stage);
         type = PowerUpType.SUPER_BALL;
+        ball = stage.getBalls().get(0);
     }
 
     public void applyEffect() {
@@ -32,7 +34,7 @@ public class SuperBallPowerUp extends PowerUp {
 
     @Override
     public void removeEffect() {
-        Ball ball = Basis.stage.getBalls().get(0);
+        Ball ball = stage.getBalls().get(0);
         ball.setSpeed(oldSpeed);
         ball.setWidth(oldWidth);
         ball.setHeight(oldHeight);

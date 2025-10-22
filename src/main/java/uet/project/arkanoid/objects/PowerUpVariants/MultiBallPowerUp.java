@@ -9,14 +9,14 @@ import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Ball;
 
 public class MultiBallPowerUp extends PowerUp {
-    Ball ball = Basis.stage.getBalls().get(0);
-    GameSetup stage = Basis.stage;
-    Ball b1;
-    Ball b2;
+    private Ball ball;
+    private Ball b1;
+    private Ball b2;
 
-    public MultiBallPowerUp(GameObject object, double width, double height) {
-        super(object, width, height);
+    public MultiBallPowerUp(GameObject object, double width, double height, GameSetup stage) {
+        super(object, width, height, stage);
         type = PowerUpType.MULTI_BALL;
+        ball = stage.getBalls().get(0);
     }
 
     public void applyEffect() {
@@ -39,11 +39,18 @@ public class MultiBallPowerUp extends PowerUp {
         b2.setHasLaunch(true);
         b2.setBallImage(Basis.MULTI_BALL_TEXTURE);
         stage.getBalls().add(b2);
+
+        b1.setX((int) Math.max(Basis.STAGE_TEST_X, Math.min(b1.getX(), Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH - b1.getWidth())));
+        b1.setY((int) Math.max(Basis.STAGE_TEST_Y, Math.min(b1.getY(), Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT - b1.getHeight())));
+
+        b2.setX((int) Math.max(Basis.STAGE_TEST_X, Math.min(b2.getX(), Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH - b2.getWidth())));
+        b2.setY((int) Math.max(Basis.STAGE_TEST_Y, Math.min(b2.getY(), Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT - b2.getHeight())));
+
     }
 
     @Override
     public void removeEffect() {
-        Basis.stage.getBalls().remove(b1);
-        Basis.stage.getBalls().remove(b2);
+        stage.getBalls().remove(b1);
+        stage.getBalls().remove(b2);
     }
 }

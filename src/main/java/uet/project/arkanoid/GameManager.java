@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.game.GameState;
 import uet.project.arkanoid.game.GameView;
+import uet.project.arkanoid.game.Level;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
@@ -83,13 +84,13 @@ public class GameManager extends Application {
         handleInput(scene);
 
         // Set up stage
-        stage = new GameSetup(currentStage); // TODO: Only update when currentState is playing
+        stage = new GameSetup(currentLevel); // TODO: Only update when currentState is playing
 
         // Set up renderers
         renderGame = new GameView(stage); // TODO: similar to stage
 
         // Game loop
-         gameLoop = new AnimationTimer() {
+        gameLoop = new AnimationTimer() {
             @Override
             public void handle(long time) { //TODO: Set up delta time
 
@@ -119,13 +120,13 @@ public class GameManager extends Application {
                 ball.Collision(stage.getBricks());
                 ball.Collision(stage.getPaddles());
             }
-            Basis.stage.addPowerUp(Basis.stage.getBricks());
+            stage.addPowerUp(stage.getBricks());
 
-            for (PowerUp powerUp : Basis.stage.getPowerUps()) {
+            for (PowerUp powerUp : stage.getPowerUps()) {
                 powerUp.update();
             }
 
-            for (Brick brick : Basis.stage.getBricks()) {
+            for (Brick brick : stage.getBricks()) {
                 brick.update();
                 if (brick.isDestroy()) {
                     stage.addScore(brick.getMaxHp()*10);
@@ -179,8 +180,8 @@ public class GameManager extends Application {
     private String checkCollisions() { //TODO: Rework this to call checkCollision of different objects (if exists)
         Ball ballMain = stage.getBalls().get(0);
         Paddle paddleMain = stage.getPaddles().get(0);
-        int testX = ballMain.getX() + ballMain.getWidth() / 2;
-        int testY = ballMain.getY() + ballMain.getHeight() - paddleMain.getY();
+        int testX = (int) (ballMain.getX() + ballMain.getWidth() / 2);
+        int testY = (int) (ballMain.getY() + ballMain.getHeight() - paddleMain.getY());
 
         if (ballMain.getX() + ballMain.getWidth() >= Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH) {
             return "Right";

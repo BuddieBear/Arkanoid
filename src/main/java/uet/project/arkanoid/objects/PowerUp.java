@@ -1,6 +1,7 @@
 package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
+import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.Basis;
 
 import java.util.List;
@@ -9,6 +10,7 @@ public abstract class PowerUp extends GameObject {
     protected PowerUpType type;
     private long duration = 10; // so it wont check isDead
     private boolean catchedPowerUp = false;
+    protected GameSetup stage;
 
     public enum PowerUpType {
         EXPAND_PADDLE,
@@ -24,9 +26,10 @@ public abstract class PowerUp extends GameObject {
         SLOW_DOWN
     }
 
-    public PowerUp(GameObject object, double width, double height) {
+    public PowerUp(GameObject object, double width, double height, GameSetup stage) {
         super( (int)(object.getX() + object.getWidth() / 2 - width),
                 object.getY(), width, height);
+        this.stage = stage;
     }
 
     public abstract void applyEffect();
@@ -41,7 +44,7 @@ public abstract class PowerUp extends GameObject {
         if(!catchedPowerUp) {
             setY(getY() + 10);
         }
-        if (checkCollision(Basis.stage.getPaddles().get(0)) && !catchedPowerUp) {
+        if (checkCollision(stage.getPaddles().get(0)) && !catchedPowerUp) {
             catchedPowerUp = true;
             applyEffect();
             duration = System.currentTimeMillis();

@@ -22,14 +22,10 @@ public class Basis {
     public static final int BALL_DIAMETER = 40;
     public static final int OBJECTIVE_BOARD_WIDTH = 180;
     public static final int OBJECTIVE_BOARD_HEIGHT = 360;
-    public static final int HEART_WIDTH = 20;
-    public static final int HEART_HEIGHT = 20;
 
     // Fixed location
     public static final int OBJECTIVE_BOARD_X = 1080;
     public static final int OBJECTIVE_BOARD_Y = 230;
-    public static final int HEART_X = 1130;
-    public static final int HEART_Y = 280;
 
     // Base stats
     public static final int BALL_SPEED = 7;
@@ -47,10 +43,8 @@ public class Basis {
     public static final Image BRICK_INDESTRUCTIBLE_TEXTURE;
     public static final Image GAME_BACKGROUND;
     public static final Image OBJECTIVE_BOARD_TEXTURE;
-    // duration
-    public static final int POWERUP_DURATION = 5000;
-    // game setup
-    public static GameSetup stage;
+
+
     static {
         // Paddle + Ball
         PADDLE_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Paddle_1.png")).toExternalForm());
@@ -68,7 +62,7 @@ public class Basis {
         BRICK_NORMAL_TEXTURE_3[0] = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Brick_3_1.png")).toExternalForm());
         BRICK_INDESTRUCTIBLE_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Brick_Indestructible.png")).toExternalForm());
 
-        // powerup
+        // Power up
         POWERUP_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/powerUpImage.png")).toExternalForm());
 
         // UI elements

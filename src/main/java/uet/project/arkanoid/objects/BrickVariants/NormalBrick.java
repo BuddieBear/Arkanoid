@@ -1,6 +1,7 @@
 package uet.project.arkanoid.objects.BrickVariants;
 
 import javafx.scene.canvas.GraphicsContext;
+import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.objects.Brick;
 
@@ -12,8 +13,8 @@ public class NormalBrick extends Brick {
         THREE
     }
 
-    public NormalBrick(int x, int y, double width, double height, int hitPoints) {
-        super(x, y, width, height, hitPoints, BrickType.NORMAL);
+    public NormalBrick(int x, int y, double width, double height, int hitPoints, GameSetup stage) {
+        super(x, y, width, height, hitPoints, BrickType.NORMAL, stage);
         if (hitPoints == 1) {
             this.brickImage = Basis.BRICK_NORMAL_TEXTURE_1;
             this.type = TextureType.ONE;

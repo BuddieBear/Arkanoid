@@ -2,6 +2,7 @@ package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
 import uet.project.arkanoid.utils.Basis;
 
@@ -18,17 +19,31 @@ public class Brick extends GameObject {
     private boolean protection = false;
     private int timer = 0;
     private int protectedTime = 5;
+    private GameSetup stage;
+    private final double originalWidth;
+    private final double originalHeight;
 
     public enum BrickType {
         INDESTRUCTIBLE,
         NORMAL
     }
 
-    public Brick(int x, int y, double width, double height, int hitPoints, BrickType type) {
+    public double getOriginalWidth() {
+        return originalWidth;
+    }
+
+    public double getOriginalHeight() {
+        return originalHeight;
+    }
+
+    public Brick(int x, int y, double width, double height, int hitPoints, BrickType type, GameSetup stage) {
         super(x, y, width, height);
         this.maxHp = hitPoints;
         this.hitPoints = hitPoints;
         this.type = type;
+        this.stage = stage;
+        this.originalWidth = width;
+        this.originalHeight = height;
     }
 
     public BrickType getType() {
@@ -83,7 +98,7 @@ public class Brick extends GameObject {
             timer ++;
         }
         if (this.isDestroy()) {
-            Basis.stage.addScore(maxHp * 10);
+            stage.addScore(maxHp * 10);
         }
     }
 }

@@ -8,12 +8,12 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import uet.project.arkanoid.game.GameSetup;
-import uet.project.arkanoid.game.Level;
 import uet.project.arkanoid.game.GameState;
 import uet.project.arkanoid.game.GameView;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
+import uet.project.arkanoid.objects.PowerUp;
 import uet.project.arkanoid.utils.Basis;
 
 
@@ -37,7 +37,7 @@ public class GameManager extends Application {
     GameSetup stage;
 
     // Renderer for each GameState
-    GameView renderGame; // For stages
+    GameView renderGame;
 
 
     public static void main(String[] args) {
@@ -119,7 +119,13 @@ public class GameManager extends Application {
                 ball.Collision(stage.getBricks());
                 ball.Collision(stage.getPaddles());
             }
-            for (Brick brick : stage.getBricks()) {
+            Basis.stage.addPowerUp(Basis.stage.getBricks());
+
+            for (PowerUp powerUp : Basis.stage.getPowerUps()) {
+                powerUp.update();
+            }
+
+            for (Brick brick : Basis.stage.getBricks()) {
                 brick.update();
                 if (brick.isDestroy()) {
                     stage.addScore(brick.getMaxHp()*10);

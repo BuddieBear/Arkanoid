@@ -6,7 +6,7 @@ import uet.project.arkanoid.objects.Brick;
 
 public class IndestructibleBrick extends Brick {
 
-    public IndestructibleBrick(int x, int y, int width, int height) {
+    public IndestructibleBrick(int x, int y, double width, double height) {
         super(x, y, width, height, 10, BrickType.INDESTRUCTIBLE);
         this.brickImage = Basis.BRICK_INDESTRUCTIBLE_TEXTURE;
     }

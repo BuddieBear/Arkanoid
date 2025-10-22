@@ -6,6 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.game.GameState;
@@ -17,6 +18,9 @@ import uet.project.arkanoid.objects.Paddle;
 import uet.project.arkanoid.objects.PowerUp;
 import uet.project.arkanoid.utils.Basis;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class GameManager extends Application {
     // Places to render objects
@@ -24,6 +28,9 @@ public class GameManager extends Application {
     private final Canvas canvas = new Canvas(Basis.SCREEN_WIDTH, Basis.SCREEN_HEIGHT);
     private final GraphicsContext gc = canvas.getGraphicsContext2D();
     AnimationTimer gameLoop;
+
+    // HandleInput
+    private final Set<KeyCode> pressedKeys = new HashSet<>();
 
     private static String resultCollection = "";  // TODO: Rework this into ball
 
@@ -93,7 +100,7 @@ public class GameManager extends Application {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long time) { //TODO: Set up delta time
-
+                processInput();
                 resultCollection = checkCollisions();
                 render();
                 update();
@@ -152,29 +159,42 @@ public class GameManager extends Application {
 
         if (currentState == GameState.PLAYING) {
             renderGame.onDraw(gc);
-            System.out.println("Score: " + stage.getScore() + "| Lives: " + stage.getLives());
         }
 
         gc.restore();
     }
 
     private void handleInput(Scene scene) {
-        scene.setOnKeyPressed(event -> {
-            switch (event.getCode()) {
-                case A -> stage.getPaddles().get(0).moveLeft();
-                case D -> stage.getPaddles().get(0).moveRight();
-                case SPACE -> stage.getBalls().get(0).launch();
-                }
-            }
-        );
+        // --- Keyboard input tracking ---
+        scene.setOnKeyPressed(event -> pressedKeys.add(event.getCode()));
+        scene.setOnKeyReleased(event -> pressedKeys.remove(event.getCode()));
 
+        // --- Mouse input ---
         canvas.setOnMouseClicked(event -> {
             double mouseX = event.getX();
             double mouseY = event.getY();
             System.out.println("Mouse clicked at: (" + mouseX + ", " + mouseY + ")");
         });
+    }
 
-        scene.setOnKeyReleased(event -> stage.getPaddles().get(0).setDx(0));
+    private void processInput() {
+        var paddle = stage.getPaddles().get(0);
+        var ball = stage.getBalls().get(0);
+
+        boolean left = pressedKeys.contains(KeyCode.A);
+        boolean right = pressedKeys.contains(KeyCode.D);
+
+        if (left && !right) {
+            paddle.moveLeft();
+        } else if (right && !left) {
+            paddle.moveRight();
+        } else {
+            paddle.setDx(0); // stop smoothly
+        }
+
+        if (pressedKeys.contains(KeyCode.SPACE)) {
+            ball.launch();
+        }
     }
 
     private String checkCollisions() { //TODO: Rework this to call checkCollision of different objects (if exists)

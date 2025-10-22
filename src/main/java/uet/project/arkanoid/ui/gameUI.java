@@ -15,11 +15,12 @@ public class gameUI {
         gc.drawImage(Basis.OBJECTIVE_BOARD_TEXTURE, Basis.OBJECTIVE_BOARD_X, Basis.OBJECTIVE_BOARD_Y, Basis.OBJECTIVE_BOARD_WIDTH, Basis.OBJECTIVE_BOARD_HEIGHT);
         // Lives
         gc.setFill(Color.DARKGREEN);
-        gc.setFont(new Font("Comic Sans MS", 36));
-        gc.fillText(String.valueOf(stage.getLives()), 1180, 310);
+        gc.setFont(new Font("Comic Sans MS", 28));
+        gc.fillText(String.valueOf(stage.getLives()), 1175, 305);
 
         // Score
+        // TODO: If (score > 1000) change fontsize and position
         gc.setFill(Color.YELLOW);
-        gc.fillText(String.valueOf(stage.getScore()), 1180, 375);
+        gc.fillText(String.valueOf(stage.getScore()), 1175, 370);
     }
 }

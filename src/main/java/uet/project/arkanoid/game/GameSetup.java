@@ -64,6 +64,7 @@ public class GameSetup {
         for (Brick brick : bricks1) {
             if (brick.isDestroy()) {
                 brick_streak++;
+                System.out.println("Brick Destroyed: " + brick_streak);
                 if (brick_streak >= 3) {
                     brick_streak = 0;
                     int choice = (int) (Math.random() * 6); // 0 → 5

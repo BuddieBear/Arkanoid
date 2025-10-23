@@ -1,10 +1,10 @@
 package uet.project.arkanoid.objects;
 
-public abstract class MovableObject extends GameObject{
+public abstract class MovableObject extends GameObject {
     private int dx = 0;
     private int dy = 0;
 
-    public MovableObject(int x, int y, int width, int height) {
+    public MovableObject(int x, int y, double width, double height) {
         super(x, y, width, height);
     }
 

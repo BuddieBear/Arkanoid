@@ -2,7 +2,9 @@ package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
+import uet.project.arkanoid.utils.Basis;
 
 import java.util.Objects;
 import java.util.List;
@@ -17,17 +19,31 @@ public class Brick extends GameObject {
     private boolean protection = false;
     private int timer = 0;
     private int protectedTime = 5;
+    private GameSetup stage;
+    private final double originalWidth;
+    private final double originalHeight;
 
     public enum BrickType {
         INDESTRUCTIBLE,
         NORMAL
     }
 
-    public Brick(int x, int y, int width, int height, int hitPoints, BrickType type) {
+    public double getOriginalWidth() {
+        return originalWidth;
+    }
+
+    public double getOriginalHeight() {
+        return originalHeight;
+    }
+
+    public Brick(int x, int y, double width, double height, int hitPoints, BrickType type, GameSetup stage) {
         super(x, y, width, height);
         this.maxHp = hitPoints;
         this.hitPoints = hitPoints;
         this.type = type;
+        this.stage = stage;
+        this.originalWidth = width;
+        this.originalHeight = height;
     }
 
     public BrickType getType() {
@@ -42,16 +58,14 @@ public class Brick extends GameObject {
         return maxHp;
     }
 
-    public void setMaxHp(int maxHp) {
-        this.maxHp = maxHp;
-    }
-
     public int getHitPoints() {
         return hitPoints;
     }
 
     public void setHitPoints(int hitPoints) {
-        this.hitPoints = hitPoints;
+        if(type == BrickType.NORMAL) {
+            this.hitPoints = hitPoints;
+        }
     }
 
     public void setProtection(boolean protect) {
@@ -63,7 +77,7 @@ public class Brick extends GameObject {
     }
 
     public void takeHit() {
-        hitPoints--;
+            hitPoints--;
     }
 
     public boolean isDestroy() {
@@ -82,6 +96,9 @@ public class Brick extends GameObject {
                 timer = 0;
             }
             timer ++;
+        }
+        if (this.isDestroy()) {
+            stage.addScore(maxHp * 10);
         }
     }
 }

@@ -6,14 +6,20 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.game.GameState;
 import uet.project.arkanoid.game.GameView;
+import uet.project.arkanoid.game.Level;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
+import uet.project.arkanoid.objects.PowerUp;
 import uet.project.arkanoid.utils.Basis;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class GameManager extends Application {
@@ -23,6 +29,9 @@ public class GameManager extends Application {
     private final GraphicsContext gc = canvas.getGraphicsContext2D();
     AnimationTimer gameLoop;
 
+    // HandleInput
+    private final Set<KeyCode> pressedKeys = new HashSet<>();
+
     private static String resultCollection = "";  // TODO: Rework this into ball
 
     public static String getResultCollection() {
@@ -31,11 +40,12 @@ public class GameManager extends Application {
 
     // Game and Stage setup
     public GameState currentState = GameState.PLAYING;
-    public GameState.Stage currentStage = GameState.Stage.STAGE_TEST;
+    public Level currentLevel = Level.STAGE_TEST;
+
     GameSetup stage;
 
     // Renderer for each GameState
-    GameView renderGame; // For stages
+    GameView renderGame;
 
 
     public static void main(String[] args) {
@@ -81,16 +91,16 @@ public class GameManager extends Application {
         handleInput(scene);
 
         // Set up stage
-        stage = new GameSetup(currentStage); // TODO: Only update when currentState is playing
+        stage = new GameSetup(currentLevel); // TODO: Only update when currentState is playing
 
         // Set up renderers
         renderGame = new GameView(stage); // TODO: similar to stage
 
         // Game loop
-         gameLoop = new AnimationTimer() {
+        gameLoop = new AnimationTimer() {
             @Override
             public void handle(long time) { //TODO: Set up delta time
-
+                processInput();
                 resultCollection = checkCollisions();
                 render();
                 update();
@@ -117,6 +127,12 @@ public class GameManager extends Application {
                 ball.Collision(stage.getBricks());
                 ball.Collision(stage.getPaddles());
             }
+            stage.addPowerUp(stage.getBricks());
+
+            for (PowerUp powerUp : stage.getPowerUps()) {
+                powerUp.update();
+            }
+
             for (Brick brick : stage.getBricks()) {
                 brick.update();
                 if (brick.isDestroy()) {
@@ -143,36 +159,49 @@ public class GameManager extends Application {
 
         if (currentState == GameState.PLAYING) {
             renderGame.onDraw(gc);
-            System.out.println("Score: " + stage.getScore() + "| Lives: " + stage.getLives());
         }
 
         gc.restore();
     }
 
     private void handleInput(Scene scene) {
-        scene.setOnKeyPressed(event -> {
-            switch (event.getCode()) {
-                case A -> stage.getPaddles().get(0).moveLeft();
-                case D -> stage.getPaddles().get(0).moveRight();
-                case SPACE -> stage.getBalls().get(0).launch();
-                }
-            }
-        );
+        // --- Keyboard input tracking ---
+        scene.setOnKeyPressed(event -> pressedKeys.add(event.getCode()));
+        scene.setOnKeyReleased(event -> pressedKeys.remove(event.getCode()));
 
+        // --- Mouse input ---
         canvas.setOnMouseClicked(event -> {
             double mouseX = event.getX();
             double mouseY = event.getY();
             System.out.println("Mouse clicked at: (" + mouseX + ", " + mouseY + ")");
         });
+    }
 
-        scene.setOnKeyReleased(event -> stage.getPaddles().get(0).setDx(0));
+    private void processInput() {
+        var paddle = stage.getPaddles().get(0);
+        var ball = stage.getBalls().get(0);
+
+        boolean left = pressedKeys.contains(KeyCode.A);
+        boolean right = pressedKeys.contains(KeyCode.D);
+
+        if (left && !right) {
+            paddle.moveLeft();
+        } else if (right && !left) {
+            paddle.moveRight();
+        } else {
+            paddle.setDx(0); // stop smoothly
+        }
+
+        if (pressedKeys.contains(KeyCode.SPACE)) {
+            ball.launch();
+        }
     }
 
     private String checkCollisions() { //TODO: Rework this to call checkCollision of different objects (if exists)
         Ball ballMain = stage.getBalls().get(0);
         Paddle paddleMain = stage.getPaddles().get(0);
-        int testX = ballMain.getX() + ballMain.getWidth() / 2;
-        int testY = ballMain.getY() + ballMain.getHeight() - paddleMain.getY();
+        int testX = (int) (ballMain.getX() + ballMain.getWidth() / 2);
+        int testY = (int) (ballMain.getY() + ballMain.getHeight() - paddleMain.getY());
 
         if (ballMain.getX() + ballMain.getWidth() >= Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH) {
             return "Right";

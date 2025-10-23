@@ -8,7 +8,7 @@ public class Paddle extends MovableObject {
     private PowerUp currentPowerUp = null;
 
 
-    public Paddle(int x, int y, int width, int height, int speed) {
+    public Paddle(int x, int y, double width, double height, int speed) {
         super(x, y, width, height);
         this.speed = speed;
     }
@@ -55,7 +55,7 @@ public class Paddle extends MovableObject {
         if (getX() <= Basis.STAGE_TEST_X - 33) {
             setX(Basis.STAGE_TEST_X - 33);
         } else if (getX() + this.width - 33 >= Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH) {
-            setX(Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH - this.width + 33);
+            setX(Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH - (int)this.width + 33);
         }
     }
 }

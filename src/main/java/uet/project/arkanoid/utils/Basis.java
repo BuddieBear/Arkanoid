@@ -1,6 +1,7 @@
 package uet.project.arkanoid.utils;
 
 import javafx.scene.image.Image;
+import uet.project.arkanoid.game.GameSetup;
 
 import java.util.Objects;
 
@@ -21,23 +22,21 @@ public class Basis {
     public static final int BALL_DIAMETER = 40;
     public static final int OBJECTIVE_BOARD_WIDTH = 180;
     public static final int OBJECTIVE_BOARD_HEIGHT = 360;
-    public static final int HEART_WIDTH = 20;
-    public static final int HEART_HEIGHT = 20;
 
     // Fixed location
     public static final int OBJECTIVE_BOARD_X = 1080;
     public static final int OBJECTIVE_BOARD_Y = 230;
-    public static final int HEART_X = 1130;
-    public static final int HEART_Y = 280;
 
     // Base stats
-    public static final int BALL_SPEED = 8;
+    public static final int BALL_SPEED = 7;
     public static final int PADDLE_SPEED = 6;
 
     // Textures
     public static final Image PADDLE_TEXTURE;
     public static final Image BALL_TEXTURE;
+    public static final Image MULTI_BALL_TEXTURE;
     public static final Image ARROW_TEXTURE;
+    public static final Image POWERUP_TEXTURE;
     public static final Image BRICK_NORMAL_TEXTURE_1;
     public static final Image[] BRICK_NORMAL_TEXTURE_2 = new Image[2];
     public static final Image[] BRICK_NORMAL_TEXTURE_3 = new Image[3];
@@ -45,10 +44,13 @@ public class Basis {
     public static final Image GAME_BACKGROUND;
     public static final Image OBJECTIVE_BOARD_TEXTURE;
 
+
     static {
         // Paddle + Ball
         PADDLE_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Paddle_1.png")).toExternalForm());
         BALL_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Ball_1.png")).toExternalForm());
+        MULTI_BALL_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Ball_3.png")).toExternalForm());
+
         ARROW_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Arrow.png")).toExternalForm());
 
         // Bricks
@@ -59,6 +61,9 @@ public class Basis {
         BRICK_NORMAL_TEXTURE_3[1] = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Brick_3_2.png")).toExternalForm());
         BRICK_NORMAL_TEXTURE_3[0] = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Brick_3_1.png")).toExternalForm());
         BRICK_INDESTRUCTIBLE_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Brick_Indestructible.png")).toExternalForm());
+
+        // Power up
+        POWERUP_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/powerUpImage.png")).toExternalForm());
 
         // UI elements
         GAME_BACKGROUND = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/InGame/Background_Arkanoid.jpg")).toExternalForm());

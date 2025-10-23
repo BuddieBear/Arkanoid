@@ -1,6 +1,7 @@
 package uet.project.arkanoid.objects.BrickVariants;
 
 import javafx.scene.canvas.GraphicsContext;
+import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.objects.Brick;
 
@@ -12,8 +13,8 @@ public class NormalBrick extends Brick {
         THREE
     }
 
-    public NormalBrick(int x, int y, int width, int height, int hitPoints) {
-        super(x, y, width, height, hitPoints, BrickType.NORMAL);
+    public NormalBrick(int x, int y, double width, double height, int hitPoints, GameSetup stage) {
+        super(x, y, width, height, hitPoints, BrickType.NORMAL, stage);
         if (hitPoints == 1) {
             this.brickImage = Basis.BRICK_NORMAL_TEXTURE_1;
             this.type = TextureType.ONE;
@@ -29,17 +30,22 @@ public class NormalBrick extends Brick {
     }
 
     @Override
-    public void render(GraphicsContext gc) {
+  public void render(GraphicsContext gc) {
         int index = getHitPoints()-1;
         switch(type){
             case TWO:
-                this.brickImage = Basis.BRICK_NORMAL_TEXTURE_2[index];
+                if(index < 2) {
+                    this.brickImage = Basis.BRICK_NORMAL_TEXTURE_2[index];
+                } else {
+                    this.brickImage = Basis.BRICK_NORMAL_TEXTURE_2[1];
+                }
                 break;
             case THREE:
-                if (getHitPoints() < getMaxHp() && index > 1) {
-                    index = 1;
+                if(index < 3) {
+                    this.brickImage = Basis.BRICK_NORMAL_TEXTURE_3[index];
+                } else {
+                    this.brickImage = Basis.BRICK_NORMAL_TEXTURE_3[2];
                 }
-                this.brickImage = Basis.BRICK_NORMAL_TEXTURE_3[index];
                 break;
         }
         super.render(gc);

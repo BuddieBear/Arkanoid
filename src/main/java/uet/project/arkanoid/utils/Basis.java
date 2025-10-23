@@ -31,6 +31,22 @@ public class Basis {
     public static final int BALL_SPEED = 7;
     public static final int PADDLE_SPEED = 6;
 
+    // Menu
+    public static final int PLAY_X = SCREEN_WIDTH / 2 - 100;
+    public static final int PLAY_Y = SCREEN_HEIGHT - 120;
+    public static final int PLAY_W = 200;
+    public static final int PLAY_H = 80;
+
+    public static final int OPTION_X = 20;
+    public static final int OPTION_Y = 20;
+    public static final int OPTION_W = 80;
+    public static final int OPTION_H = 80;
+
+    public static final int SETTING_X = SCREEN_WIDTH - 100;
+    public static final int SETTING_Y = 20;
+    public static final int SETTING_W = 80;
+    public static final int SETTING_H = 80;
+
     // Textures
     public static final Image PADDLE_TEXTURE;
     public static final Image BALL_TEXTURE;
@@ -43,7 +59,10 @@ public class Basis {
     public static final Image BRICK_INDESTRUCTIBLE_TEXTURE;
     public static final Image GAME_BACKGROUND;
     public static final Image OBJECTIVE_BOARD_TEXTURE;
-
+    public static final Image MENU;
+    public static final Image PLAY_BUTTON;
+    public static final Image OPTION_BUTTON;
+    public static final Image SETTING_BUTTON;
 
     static {
         // Paddle + Ball
@@ -68,5 +87,11 @@ public class Basis {
         // UI elements
         GAME_BACKGROUND = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/InGame/Background_Arkanoid.jpg")).toExternalForm());
         OBJECTIVE_BOARD_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/InGame/Objective_Board.jpg")).toExternalForm());
+
+        // Menu
+        MENU = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/menu.png")).toExternalForm());
+        PLAY_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/play.png")).toExternalForm());
+        OPTION_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/option.png")).toExternalForm());
+        SETTING_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/setting.png")).toExternalForm());
     }
 }

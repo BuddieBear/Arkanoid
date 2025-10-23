@@ -12,6 +12,9 @@ import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.game.GameState;
 import uet.project.arkanoid.game.GameView;
 import uet.project.arkanoid.game.Level;
+import uet.project.arkanoid.ui.MenuView;
+import uet.project.arkanoid.ui.Setting;
+import uet.project.arkanoid.ui.Option;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
@@ -39,13 +42,16 @@ public class GameManager extends Application {
     }
 
     // Game and Stage setup
-    public GameState currentState = GameState.PLAYING;
+    public GameState currentState = GameState.MENU;
     public Level currentLevel = Level.STAGE_TEST;
 
     GameSetup stage;
 
     // Renderer for each GameState
     GameView renderGame;
+    MenuView renderMenu;
+    Setting renderSetting;
+    Option renderOption;
 
 
     public static void main(String[] args) {
@@ -95,6 +101,9 @@ public class GameManager extends Application {
 
         // Set up renderers
         renderGame = new GameView(stage); // TODO: similar to stage
+        renderMenu = new MenuView();
+        renderSetting = new Setting();
+        renderOption = new Option();
 
         // Game loop
         gameLoop = new AnimationTimer() {
@@ -148,20 +157,25 @@ public class GameManager extends Application {
     }
 
     public void render() {
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        // gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;
-        double scaleY = canvas.getHeight() / Basis.SCREEN_HEIGHT;
+        // double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;
+        // double scaleY = canvas.getHeight() / Basis.SCREEN_HEIGHT;
 
-        gc.save();
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        gc.scale(scaleX, scaleY);
-
-        if (currentState == GameState.PLAYING) {
+        // gc.save();
+        // gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        // gc.scale(scaleX, scaleY);
+        if (currentState == GameState.MENU) {
+            renderMenu.onDraw(gc);
+        } else if (currentState == GameState.SETTING){
+            renderSetting.onDraw(gc);
+        } else if (currentState == GameState.OPTION) {
+            renderOption.onDraw(gc);
+        } else if (currentState == GameState.PLAYING) {
             renderGame.onDraw(gc);
         }
 
-        gc.restore();
+        //gc.restore();
     }
 
     private void handleInput(Scene scene) {
@@ -173,7 +187,22 @@ public class GameManager extends Application {
         canvas.setOnMouseClicked(event -> {
             double mouseX = event.getX();
             double mouseY = event.getY();
-            System.out.println("Mouse clicked at: (" + mouseX + ", " + mouseY + ")");
+            System.out.println(mouseX + " " + mouseY);
+            if (currentState == GameState.MENU) {
+                if (mouseX >= Basis.PLAY_X && mouseX <= Basis.PLAY_X + Basis.PLAY_W
+                 && mouseY >= Basis.PLAY_Y && mouseY <= Basis.PLAY_Y + Basis.PLAY_H) {
+                    currentState = GameState.PLAYING;
+                    render();
+                } else if (mouseX >= Basis.SETTING_X && mouseX <= Basis.SETTING_X + Basis.SETTING_W
+                        && mouseY >= Basis.SETTING_Y && mouseY <= Basis.SETTING_Y + Basis.SETTING_H) {
+                    currentState = GameState.SETTING;
+                    render();
+                } else if (mouseX >= Basis.OPTION_X && mouseX <= Basis.OPTION_X+ Basis.OPTION_W
+                        && mouseY >= Basis.OPTION_Y && mouseY <= Basis.OPTION_Y + Basis.OPTION_H) {
+                    currentState = GameState.OPTION;
+                    render();
+                } 
+            }
         });
     }
 

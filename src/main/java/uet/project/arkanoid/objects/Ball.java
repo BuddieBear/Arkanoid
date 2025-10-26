@@ -3,6 +3,7 @@ package uet.project.arkanoid.objects;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.project.arkanoid.game.GameSetup;
+import uet.project.arkanoid.utils.AudioSet;
 import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.GameManager;
 
@@ -131,6 +132,7 @@ public class Ball extends MovableObject {
                     } else {
                         ((Brick) Obj).setHitPoints(0);
                     }
+                    AudioSet.collisionBrickSound.play();
                     ((Brick) Obj).setProtection(true);
                     if(!invincible) {
                         bounceOff(Obj);
@@ -138,6 +140,7 @@ public class Ball extends MovableObject {
                 }
                 else if (Obj instanceof Paddle) {
                     bounceOff(Obj);
+                    AudioSet.collisionPaddleSound.play();
                 }
             }
         }
@@ -176,6 +179,7 @@ public class Ball extends MovableObject {
             setDx(0);
             setDy(0);
             angle = 0;
+            AudioSet.lossHpSound.play();
             stage.setLives(stage.getLives() - 1);
         }
     }
@@ -185,6 +189,7 @@ public class Ball extends MovableObject {
         {
             String check = GameManager.getResultCollection();
             if (check.equals("Right") || check.equals("Left")) {
+                AudioSet.wallBounceSound.play();
                 setDx(-getDx());
             } else if (check.equals("Up") || check.equals("Paddle")) {
                 setDy(-getDy());

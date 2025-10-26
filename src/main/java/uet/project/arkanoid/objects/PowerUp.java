@@ -15,7 +15,6 @@ public abstract class PowerUp extends GameObject {
     public enum PowerUpType {
         EXPAND_PADDLE,
         SHRINK_PADDLE,
-        EXTRA_LIFE,
         MULTI_BALL,
         SPEED_UP,
         DAMAGE_BRICK,
@@ -23,7 +22,10 @@ public abstract class PowerUp extends GameObject {
         HARDER_BRICK,
         SUPER_BALL,
         INVINCIBLE_BALL,
-        SLOW_DOWN
+        SLOW_DOWN,
+        EXTRA_LIFE,
+        DOUBLE_SCORE,
+        RESPAWN_FREE
     }
 
     public PowerUp(GameObject object, double width, double height, GameSetup stage) {
@@ -49,9 +51,14 @@ public abstract class PowerUp extends GameObject {
             applyEffect();
             duration = System.currentTimeMillis();
         }
-        if (catchedPowerUp && (System.currentTimeMillis() - duration) >= 3000) {
-            duration = 0;
-            removeEffect();
+        if (catchedPowerUp) {
+            if (type == PowerUpType.EXTRA_LIFE || type == PowerUpType.DOUBLE_SCORE
+                    || type == PowerUpType.RESPAWN_FREE) {
+                duration = 0;
+            } else if ((System.currentTimeMillis() - duration) >= 3000) {
+                duration = 0;
+                removeEffect();
+            }
         }
     }
 

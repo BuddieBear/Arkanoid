@@ -132,9 +132,9 @@ public class GameManager extends Application {
                 paddle.update();
             }
             for (Ball ball : stage.getBalls()) {
-                ball.update();
                 ball.Collision(stage.getBricks());
                 ball.Collision(stage.getPaddles());
+                ball.update();
             }
             stage.addPowerUp(stage.getBricks());
 

@@ -126,15 +126,15 @@ public class Ball extends MovableObject {
     public void Collision(List<? extends GameObject> others) {
         for (GameObject Obj : others) {
             if (this.checkCollision(Obj)) {
-                if (Obj instanceof Brick && !((Brick) Obj).getProtection()) { // Check for Bricks
+                if (Obj instanceof Brick && !((Brick) Obj).getProtection()) {// Check for Bricks
                     if(!invincible) {
                         ((Brick) Obj).takeHit();
                     } else {
                         ((Brick) Obj).setHitPoints(0);
                     }
-                    AudioSet.collisionBrickSound.play();
                     ((Brick) Obj).setProtection(true);
                     if(!invincible) {
+                        AudioSet.collisionBrickSound.play();
                         bounceOff(Obj);
                     }
                 }
@@ -192,6 +192,7 @@ public class Ball extends MovableObject {
                 AudioSet.wallBounceSound.play();
                 setDx(-getDx());
             } else if (check.equals("Up") || check.equals("Paddle")) {
+                AudioSet.wallBounceSound.play();
                 setDy(-getDy());
             }
         }

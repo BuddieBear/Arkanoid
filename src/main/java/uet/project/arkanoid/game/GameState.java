@@ -7,6 +7,7 @@ public enum GameState {
     GAME_OVER,
     LOAD_GAME,
     NEW_GAME,
-    SETTING;
+    SETTING,
+    OPTION;
 }
 

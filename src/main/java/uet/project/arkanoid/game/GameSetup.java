@@ -67,7 +67,7 @@ public class GameSetup {
                 System.out.println("Brick Destroyed: " + brick_streak);
                 if (brick_streak >= 3) {
                     brick_streak = 0;
-                    int choice = (int) (Math.random() * 6); // 0 → 5
+                    int choice = (int) (Math.random() * 9); // 0 → 8
                     switch (choice) {
                         case 0:
                             powerUps.add(new DamageBrickPowerUp(brick, 30, 30, this));
@@ -86,6 +86,15 @@ public class GameSetup {
                             break;
                         case 5:
                             powerUps.add(new HarderBrickPowerDown(brick, 30, 30, this));
+                            break;
+                        case 6:
+                            powerUps.add(new ExtraLifePowerUp(brick, 30, 30, this));
+                            break;
+                        case 7:
+                            powerUps.add(new DoubleScorePowerUp(brick, 30, 30, this));
+                            break;
+                        case 8:
+                            powerUps.add(new RespawnFreePowerUp(brick, 30, 30, this));
                             break;
                     }
                 }

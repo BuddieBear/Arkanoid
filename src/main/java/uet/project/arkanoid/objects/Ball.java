@@ -58,8 +58,8 @@ public class Ball extends MovableObject {
     }
     public void bounceOff(GameObject other) {
         // Paddle collision: custom bounce
-        if (other instanceof Paddle paddle) {
-            handlePaddleCollision(paddle);
+        if (other instanceof Paddle ) {
+            handlePaddleCollision((Paddle) other);
             return;
         }
 
@@ -189,11 +189,17 @@ public class Ball extends MovableObject {
         {
             String check = GameManager.getResultCollection();
             if (check.equals("Right") || check.equals("Left")) {
+                long start = System.nanoTime();
+                AudioSet.wallBounceSound.stop();
                 AudioSet.wallBounceSound.play();
+                System.out.println("WALL BOUNCED at " + (System.nanoTime() - start)/1_000_000.0 + " ms");
                 setDx(-getDx());
             } else if (check.equals("Up") || check.equals("Paddle")) {
+                AudioSet.wallBounceSound.stop();
+                System.out.println("WALL BOUNCED !");
                 setDy(-getDy());
             }
+
         }
         setX(getX() + getDx());
         setY(getY() + getDy());

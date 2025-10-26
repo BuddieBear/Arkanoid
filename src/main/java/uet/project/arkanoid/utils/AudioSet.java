@@ -11,12 +11,12 @@ public class AudioSet {
     public static final AudioClip powerUpSound;
 
     static {
-        wallBounceSound = load("wall_bounce.wav");
-        lossHpSound = load("loss_hp.ogg");
-        collisionPaddleSound = load("paddle_sound.wav");
-        collisionBrickSound = load("brick_sound.wav");
-        gameOverSound = load("game_over.wav");
-        powerUpSound = load("power_up.wav");
+        wallBounceSound = load("/Sound/wall_bounce.wav");
+        lossHpSound = load("/Sound/loss_hp.wav");
+        collisionPaddleSound = load("/Sound/paddle_sound.wav");
+        collisionBrickSound = load("/Sound/brick_sound.wav");
+        gameOverSound = load("/Sound/game_over.wav");
+        powerUpSound = load("/Sound/power_up.wav");
     }
 
     private static AudioClip load(String filename) {

@@ -19,6 +19,7 @@ import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
 import uet.project.arkanoid.objects.PowerUp;
+import uet.project.arkanoid.utils.AudioSet;
 import uet.project.arkanoid.utils.Basis;
 
 import java.util.HashSet;
@@ -111,8 +112,8 @@ public class GameManager extends Application {
             public void handle(long time) { //TODO: Set up delta time
                 processInput();
                 resultCollection = checkCollisions();
-                render();
                 update();
+                render();
             }
         };
 
@@ -207,8 +208,8 @@ public class GameManager extends Application {
     }
 
     private void processInput() {
-        var paddle = stage.getPaddles().get(0);
-        var ball = stage.getBalls().get(0);
+        Paddle paddle = stage.getPaddles().get(0);
+        Ball ball = stage.getBalls().get(0);
 
         boolean left = pressedKeys.contains(KeyCode.A);
         boolean right = pressedKeys.contains(KeyCode.D);

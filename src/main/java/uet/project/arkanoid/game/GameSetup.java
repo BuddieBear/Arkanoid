@@ -35,7 +35,7 @@ public class GameSetup {
         // TEST setup
         if (currentStage == Level.STAGE_TEST) {
             lives = 3;
-            paddles.add(new Paddle(Basis.STAGE_TEST_X - 33, 720 - 70, 210, 56, Basis.PADDLE_SPEED));  // 33 is padding
+            paddles.add(new Paddle(Basis.STAGE_TEST_X - 33, Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
             balls.add(new Ball(
                     paddleMain.getX() + (int)paddleMain.getWidth() / 2 - 25,
@@ -43,20 +43,20 @@ public class GameSetup {
                     Basis.BALL_SPEED, this
             ));
 
-            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 50, Basis.STAGE_TEST_Y + 75, 100, 75, 1, this));
-            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 250, Basis.STAGE_TEST_Y + 225, 100, 75, 2, this));
-            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 350, Basis.STAGE_TEST_Y + 300, 100, 75, 3, this));
-            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 450, Basis.STAGE_TEST_Y + 300, 100, 75, 1, this));
-            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 650, Basis.STAGE_TEST_Y + 150, 100, 75, 2, this));
-            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 750, Basis.STAGE_TEST_Y + 75, 100, 75, 3, this));
-            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 250, Basis.STAGE_TEST_Y + 30, 100, 75, 1, this));
-            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 350, Basis.STAGE_TEST_Y + 30, 100, 75, 2, this));
-            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 450, Basis.STAGE_TEST_Y + 30, 100, 75, 2, this));
-            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 550, Basis.STAGE_TEST_Y + 30, 100, 75, 3, this));
-            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 650, Basis.STAGE_TEST_Y + 30, 100, 75, 1, this));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 50, Basis.STAGE_TEST_Y + 75, 70, 35, 1, this));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 250, Basis.STAGE_TEST_Y + 225, 70, 35, 2, this));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 350, Basis.STAGE_TEST_Y + 300, 70, 35, 3, this));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 450, Basis.STAGE_TEST_Y + 300, 70, 35, 1, this));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 650, Basis.STAGE_TEST_Y + 150, 70, 35, 2, this));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 750, Basis.STAGE_TEST_Y + 75, 70, 35, 3, this));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 250, Basis.STAGE_TEST_Y + 30, 70, 35, 1, this));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 350, Basis.STAGE_TEST_Y + 30, 70, 35, 2, this));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 450, Basis.STAGE_TEST_Y + 30, 70, 35, 2, this));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 550, Basis.STAGE_TEST_Y + 30, 70, 35, 3, this));
+            bricks.add(new NormalBrick(Basis.STAGE_TEST_X + 650, Basis.STAGE_TEST_Y + 30, 70, 35, 1, this));
 
-            bricks.add(new IndestructibleBrick(Basis.STAGE_TEST_X + 550, Basis.STAGE_TEST_Y + 225, 100, 75, this));
-            bricks.add(new IndestructibleBrick(Basis.STAGE_TEST_X + 150, Basis.STAGE_TEST_Y + 150, 100, 75, this));
+            bricks.add(new IndestructibleBrick(Basis.STAGE_TEST_X + 550, Basis.STAGE_TEST_Y + 225, 70, 35, this));
+            bricks.add(new IndestructibleBrick(Basis.STAGE_TEST_X + 150, Basis.STAGE_TEST_Y + 150, 70, 35, this));
         }
     }
 

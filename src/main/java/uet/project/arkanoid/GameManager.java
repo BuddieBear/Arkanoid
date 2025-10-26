@@ -159,12 +159,12 @@ public class GameManager extends Application {
     public void render() {
         // gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        // double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;
-        // double scaleY = canvas.getHeight() / Basis.SCREEN_HEIGHT;
+        double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;
+        double scaleY = canvas.getHeight() / Basis.SCREEN_HEIGHT;
 
-        // gc.save();
-        // gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        // gc.scale(scaleX, scaleY);
+        gc.save();
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        gc.scale(scaleX, scaleY);
         if (currentState == GameState.MENU) {
             renderMenu.onDraw(gc);
         } else if (currentState == GameState.SETTING){
@@ -175,7 +175,7 @@ public class GameManager extends Application {
             renderGame.onDraw(gc);
         }
 
-        //gc.restore();
+        gc.restore();
     }
 
     private void handleInput(Scene scene) {
@@ -240,7 +240,6 @@ public class GameManager extends Application {
             return "Up";
         }
 
-        // 33 and 25 are the padding of the paddle.
         return "";
     }
 

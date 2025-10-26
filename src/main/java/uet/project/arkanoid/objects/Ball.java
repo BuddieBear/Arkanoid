@@ -125,13 +125,12 @@ public class Ball extends MovableObject {
     public void Collision(List<? extends GameObject> others) {
         for (GameObject Obj : others) {
             if (this.checkCollision(Obj)) {
-                if (Obj instanceof Brick && !((Brick) Obj).getProtection()) { // Check for Bricks
+                if (Obj instanceof Brick) { // Check for Bricks
                     if(!invincible) {
                         ((Brick) Obj).takeHit();
                     } else {
                         ((Brick) Obj).setHitPoints(0);
                     }
-                    ((Brick) Obj).setProtection(true);
                     if(!invincible) {
                         bounceOff(Obj);
                     }
@@ -170,7 +169,7 @@ public class Ball extends MovableObject {
     }
 
     public void ifDead() {
-        if (this.getY() > Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT &&
+        if (this.getY() > Basis.STAGE_Y + Basis.STAGE_HEIGHT &&
                 this == stage.getBalls().get(0)) {
             hasLaunch = false;
             setDx(0);

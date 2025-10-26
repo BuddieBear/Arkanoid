@@ -9,11 +9,13 @@ public class Basis {
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
 
-    //Testing stage
-    public static final int STAGE_TEST_WIDTH = 1030;
-    public static final int STAGE_TEST_HEIGHT = 680;
-    public static final int STAGE_TEST_X = 32;
-    public static final int STAGE_TEST_Y = 32;
+    //stage
+    public static final int STAGE_WIDTH = 1030;
+    public static final int STAGE_HEIGHT = 680;
+    public static final int STAGE_X = 32;
+    public static final int STAGE_Y = 32;
+
+    public static final String STAGE_1 = "src/main/resources/Stages/Stage_1.tmx";
 
 
     // Fixed width, height
@@ -29,7 +31,7 @@ public class Basis {
 
     // Base stats
     public static final int BALL_SPEED = 7;
-    public static final int PADDLE_SPEED = 6;
+    public static final int PADDLE_SPEED = 8;
 
     // Menu
     public static final int PLAY_X = SCREEN_WIDTH / 2 - 100;

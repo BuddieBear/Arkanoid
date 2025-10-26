@@ -43,7 +43,7 @@ public class GameManager extends Application {
 
     // Game and Stage setup
     public GameState currentState = GameState.MENU;
-    public Level currentLevel = Level.STAGE_TEST;
+    public Level currentLevel = Level.STAGE_1;
 
     GameSetup stage;
 
@@ -232,11 +232,11 @@ public class GameManager extends Application {
         int testX = (int) (ballMain.getX() + ballMain.getWidth() / 2);
         int testY = (int) (ballMain.getY() + ballMain.getHeight() - paddleMain.getY());
 
-        if (ballMain.getX() + ballMain.getWidth() >= Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH) {
+        if (ballMain.getX() + ballMain.getWidth() >= Basis.STAGE_X + Basis.STAGE_WIDTH) {
             return "Right";
-        } else if (ballMain.getX() <= Basis.STAGE_TEST_X) {
+        } else if (ballMain.getX() <= Basis.STAGE_X) {
             return "Left";
-        } else if (ballMain.getY() <= Basis.STAGE_TEST_Y){
+        } else if (ballMain.getY() <= Basis.STAGE_Y){
             return "Up";
         }
 

@@ -39,7 +39,7 @@ public abstract class PowerUp extends GameObject {
     public abstract void removeEffect();
 
     public boolean isDead() {
-        return this.getY() > Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT || duration == 0;
+        return this.getY() > Basis.STAGE_Y + Basis.STAGE_HEIGHT || duration == 0;
     }
 
     public void update() {

@@ -40,11 +40,11 @@ public class MultiBallPowerUp extends PowerUp {
         b2.setBallImage(Basis.MULTI_BALL_TEXTURE);
         stage.getBalls().add(b2);
 
-        b1.setX((int) Math.max(Basis.STAGE_TEST_X, Math.min(b1.getX(), Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH - b1.getWidth())));
-        b1.setY((int) Math.max(Basis.STAGE_TEST_Y, Math.min(b1.getY(), Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT - b1.getHeight())));
+        b1.setX((int) Math.max(Basis.STAGE_X, Math.min(b1.getX(), Basis.STAGE_X + Basis.STAGE_WIDTH - b1.getWidth())));
+        b1.setY((int) Math.max(Basis.STAGE_Y, Math.min(b1.getY(), Basis.STAGE_Y + Basis.STAGE_HEIGHT - b1.getHeight())));
 
-        b2.setX((int) Math.max(Basis.STAGE_TEST_X, Math.min(b2.getX(), Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH - b2.getWidth())));
-        b2.setY((int) Math.max(Basis.STAGE_TEST_Y, Math.min(b2.getY(), Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT - b2.getHeight())));
+        b2.setX((int) Math.max(Basis.STAGE_X, Math.min(b2.getX(), Basis.STAGE_X + Basis.STAGE_WIDTH - b2.getWidth())));
+        b2.setY((int) Math.max(Basis.STAGE_Y, Math.min(b2.getY(), Basis.STAGE_Y + Basis.STAGE_HEIGHT - b2.getHeight())));
 
     }
 

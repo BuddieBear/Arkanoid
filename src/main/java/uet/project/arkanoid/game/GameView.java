@@ -1,4 +1,4 @@
-        package uet.project.arkanoid.game;
+package uet.project.arkanoid.game;
 
 import javafx.scene.canvas.GraphicsContext;
 import uet.project.arkanoid.objects.Ball;

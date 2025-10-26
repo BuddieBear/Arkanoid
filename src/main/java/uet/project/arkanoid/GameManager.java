@@ -15,6 +15,7 @@ import uet.project.arkanoid.game.Level;
 import uet.project.arkanoid.ui.MenuView;
 import uet.project.arkanoid.ui.Setting;
 import uet.project.arkanoid.ui.Option;
+import uet.project.arkanoid.ui.PausedMenuView;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
@@ -52,6 +53,7 @@ public class GameManager extends Application {
     MenuView renderMenu;
     Setting renderSetting;
     Option renderOption;
+    PausedMenuView renderPausedMenu;
 
 
     public static void main(String[] args) {
@@ -104,6 +106,7 @@ public class GameManager extends Application {
         renderMenu = new MenuView();
         renderSetting = new Setting();
         renderOption = new Option();
+        renderPausedMenu = new PausedMenuView();
 
         // Game loop
         gameLoop = new AnimationTimer() {
@@ -173,6 +176,9 @@ public class GameManager extends Application {
             renderOption.onDraw(gc);
         } else if (currentState == GameState.PLAYING) {
             renderGame.onDraw(gc);
+        } else if (currentState == GameState.PAUSED) {
+            renderGame.onDraw(gc);
+            renderPausedMenu.onDraw(gc);
         }
 
         gc.restore();
@@ -185,8 +191,10 @@ public class GameManager extends Application {
 
         // --- Mouse input ---
         canvas.setOnMouseClicked(event -> {
-            double mouseX = event.getX();
-            double mouseY = event.getY();
+            double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;
+            double scaleY = canvas.getHeight() / Basis.SCREEN_HEIGHT;
+            double mouseX = event.getX() / scaleX;
+            double mouseY = event.getY() / scaleY;
             System.out.println(mouseX + " " + mouseY);
             if (currentState == GameState.MENU) {
                 if (mouseX >= Basis.PLAY_X && mouseX <= Basis.PLAY_X + Basis.PLAY_W
@@ -202,6 +210,23 @@ public class GameManager extends Application {
                     currentState = GameState.OPTION;
                     render();
                 } 
+            } else if (currentState == GameState.PAUSED) {
+                if (mouseX >= Basis.CONTINUE_BTN_X && mouseX <= Basis.CONTINUE_BTN_X + Basis.PAUSE_BTN_WIDTH
+                        && mouseY >= Basis.CONTINUE_BTN_Y && mouseY <= Basis.CONTINUE_BTN_Y + Basis.PAUSE_BTN_HEIGHT) {
+                    currentState = GameState.PLAYING;
+                } else if (mouseX >= Basis.MENU_BTN_X && mouseX <= Basis.MENU_BTN_X + Basis.PAUSE_BTN_WIDTH
+                        && mouseY >= Basis.MENU_BTN_Y && mouseY <= Basis.MENU_BTN_Y + Basis.PAUSE_BTN_HEIGHT) {
+                    stage = new GameSetup(currentLevel);
+                    renderGame = new GameView(stage);
+                    currentState = GameState.MENU;
+                    render();
+                } else if (mouseX >= Basis.OPTIONS_BTN_X && mouseX <= Basis.OPTIONS_BTN_X + Basis.PAUSE_BTN_WIDTH
+                        && mouseY >= Basis.OPTIONS_BTN_Y && mouseY <= Basis.OPTIONS_BTN_Y + Basis.PAUSE_BTN_HEIGHT) {
+                    System.out.println("chưa làm");
+                } else if (mouseX >= Basis.SAVEGAME_BTN_X && mouseX <= Basis.SAVEGAME_BTN_X + Basis.PAUSE_BTN_WIDTH
+                        && mouseY >= Basis.SAVEGAME_BTN_Y && mouseY <= Basis.SAVEGAME_BTN_Y + Basis.PAUSE_BTN_HEIGHT) {
+                    System.out.println("chưa làm");
+                }
             }
         });
     }
@@ -223,6 +248,13 @@ public class GameManager extends Application {
 
         if (pressedKeys.contains(KeyCode.SPACE)) {
             ball.launch();
+        }
+
+        if (pressedKeys.contains(KeyCode.ESCAPE)) {
+            if (currentState == GameState.PLAYING) {
+                currentState = GameState.PAUSED;
+                pressedKeys.remove(KeyCode.ESCAPE);
+            }
         }
     }
 

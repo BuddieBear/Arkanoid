@@ -52,10 +52,10 @@ public class Paddle extends MovableObject {
 
         // Prevent paddle from leaving stage boundaries
         // 33 is the padding of the paddle.
-        if (getX() <= Basis.STAGE_TEST_X - 33) {
-            setX(Basis.STAGE_TEST_X - 33);
-        } else if (getX() + this.width - 33 >= Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH) {
-            setX(Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH - (int)this.width + 33);
+        if (getX() <= Basis.STAGE_TEST_X) {
+            setX(Basis.STAGE_TEST_X);
+        } else if (getX() + this.width >= Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH) {
+            setX(Basis.STAGE_TEST_X + Basis.STAGE_TEST_WIDTH - (int)this.width);
         }
     }
 }

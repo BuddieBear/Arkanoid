@@ -105,9 +105,9 @@ public class GameSetup {
 
 
     public boolean gameLose() {
-            if (lives > 0) {
-                return false;
-            }
+        if (lives > 0) {
+            return false;
+        }
         AudioSet.gameOverSound.play();
         System.out.println("YOU LOST!");
         FileManager.saveScore(this.score);

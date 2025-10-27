@@ -11,16 +11,16 @@ public class AudioSet {
     public static final AudioClip powerUpSound;
 
     static {
-        wallBounceSound = load("Assets/wall_bounce.wav");
-        lossHpSound = load("Assets/loss_hp.wav");
-        collisionPaddleSound = load("Assets/paddle_sound.wav");
-        collisionBrickSound = load("Assets/brick_sound.wav");
-        gameOverSound = load("Assets/game_over.wav");
-        powerUpSound = load("Assets/power_up.wav");
+        wallBounceSound = load("/Sound/wall_bounce.wav");
+        lossHpSound = load("/Sound/loss_hp.wav");
+        collisionPaddleSound = load("/Sound/paddle_sound.wav");
+        collisionBrickSound = load("/Sound/brick_sound.wav");
+        gameOverSound = load("/Sound/game_over.wav");
+        powerUpSound = load("/Sound/power_up.wav");
     }
 
     private static AudioClip load(String filename) {
-        URL resource = AudioSet.class.getResource("/" + filename);
+        URL resource = AudioSet.class.getResource(filename);
         if (resource == null) {
             System.err.println("audio file is missing: " + filename);
             return null;

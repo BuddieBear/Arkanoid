@@ -9,11 +9,13 @@ public class Basis {
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
 
-    //Testing stage
-    public static final int STAGE_TEST_WIDTH = 1030;
-    public static final int STAGE_TEST_HEIGHT = 680;
-    public static final int STAGE_TEST_X = 32;
-    public static final int STAGE_TEST_Y = 32;
+    //stage
+    public static final int STAGE_WIDTH = 1030;
+    public static final int STAGE_HEIGHT = 680;
+    public static final int STAGE_X = 32;
+    public static final int STAGE_Y = 32;
+
+    public static final String STAGE_1 = "src/main/resources/Stages/Stage_1.tmx";
 
 
     // Fixed width, height
@@ -29,7 +31,7 @@ public class Basis {
 
     // Base stats
     public static final int BALL_SPEED = 7;
-    public static final int PADDLE_SPEED = 6;
+    public static final int PADDLE_SPEED = 8;
 
     // Menu
     public static final int PLAY_X = SCREEN_WIDTH / 2 - 100;
@@ -47,6 +49,28 @@ public class Basis {
     public static final int SETTING_W = 80;
     public static final int SETTING_H = 80;
 
+    //Pause Menu
+    public static final int PAUSE_MENU_WIDTH = 400;
+    public static final int PAUSE_MENU_HEIGHT = 500;
+    public static final int PAUSE_MENU_X = (SCREEN_WIDTH - PAUSE_MENU_WIDTH) / 2;
+    public static final int PAUSE_MENU_Y = (SCREEN_HEIGHT - PAUSE_MENU_HEIGHT) / 2;
+
+    public static final int PAUSE_BTN_WIDTH = 350;
+    public static final int PAUSE_BTN_HEIGHT = 60;
+    public static final int PAUSE_BTN_X_OFFSET = (PAUSE_MENU_WIDTH - PAUSE_BTN_WIDTH) / 2;
+
+    public static final int CONTINUE_BTN_X = PAUSE_MENU_X + PAUSE_BTN_X_OFFSET;
+    public static final int CONTINUE_BTN_Y = PAUSE_MENU_Y + 150;
+
+    public static final int MENU_BTN_X = PAUSE_MENU_X + PAUSE_BTN_X_OFFSET;
+    public static final int MENU_BTN_Y = PAUSE_MENU_Y + 225;
+
+    public static final int OPTIONS_BTN_X = PAUSE_MENU_X + PAUSE_BTN_X_OFFSET;
+    public static final int OPTIONS_BTN_Y = PAUSE_MENU_Y + 300;
+
+    public static final int SAVEGAME_BTN_X = PAUSE_MENU_X + PAUSE_BTN_X_OFFSET;
+    public static final int SAVEGAME_BTN_Y = PAUSE_MENU_Y + 375;
+
     // Textures
     public static final Image PADDLE_TEXTURE;
     public static final Image BALL_TEXTURE;
@@ -63,6 +87,11 @@ public class Basis {
     public static final Image PLAY_BUTTON;
     public static final Image OPTION_BUTTON;
     public static final Image SETTING_BUTTON;
+    public static final Image PAUSE_CONTINUE_BUTTON;
+    public static final Image PAUSE_MENU_BUTTON;
+    public static final Image PAUSE_OPTIONS_BUTTON;
+    public static final Image PAUSE_SAVEGAME_BUTTON;
+    public static final Image PAUSE_MENU_PANEL;
 
     static {
         // Paddle + Ball
@@ -93,5 +122,12 @@ public class Basis {
         PLAY_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/play.png")).toExternalForm());
         OPTION_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/option.png")).toExternalForm());
         SETTING_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/setting.png")).toExternalForm());
+
+        // PausedMenu
+        PAUSE_MENU_PANEL = new Image(Objects.requireNonNull(Basis.class.getResource("/PausedMenu/Panel.png")).toExternalForm());
+        PAUSE_CONTINUE_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/PausedMenu/Continue.png")).toExternalForm());
+        PAUSE_MENU_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/PausedMenu/Menu.png")).toExternalForm());
+        PAUSE_OPTIONS_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/PausedMenu/Options.png")).toExternalForm());
+        PAUSE_SAVEGAME_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/PausedMenu/SaveGame.png")).toExternalForm());
     }
 }

@@ -57,8 +57,8 @@ public class Ball extends MovableObject {
     }
     public void bounceOff(GameObject other) {
         // Paddle collision: custom bounce
-        if (other instanceof Paddle paddle) {
-            handlePaddleCollision(paddle);
+        if (other instanceof Paddle ) {
+            handlePaddleCollision((Paddle) other);
             return;
         }
 
@@ -125,19 +125,20 @@ public class Ball extends MovableObject {
     public void Collision(List<? extends GameObject> others) {
         for (GameObject Obj : others) {
             if (this.checkCollision(Obj)) {
-                if (Obj instanceof Brick && !((Brick) Obj).getProtection()) { // Check for Bricks
+                if (Obj instanceof Brick) { // Check for Bricks
                     if(!invincible) {
                         ((Brick) Obj).takeHit();
                     } else {
                         ((Brick) Obj).setHitPoints(0);
                     }
-                    ((Brick) Obj).setProtection(true);
+                    AudioSet.collisionBrickSound.play();
                     if(!invincible) {
                         bounceOff(Obj);
                     }
                 }
                 else if (Obj instanceof Paddle) {
                     bounceOff(Obj);
+                    AudioSet.collisionPaddleSound.play();
                 }
             }
         }
@@ -170,12 +171,13 @@ public class Ball extends MovableObject {
     }
 
     public void ifDead() {
-        if (this.getY() > Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT &&
+        if (this.getY() > Basis.STAGE_Y + Basis.STAGE_HEIGHT &&
                 this == stage.getBalls().get(0)) {
             hasLaunch = false;
             setDx(0);
             setDy(0);
             angle = 0;
+            AudioSet.lossHpSound.play();
             stage.setLives(stage.getLives() - 1);
         }
     }
@@ -185,10 +187,17 @@ public class Ball extends MovableObject {
         {
             String check = GameManager.getResultCollection();
             if (check.equals("Right") || check.equals("Left")) {
+                long start = System.nanoTime();
+                AudioSet.wallBounceSound.stop();
+                AudioSet.wallBounceSound.play();
+                System.out.println("WALL BOUNCED at " + (System.nanoTime() - start)/1_000_000.0 + " ms");
                 setDx(-getDx());
             } else if (check.equals("Up") || check.equals("Paddle")) {
+                AudioSet.wallBounceSound.stop();
+                System.out.println("WALL BOUNCED !");
                 setDy(-getDy());
             }
+
         }
         setX(getX() + getDx());
         setY(getY() + getDy());

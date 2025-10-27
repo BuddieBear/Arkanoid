@@ -16,9 +16,6 @@ public class Brick extends GameObject {
     private int maxHp;
     private BrickType type;
     protected Image brickImage;
-    private boolean protection = false;
-    private int timer = 0;
-    private int protectedTime = 5;
     private GameSetup stage;
     private final double originalWidth;
     private final double originalHeight;
@@ -68,13 +65,6 @@ public class Brick extends GameObject {
         }
     }
 
-    public void setProtection(boolean protect) {
-        this.protection = protect;
-    }
-
-    public boolean getProtection() {
-        return protection;
-    }
 
     public void takeHit() {
             hitPoints--;
@@ -90,13 +80,6 @@ public class Brick extends GameObject {
 
     @Override
     public void update() {
-        if (protection) {
-            if (timer > protectedTime) {
-                this.protection = false;
-                timer = 0;
-            }
-            timer ++;
-        }
         if (this.isDestroy()) {
             stage.addScore(maxHp * 10);
         }

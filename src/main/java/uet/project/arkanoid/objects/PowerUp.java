@@ -3,6 +3,7 @@ package uet.project.arkanoid.objects;
 import javafx.scene.canvas.GraphicsContext;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.Basis;
+import uet.project.arkanoid.utils.AudioSet;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public abstract class PowerUp extends GameObject {
     public abstract void removeEffect();
 
     public boolean isDead() {
-        return this.getY() > Basis.STAGE_TEST_Y + Basis.STAGE_TEST_HEIGHT || duration == 0;
+        return this.getY() > Basis.STAGE_Y + Basis.STAGE_HEIGHT || duration == 0;
     }
 
     public void update() {
@@ -50,6 +51,8 @@ public abstract class PowerUp extends GameObject {
             catchedPowerUp = true;
             applyEffect();
             duration = System.currentTimeMillis();
+            // add music
+            AudioSet.powerUpSound.play();
         }
         if (catchedPowerUp) {
             if (type == PowerUpType.EXTRA_LIFE || type == PowerUpType.DOUBLE_SCORE

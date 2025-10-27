@@ -10,9 +10,9 @@ import uet.project.arkanoid.objects.PowerUp;
 
 public class SuperBallPowerUp extends PowerUp {
     private Ball ball;
-    private int oldSpeed = ball.getSpeed();
-    private double oldWidth = ball.getWidth();
-    private double oldHeight = ball.getHeight();
+    private final int oldSpeed;
+    private final double oldWidth;
+    private final double oldHeight;
     private int oldX;
     private int oldY;
 
@@ -21,6 +21,9 @@ public class SuperBallPowerUp extends PowerUp {
         super(object, width, height, stage);
         type = PowerUpType.SUPER_BALL;
         ball = stage.getBalls().get(0);
+        oldSpeed = ball.getSpeed();
+        oldWidth = ball.getWidth();
+        oldHeight = ball.getHeight();
     }
 
     public void applyEffect() {

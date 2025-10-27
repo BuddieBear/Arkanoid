@@ -38,7 +38,7 @@ public class GameSetup {
         if (currentStage == Level.STAGE_1) {
             lives = 5;
 
-            paddles.add(new Paddle(Basis.STAGE_X - 33, Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
+            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 
             balls.add(new Ball(
@@ -48,6 +48,19 @@ public class GameSetup {
             ));
 
             mapLoader.loadBricksFromTiled(this, Basis.STAGE_1);
+        } else if (currentStage == Level.STAGE_2) {
+            lives = 5;
+
+            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
+            Paddle paddleMain = paddles.get(0);
+
+            balls.add(new Ball(
+                    paddleMain.getX() + (int)paddleMain.getWidth() / 2 - 25,
+                    paddleMain.getY() - 20, Basis.BALL_DIAMETER, Basis.BALL_DIAMETER,
+                    Basis.BALL_SPEED, this
+            ));
+
+            mapLoader.loadBricksFromTiled(this, Basis.STAGE_2);
         }
     }
 

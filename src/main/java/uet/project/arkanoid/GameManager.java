@@ -45,7 +45,7 @@ public class GameManager extends Application {
 
     // Game and Stage setup
     public GameState currentState = GameState.MENU;
-    public Level currentLevel = Level.STAGE_1;
+    public Level currentLevel = Level.STAGE_2;
 
     GameSetup stage;
 

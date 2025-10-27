@@ -45,7 +45,7 @@ public class GameManager extends Application {
 
     // Game and Stage setup
     public GameState currentState = GameState.MENU;
-    public Level currentLevel = Level.STAGE_2;
+    public Level currentLevel = Level.STAGE_3;
 
     GameSetup stage;
 
@@ -197,6 +197,7 @@ public class GameManager extends Application {
             double mouseX = event.getX() / scaleX;
             double mouseY = event.getY() / scaleY;
             System.out.println(mouseX + " " + mouseY);
+
             if (currentState == GameState.MENU) {
                 if (mouseX >= Basis.PLAY_X && mouseX <= Basis.PLAY_X + Basis.PLAY_W
                  && mouseY >= Basis.PLAY_Y && mouseY <= Basis.PLAY_Y + Basis.PLAY_H) {
@@ -210,7 +211,7 @@ public class GameManager extends Application {
                         && mouseY >= Basis.OPTION_Y && mouseY <= Basis.OPTION_Y + Basis.OPTION_H) {
                     currentState = GameState.OPTION;
                     render();
-                } 
+                }
             } else if (currentState == GameState.PAUSED) {
                 if (mouseX >= Basis.CONTINUE_BTN_X && mouseX <= Basis.CONTINUE_BTN_X + Basis.PAUSE_BTN_WIDTH
                         && mouseY >= Basis.CONTINUE_BTN_Y && mouseY <= Basis.CONTINUE_BTN_Y + Basis.PAUSE_BTN_HEIGHT) {
@@ -245,6 +246,11 @@ public class GameManager extends Application {
             paddle.moveRight();
         } else {
             paddle.setDx(0); // stop smoothly
+        }
+
+        if (pressedKeys.contains(KeyCode.R)) {
+            ball.setX(Basis.SCREEN_WIDTH + 1);
+            ball.setY(Basis.SCREEN_HEIGHT + 1);
         }
 
         if (pressedKeys.contains(KeyCode.SPACE)) {

@@ -116,8 +116,12 @@ public class Ball extends MovableObject {
         double newAngle = 270.0 + hitPos * maxBounce;
 
         // Clamp — never let the ball go too horizontal
-        if (newAngle > 345.0) newAngle = 345.0; // up-right limit
-        if (newAngle < 195.0) newAngle = 195.0; // up-left limit
+        if (newAngle > 345.0) {
+            newAngle = 345.0; // up-right limit
+        }
+        if (newAngle < 195.0) {
+            newAngle = 195.0; // up-left limit
+        }
 
         this.angle = (int) newAngle;
         updateVelocity();
@@ -158,6 +162,7 @@ public class Ball extends MovableObject {
                 back = false;
             }
         }
+        System.out.println("Arrow angle: " + angle);
     }
     // Set speed when launch
     public void launch () {
@@ -188,14 +193,11 @@ public class Ball extends MovableObject {
         {
             String check = GameManager.getResultCollection();
             if (check.equals("Right") || check.equals("Left")) {
-                long start = System.nanoTime();
                 AudioSet.wallBounceSound.stop();
                 AudioSet.wallBounceSound.play();
-                System.out.println("WALL BOUNCED at " + (System.nanoTime() - start)/1_000_000.0 + " ms");
                 setDx(-getDx());
             } else if (check.equals("Up") || check.equals("Paddle")) {
                 AudioSet.wallBounceSound.stop();
-                System.out.println("WALL BOUNCED !");
                 setDy(-getDy());
             }
 

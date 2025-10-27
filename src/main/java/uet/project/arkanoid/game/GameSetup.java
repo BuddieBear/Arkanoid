@@ -3,6 +3,7 @@ package uet.project.arkanoid.game;
 import uet.project.arkanoid.objects.*;
 import uet.project.arkanoid.objects.DeBuffVariants.HarderBrickPowerDown;
 import uet.project.arkanoid.objects.PowerUpVariants.*;
+import uet.project.arkanoid.utils.AudioSet;
 import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
 import uet.project.arkanoid.objects.BrickVariants.NormalBrick;
@@ -97,6 +98,7 @@ public class GameSetup {
         if (lives > 0) {
             return false;
         }
+        AudioSet.gameOverSound.play();
         System.out.println("YOU LOST!");
         FileManager.saveScore(this.score);
         return true;

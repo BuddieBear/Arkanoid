@@ -3,6 +3,7 @@ package uet.project.arkanoid.objects;
 import javafx.scene.canvas.GraphicsContext;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.Basis;
+import uet.project.arkanoid.utils.AudioSet;
 
 import java.util.List;
 
@@ -50,6 +51,8 @@ public abstract class PowerUp extends GameObject {
             catchedPowerUp = true;
             applyEffect();
             duration = System.currentTimeMillis();
+            // add music
+            AudioSet.powerUpSound.play();
         }
         if (catchedPowerUp) {
             if (type == PowerUpType.EXTRA_LIFE || type == PowerUpType.DOUBLE_SCORE

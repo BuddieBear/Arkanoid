@@ -3,6 +3,7 @@ package uet.project.arkanoid.objects;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.project.arkanoid.game.GameSetup;
+import uet.project.arkanoid.utils.AudioSet;
 import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.GameManager;
 

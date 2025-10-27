@@ -16,6 +16,7 @@ public class Basis {
     public static final int STAGE_Y = 32;
 
     public static final String STAGE_1 = "src/main/resources/Stages/Stage_1.tmx";
+    public static final String STAGE_2 = "src/main/resources/Stages/Stage_2.tmx";
 
 
     // Fixed width, height

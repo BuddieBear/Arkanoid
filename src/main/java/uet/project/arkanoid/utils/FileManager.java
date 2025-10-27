@@ -30,6 +30,7 @@ public class FileManager {
     public static void saveScore(int score) {
         try {
             ensureFileExists();
+
             try (FileWriter writer = new FileWriter(SCORE_FILE, true)) {
                 writer.write(score + System.lineSeparator());
             }
@@ -46,4 +47,6 @@ public class FileManager {
             return List.of("No scores yet!");
         }
     }
+
+
 }

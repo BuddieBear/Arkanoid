@@ -37,8 +37,6 @@ public class GameManager extends Application {
     // HandleInput
     private final Set<KeyCode> pressedKeys = new HashSet<>();
 
-    private static String resultCollection = "";  // TODO: Rework this into ball
-
     public static String getResultCollection() {
         return resultCollection;
     }
@@ -114,7 +112,6 @@ public class GameManager extends Application {
             @Override
             public void handle(long time) { //TODO: Set up delta time
                 processInput();
-                resultCollection = checkCollisions();
                 update();
                 render();
             }
@@ -265,24 +262,3 @@ public class GameManager extends Application {
         }
     }
 
-    private String checkCollisions() { //TODO: Rework this to call checkCollision of different objects (if exists)
-        Ball ballMain = stage.getBalls().get(0);
-        Paddle paddleMain = stage.getPaddles().get(0);
-        int testX = (int) (ballMain.getX() + ballMain.getWidth() / 2);
-        int testY = (int) (ballMain.getY() + ballMain.getHeight() - paddleMain.getY());
-
-        if (ballMain.getX() + ballMain.getWidth() >= Basis.STAGE_X + Basis.STAGE_WIDTH) {
-            return "Right";
-        } else if (ballMain.getX() <= Basis.STAGE_X) {
-            return "Left";
-        } else if (ballMain.getY() <= Basis.STAGE_Y){
-            return "Up";
-        }
-
-        return "";
-    }
-
-    public GameSetup getStage() {
-        return stage;
-    }
-}

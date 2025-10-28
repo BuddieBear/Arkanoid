@@ -5,34 +5,18 @@ import javafx.scene.canvas.GraphicsContext;
 public abstract class GameObject {
     protected double width;
     protected double height;
-    private int x;
-    private int y;
+    private double x;
+    private double y;
 
-    public GameObject(int x, int y, double width, double height) {
+    public GameObject(double x, double y, double width, double height) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int X) {
-        this.x = X;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int Y) {
-        this.y = Y;
-    }
-
     public double getWidth() {
-        return this.width;
+        return width;
     }
 
     public void setWidth(double width) {
@@ -40,11 +24,27 @@ public abstract class GameObject {
     }
 
     public double getHeight() {
-        return this.height;
+        return height;
     }
 
     public void setHeight(double height) {
         this.height = height;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
     }
 
     public boolean checkCollision(GameObject other) {

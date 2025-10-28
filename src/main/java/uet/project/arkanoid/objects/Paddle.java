@@ -4,7 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import uet.project.arkanoid.utils.Basis;
 
 public class Paddle extends MovableObject {
-    private int speed;
+    private double speed;
     private PowerUp currentPowerUp = null;
 
 
@@ -13,11 +13,11 @@ public class Paddle extends MovableObject {
         this.speed = speed;
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return this.speed;
     }
 
-    public void setSpeed(int speed) {
+    public void setSpeed(double speed) {
         this.speed = speed;
     }
 

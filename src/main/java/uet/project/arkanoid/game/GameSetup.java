@@ -41,11 +41,9 @@ public class GameSetup {
             paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 
-            balls.add(new Ball(
-                    paddleMain.getX() + (int)paddleMain.getWidth() / 2 - Basis.BALL_DIAMETER/2,
-                    paddleMain.getY() - Basis.BALL_DIAMETER - 5, Basis.BALL_DIAMETER, Basis.BALL_DIAMETER,
-                    Basis.BALL_SPEED, this
-            ));
+            balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
+                    paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 -  10,
+                    Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
 
             mapLoader.loadBricksFromTiled(this, Basis.STAGE_1);
         } else if (currentStage == Level.STAGE_2) {
@@ -54,11 +52,10 @@ public class GameSetup {
             paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 
-            balls.add(new Ball(
-                    paddleMain.getX() + (int)paddleMain.getWidth() / 2 - Basis.BALL_DIAMETER/2,
-                    paddleMain.getY() - Basis.BALL_DIAMETER - 5, Basis.BALL_DIAMETER, Basis.BALL_DIAMETER,
-                    Basis.BALL_SPEED, this
-            ));
+            balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
+                    paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 - 10,
+                    Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
+
 
             mapLoader.loadBricksFromTiled(this, Basis.STAGE_2);
         } else if (currentStage == Level.STAGE_3) {
@@ -67,11 +64,10 @@ public class GameSetup {
             paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 
-            balls.add(new Ball(
-                    paddleMain.getX() + (int)paddleMain.getWidth() / 2 - Basis.BALL_DIAMETER/2,
-                    paddleMain.getY() - Basis.BALL_DIAMETER - 5, Basis.BALL_DIAMETER, Basis.BALL_DIAMETER,
-                    Basis.BALL_SPEED, this
-            ));
+            balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
+                    paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 -  10,
+                    Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
+
 
             mapLoader.loadBricksFromTiled(this, Basis.STAGE_3);
         }

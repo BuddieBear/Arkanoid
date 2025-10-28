@@ -2,16 +2,21 @@ package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.project.arkanoid.GameManager;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.AudioSet;
 import uet.project.arkanoid.utils.Basis;
-import uet.project.arkanoid.GameManager;
 
 import java.util.List;
 
 public class Ball extends MovableObject {
-    private int speed = 5;
-    private int angle = 0;
+    private double radius;
+    private double centerX;
+    private double centerY;
+
+    private double speed;
+    private double angle; // in degrees
+
     private boolean invincible = false;
     private boolean hasLaunch = false;
     private boolean back = false;
@@ -20,165 +25,187 @@ public class Ball extends MovableObject {
     private final GameSetup stage;
     private Image ballImage = Basis.BALL_TEXTURE;
 
-    public Ball(int x, int y, double width, double height, int speed, GameSetup stage) {
-        super(x, y, width, height);
+    // ===== Constructor =====
+    public Ball(double centerX, double centerY, double radius, double speed, GameSetup stage) {
+        super((int)(centerX - radius), (int)(centerY - radius), radius * 2, radius * 2);
+        this.centerX = centerX;
+        this.centerY = centerY;
+        this.radius = radius;
         this.speed = speed;
         this.stage = stage;
         this.paddleMain = stage.getPaddles().get(0);
     }
 
-    public void setInvincible(boolean invincible) {
-        this.invincible = invincible;
-    }
-
+    // ===== Basic Getters / Setters =====
     public boolean getLaunchState() {
         return hasLaunch;
-    }
-
-    public void setBallImage(Image ballImage) {
-        this.ballImage = ballImage;
-    }
-
-    public int getSpeed() {
-        return speed;
     }
 
     public void setHasLaunch(boolean hasLaunch) {
         this.hasLaunch = hasLaunch;
     }
 
-    public void setSpeed(int speed) {
+    public double getRadius() {
+        return radius;
+    }
+
+    public double getCenterX() {
+        return centerX;
+    }
+
+    public double getCenterY() {
+        return centerY;
+    }
+
+    public void setCenter(double x, double y) {
+        this.centerX = x;
+        this.centerY = y;
+        super.setX((int)(x - radius));
+        super.setY((int)(y - radius));
+    }
+
+    public void setBallImage(Image img) {
+        this.ballImage = img;
+    }
+
+    public void setInvincible(boolean invincible) {
+        this.invincible = invincible;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
         this.speed = speed;
     }
 
+    // ===== Velocity Update =====
     public void updateVelocity() {
-        double angleRad = Math.toRadians(angle);
-        setDx((int) (speed * Math.cos(angleRad)));
-        setDy((int) (speed * Math.sin(angleRad)));
-    }
-    public void bounceOff(GameObject other) {
-        // Paddle collision: custom bounce
-        if (other instanceof Paddle ) {
-            handlePaddleCollision((Paddle) other);
-            return;
-        }
-
-        int ballLeft = getX();
-        int ballRight = getX() + (int)getWidth();
-        int ballTop = getY();
-        int ballBottom = getY() + (int)getHeight();
-
-        int otherLeft = other.getX();
-        int otherRight = other.getX() + (int)other.getWidth();
-        int otherTop = other.getY();
-        int otherBottom = other.getY() + (int)other.getHeight();
-
-        // Calculate overlaps
-        int overlapLeft = ballRight - otherLeft;
-        int overlapRight = otherRight - ballLeft;
-        int overlapTop = ballBottom - otherTop;
-        int overlapBottom = otherBottom - ballTop;
-
-        // Find smallest positive overlap
-        int minOverlap = Math.min(Math.min(overlapLeft, overlapRight), Math.min(overlapTop, overlapBottom));
-
-        // Now separate the ball and reflect its velocity
-        if (minOverlap == overlapLeft) {          // Hit from left
-            setX(getX() - overlapLeft);
-            setDx(-Math.abs(getDx()));
-        } else if (minOverlap == overlapRight) {  // Hit from right
-            setX(getX() + overlapRight);
-            setDx(Math.abs(getDx()));
-        } else if (minOverlap == overlapTop) {    // Hit from top
-            setY(getY() - overlapTop);
-            setDy(-Math.abs(getDy()));
-        } else {                                  // Hit from bottom
-            setY(getY() + overlapBottom);
-            setDy(Math.abs(getDy()));
-        }
-        //TODO: Paddle Ball Angle changes
-        return;
+        double rad = Math.toRadians(angle);
+        setDx((int)(speed * Math.cos(rad)));
+        setDy((int)(speed * Math.sin(rad)));
     }
 
-    private void handlePaddleCollision(Paddle paddle) {
-        // Compute centers
-        double paddleCenter = paddle.getX() + paddle.getWidth() / 2.0;
-        double ballCenter = getX() + getWidth() / 2.0;
-
-        // Relative hit position (-1 → left edge, +1 → right edge)
-        double hitPos = (ballCenter - paddleCenter) / (paddle.getWidth() / 2.0);
-        hitPos = Math.max(-1.0, Math.min(1.0, hitPos));
-
-        // Define max deviation from vertical (e.g. ±60°)
-        double maxBounce = 60.0;
-
-        // Base upward = 270°, adjust left/right
-        double newAngle = 270.0 + hitPos * maxBounce;
-
-        // Clamp — never let the ball go too horizontal
-        if (newAngle > 345.0) {
-            newAngle = 345.0; // up-right limit
-        }
-        if (newAngle < 195.0) {
-            newAngle = 195.0; // up-left limit
+    // ===== Movement =====
+    public void move() {
+        if (hasLaunch) {
+            String check = GameManager.getResultCollection();
+            if (check.equals("Right") || check.equals("Left")) {
+                AudioSet.wallBounceSound.stop();
+                AudioSet.wallBounceSound.play();
+                setDx(-getDx());
+            } else if (check.equals("Up") || check.equals("Paddle")) {
+                AudioSet.wallBounceSound.stop();
+                AudioSet.wallBounceSound.play();
+                setDy(-getDy());
+            }
         }
 
-        this.angle = (int) newAngle;
-        updateVelocity();
+        centerX += getDx();
+        centerY += getDy();
+
+        super.setX((int)(centerX - radius));
+        super.setY((int)(centerY - radius));
     }
 
+    // ===== Collision Handling =====
     public void Collision(List<? extends GameObject> others) {
-        for (GameObject Obj : others) {
-            if (this.checkCollision(Obj)) {
-                if (Obj instanceof Brick) { // Check for Bricks
-                    if(!invincible) {
-                        ((Brick) Obj).takeHit();
+        for (GameObject obj : others) {
+            if (circleIntersectsRect(centerX, centerY, radius, obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight())) {
+                if (obj instanceof Brick) {
+
+                    if (!invincible) {
+                        ((Brick) obj).takeHit();
                     } else {
-                        ((Brick) Obj).setHitPoints(0);
+                        ((Brick) obj).setHitPoints(0);
                     }
                     AudioSet.collisionBrickSound.play();
-                    if(!invincible) {
-                        bounceOff(Obj);
+
+                    if (!invincible) {
+                        bounceOff(obj);
                     }
-                }
-                else if (Obj instanceof Paddle) {
-                    bounceOff(Obj);
+                } else if (obj instanceof Paddle) {
+                    bounceOff(obj);
                     AudioSet.collisionPaddleSound.play();
                 }
             }
         }
     }
 
-    // Set the ball on the paddle waiting to be launched
-    public void prepareLaunch() {
-        setX((int) (paddleMain.getX() + paddleMain.getWidth() / 2 -25));
-        setY((int) (paddleMain.getY() - this.height));
-        if (! back) {
-            if (++angle >= 75) {
-                back = true;
-            }
+    // ===== Bounce Reflection =====
+    public void bounceOff(GameObject other) {
+        if (other instanceof Paddle) {
+            handlePaddleCollision((Paddle) other);
+            return;
+        }
+
+        double nearestX = clamp(centerX, other.getX(), other.getX() + other.getWidth());
+        double nearestY = clamp(centerY, other.getY(), other.getY() + other.getHeight());
+
+        double dx = centerX - nearestX;
+        double dy = centerY - nearestY;
+
+        // Bounce depending on which axis is stronger
+        if (Math.abs(dx) > Math.abs(dy)) {
+            setDx(-getDx());
         } else {
-            if (--angle <= -75) {
-                back = false;
-            }
+            setDy(-getDy());
+        }
+    }
+
+    private void handlePaddleCollision(Paddle paddle) {
+        double paddleCenter = paddle.getX() + paddle.getWidth() / 2.0;
+
+        double hitPos = (centerX - paddleCenter) / (paddle.getWidth() / 2.0);
+
+        if (hitPos < -1) {
+            hitPos = -1;
+        } else if (hitPos > 1) {
+            hitPos = 1;
+        }
+
+        double maxBounce = 60.0;
+
+        double newAngle = 270.0 + hitPos * maxBounce;
+
+        if (newAngle < 195.0) {
+            newAngle = 195.0;
+        } else if (newAngle > 345.0) {
+            newAngle = 345.0;
+        }
+
+        this.angle = newAngle;
+        updateVelocity();
+    }
+
+    // ===== Launch =====
+    public void prepareLaunch() {
+        setCenter(paddleMain.getX() + paddleMain.getWidth() / 2.0, paddleMain.getY() - radius - 10);
+
+        if (!back) {
+            if (++angle >= 75) back = true;
+        } else {
+            if (--angle <= -75) back = false;
         }
         System.out.println("Arrow angle: " + angle);
     }
-    // Set speed when launch
-    public void launch () {
+
+    public void launch() {
         if (hasLaunch) {
             return;
         }
+
         angle = 90 - angle;
-        double angleRadian = Math.toRadians(angle);
-        setDx((int)(this.speed * Math.cos(angleRadian)));
-        setDy((int)(-this.speed * Math.sin(angleRadian)));
+        double rad = Math.toRadians(angle);
+        setDx((int)(speed * Math.cos(rad)));
+        setDy((int)(-speed * Math.sin(rad)));
         hasLaunch = true;
     }
 
+    // ===== Death Check =====
     public void ifDead() {
-        if (this.getY() > Basis.STAGE_Y + Basis.STAGE_HEIGHT &&
-                this == stage.getBalls().get(0)) {
+        if (centerY > Basis.STAGE_Y + Basis.STAGE_HEIGHT && this == stage.getBalls().get(0)) {
             hasLaunch = false;
             setDx(0);
             setDy(0);
@@ -188,49 +215,66 @@ public class Ball extends MovableObject {
         }
     }
 
-    public void move() {
-        if (hasLaunch)
-        {
-            String check = GameManager.getResultCollection();
-            if (check.equals("Right") || check.equals("Left")) {
-                AudioSet.wallBounceSound.stop();
-                AudioSet.wallBounceSound.play();
-                setDx(-getDx());
-            } else if (check.equals("Up") || check.equals("Paddle")) {
-                AudioSet.wallBounceSound.stop();
-                setDy(-getDy());
-            }
-
-        }
-        setX(getX() + getDx());
-        setY(getY() + getDy());
-    }
-
+    // ===== Rendering =====
     public void render(GraphicsContext gc) {
-        // Draw Arrows if not launched
         if (!hasLaunch) {
             gc.save();
-            // Move origin to ball center
-            gc.translate(getX() + width / 2.0, getY() + height / 2.0);
-            // Rotate the arrow
+            gc.translate(centerX, centerY);
             gc.rotate(angle);
-            // Draw the arrow above the ball, centered horizontally
-            gc.drawImage(Basis.ARROW_TEXTURE, -Basis.ARROW_WIDTH / 2.0, -this.height / 2.0 - Basis.ARROW_HEIGHT, Basis.ARROW_WIDTH, Basis.ARROW_HEIGHT);
+            gc.drawImage(
+                    Basis.ARROW_TEXTURE,
+                    -Basis.ARROW_WIDTH / 2.0,
+                    -radius - Basis.ARROW_HEIGHT,
+                    Basis.ARROW_WIDTH,
+                    Basis.ARROW_HEIGHT
+            );
             gc.restore();
         }
-
-        // Always draw the ball itself
-        gc.drawImage(ballImage, getX(), getY(), width, height);
+        gc.drawImage(ballImage, centerX - radius, centerY - radius, radius * 2, radius * 2);
     }
 
     public void update() {
         if (!hasLaunch) {
-            prepareLaunch();  // Spawn until launched
+            prepareLaunch();
         } else {
-            this.Collision(stage.getBricks());
-            this.Collision(stage.getPaddles());
+            Collision(stage.getBricks());
+            Collision(stage.getPaddles());
             move();
             ifDead();
         }
+    }
+
+    // ===== Collision Helper Functions =====
+    private static boolean circleIntersectsRect(double cx, double cy, double r,
+                                                double rx, double ry, double rw, double rh) {
+        double closestX = clamp(cx, rx, rx + rw);
+        double closestY = clamp(cy, ry, ry + rh);
+        double dx = cx - closestX;
+        double dy = cy - closestY;
+        return dx * dx + dy * dy <= r * r;
+    }
+
+    private static double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    public String checkBorderCollision() {
+        // Right wall
+        if (centerX + radius >= Basis.STAGE_X + Basis.STAGE_WIDTH) {
+            return "Right";
+        }
+        // Left wall
+        else if (centerX - radius <= Basis.STAGE_X) {
+            return "Left";
+        }
+        // Top wall
+        else if (centerY - radius <= Basis.STAGE_Y) {
+            return "Up";
+        }
+        // Bottom (death zone)
+        else if (centerY - radius > Basis.STAGE_Y + Basis.STAGE_HEIGHT) {
+            return "Down";
+        }
+        return "";
     }
 }

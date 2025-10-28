@@ -30,7 +30,7 @@ public abstract class PowerUp extends GameObject {
     }
 
     public PowerUp(GameObject object, double width, double height, GameSetup stage) {
-        super( (int)(object.getX() + object.getWidth() / 2 - width),
+        super(object.getX() + object.getWidth() / 2 - width,
                 object.getY(), width, height);
         this.stage = stage;
     }

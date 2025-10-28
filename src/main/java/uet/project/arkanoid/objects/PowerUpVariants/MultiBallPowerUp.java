@@ -20,20 +20,20 @@ public class MultiBallPowerUp extends PowerUp {
     }
 
     public void applyEffect() {
-        int speed = ball.getSpeed();
+        int speed = (int) ball.getSpeed();
         // tạo 2 balls mới chia làm 2 hướng lệch 45 độ với ball gốc
         double currentAngle = Math.toDegrees(Math.atan2(-ball.getDy(), ball.getDx()));
         double rad1 = Math.toRadians(currentAngle + 45);
         double rad2 = Math.toRadians(currentAngle - 45);
 
-        b1 = new Ball(ball.getX(), ball.getY(), ball.getWidth(), ball.getHeight(), speed, stage);
+        b1 = new Ball(ball.getCenterX(), ball.getCenterY(), ball.getRadius(), ball.getSpeed(), stage);
         b1.setDx((int)(speed * Math.cos(rad1)));
         b1.setDy((int)(-speed * Math.sin(rad1)));
         b1.setHasLaunch(true);
         b1.setBallImage(Basis.MULTI_BALL_TEXTURE);
         stage.getBalls().add(b1);
 
-        b2 = new Ball(ball.getX(), ball.getY(), ball.getWidth(), ball.getHeight(), speed, stage);
+        b2 = new Ball(ball.getCenterX(), ball.getCenterY(), ball.getRadius(), ball.getSpeed(), stage);
         b2.setDx((int)(speed * Math.cos(rad2)));
         b2.setDy((int)(-speed * Math.sin(rad2)));
         b2.setHasLaunch(true);

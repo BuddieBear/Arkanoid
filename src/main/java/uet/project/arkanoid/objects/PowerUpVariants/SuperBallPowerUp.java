@@ -21,7 +21,7 @@ public class SuperBallPowerUp extends PowerUp {
         super(object, width, height, stage);
         type = PowerUpType.SUPER_BALL;
         ball = stage.getBalls().get(0);
-        oldSpeed = ball.getSpeed();
+        oldSpeed = (int) ball.getSpeed();
         oldWidth = ball.getWidth();
         oldHeight = ball.getHeight();
     }

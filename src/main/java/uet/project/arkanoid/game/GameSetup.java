@@ -91,8 +91,6 @@ public class GameSetup {
                             powerUps.add(new MultiBallPowerUp(brick, 30, 30, this));
                             break;
                         case 3:
-                            powerUps.add(new SmallBrickPowerUp(brick, 30, 30, this));
-                            break;
                         case 4:
                             powerUps.add(new SuperBallPowerUp(brick, 30, 30, this));
                             break;

@@ -16,6 +16,7 @@ public class Brick extends GameObject {
     private final double originalWidth;
     private final double originalHeight;
 
+    private Rectangle hitBox;
 
     public enum BrickType {
         INDESTRUCTIBLE,
@@ -30,7 +31,7 @@ public class Brick extends GameObject {
         return originalHeight;
     }
 
-    public Brick(int x, int y, double width, double height, int hitPoints, BrickType type, GameSetup stage) {
+    public Brick(int x, int y, double width, double height, double rotation, int hitPoints, BrickType type, GameSetup stage) {
         super(x, y, width, height);
         this.maxHp = hitPoints;
         this.hitPoints = hitPoints;
@@ -38,6 +39,7 @@ public class Brick extends GameObject {
         this.stage = stage;
         this.originalWidth = width;
         this.originalHeight = height;
+        this.hitBox = new Rectangle(x + width/2, y + height/2, width, heighth, rotation)
     }
 
     public BrickType getType() {

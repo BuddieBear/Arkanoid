@@ -9,14 +9,13 @@ public class Circle implements Shape {
         this.radius = radius;
     }
 
-
     public boolean intersect(Shape other) {
-        if (other instanceof Circle circle) {
+        if (other instanceof Circle circle) { // Ball vs Ball
             // Circle–Circle intersection
             double distanceBetweenCenters = this.center.distanceTo(circle.center);
             return distanceBetweenCenters <= this.radius + circle.radius;
         }
-        else if (other instanceof Rectangle rect) {
+        else if (other instanceof Rectangle rect) { // Ball vs Brick
             // Circle–Rectangle intersection
             return intersectsRectangle(rect);
         }
@@ -31,23 +30,30 @@ public class Circle implements Shape {
 
     private boolean intersectsRectangle(Rectangle rect) {
         // For now assume rectangle is axis-aligned (no rotation)
-        double rx = rect.getCenter().getX() - rect.getSize().getX() / 2.0;
-        double ry = rect.getCenter().getY() - rect.getSize().getY() / 2.0;
-        double rw = rect.getSize().getX();
-        double rh = rect.getSize().getY();
+        if (rect.getRotation() == 0) {
+            double rx = rect.getCenter().getX() - rect.getSize().getX() / 2.0;
+            double ry = rect.getCenter().getY() - rect.getSize().getY() / 2.0;
+            double rw = rect.getSize().getX();
+            double rh = rect.getSize().getY();
 
-        // Find closest point on rectangle to circle center
-        double closestX = clamp(center.getX(), rx, rx + rw);
-        double closestY = clamp(center.getY(), ry, ry + rh);
+            // Find closest point on rectangle to circle center
+            double closestX = clamp(center.getX(), rx, rx + rw);
+            double closestY = clamp(center.getY(), ry, ry + rh);
 
-        double dx = center.getX() - closestX;
-        double dy = center.getY() - closestY;
+            double dx = center.getX() - closestX;
+            double dy = center.getY() - closestY;
 
-        return dx * dx + dy * dy <= radius * radius;
+            return dx * dx + dy * dy <= radius * radius;
+        }
     }
 
     private double clamp(double value, double min, double max) {
-        return Math.max(min, Math.min(max, value));
+        if (value > max) {
+            return max;
+        } else if (value < min) {
+            return min;
+        }
+        return value;
     }
 
     public Point getCenter() {

@@ -14,7 +14,6 @@ public class Point {
         this.y = other.y;
     }
 
-
     public double distanceTo(Point other) {
         double dx = this.x - other.x;
         double dy = this.y - other.y;

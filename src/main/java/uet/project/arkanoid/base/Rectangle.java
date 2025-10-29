@@ -11,8 +11,13 @@ public class Rectangle implements Shape {
         this.rotation = rotation;
     }
 
+    public Rectangle(double centerX, double centerY, double width, double height, double rotation) {
+        this.center = new Point(centerX, centerY);
+        this.size = new Vector2D(width, height);
+        this.rotation  = rotation;
+    }
+
     public boolean contains(Point p) {
-        // Transform point into rectangle’s local space
         double cos = Math.cos(-rotation);
         double sin = Math.sin(-rotation);
         double dx = p.getX() - center.getX();
@@ -35,9 +40,7 @@ public class Rectangle implements Shape {
         return false;
     }
 
-    // ===== Utility Methods =====
     public boolean intersectsRectangle(Rectangle other) {
-        // Simple version: use Separating Axis Theorem (SAT) for rotated rectangles
         Vector2D[] axes = getAxes(other);
 
         for (Vector2D axis : axes) {
@@ -76,8 +79,12 @@ public class Rectangle implements Shape {
         double max = min;
         for (int i = 1; i < 4; i++) {
             double p = corners[i].dot(axis);
-            if (p < min) min = p;
-            if (p > max) max = p;
+            if (p < min) {
+                min = p;
+            }
+            if (p > max) {
+                max = p;
+            }
         }
         return new double[]{min, max};
     }

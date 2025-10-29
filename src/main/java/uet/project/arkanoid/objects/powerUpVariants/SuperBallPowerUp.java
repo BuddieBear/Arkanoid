@@ -1,11 +1,8 @@
-package uet.project.arkanoid.objects.PowerUpVariants;
+package uet.project.arkanoid.objects.powerUpVariants;
 
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.objects.Ball;
-import uet.project.arkanoid.objects.Brick;
-import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
 import uet.project.arkanoid.objects.GameObject;
-import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.objects.PowerUp;
 
 public class SuperBallPowerUp extends PowerUp {

@@ -90,7 +90,7 @@ public class Ball extends MovableObject {
     // ===== Movement =====
     public void move() {
         if (hasLaunch) {
-            String check = GameManager.getResultCollection();
+            String check = checkBorderCollision();
             if (check.equals("Right") || check.equals("Left")) {
                 AudioSet.wallBounceSound.stop();
                 AudioSet.wallBounceSound.play();
@@ -102,6 +102,9 @@ public class Ball extends MovableObject {
             }
         }
 
+        this.Collision(stage.getBricks());
+        this.Collision(stage.getPaddles());
+
         centerX += getDx();
         centerY += getDy();
 
@@ -110,11 +113,11 @@ public class Ball extends MovableObject {
     }
 
     // ===== Collision Handling =====
-    public void Collision(List<? extends GameObject> others) {
+    public boolean Collision(List<? extends GameObject> others) {
+        boolean hit = false;
         for (GameObject obj : others) {
             if (circleIntersectsRect(centerX, centerY, radius, obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight())) {
                 if (obj instanceof Brick) {
-
                     if (!invincible) {
                         ((Brick) obj).takeHit();
                     } else {
@@ -129,8 +132,10 @@ public class Ball extends MovableObject {
                     bounceOff(obj);
                     AudioSet.collisionPaddleSound.play();
                 }
+                hit = true;
             }
         }
+        return hit;
     }
 
     // ===== Bounce Reflection =====
@@ -140,18 +145,6 @@ public class Ball extends MovableObject {
             return;
         }
 
-        double nearestX = clamp(centerX, other.getX(), other.getX() + other.getWidth());
-        double nearestY = clamp(centerY, other.getY(), other.getY() + other.getHeight());
-
-        double dx = centerX - nearestX;
-        double dy = centerY - nearestY;
-
-        // Bounce depending on which axis is stronger
-        if (Math.abs(dx) > Math.abs(dy)) {
-            setDx(-getDx());
-        } else {
-            setDy(-getDy());
-        }
     }
 
     private void handlePaddleCollision(Paddle paddle) {
@@ -237,8 +230,6 @@ public class Ball extends MovableObject {
         if (!hasLaunch) {
             prepareLaunch();
         } else {
-            Collision(stage.getBricks());
-            Collision(stage.getPaddles());
             move();
             ifDead();
         }

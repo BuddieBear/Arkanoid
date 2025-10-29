@@ -1,4 +1,4 @@
-package uet.project.arkanoid.objects.BrickVariants;
+package uet.project.arkanoid.objects.brickVariants;
 
 import javafx.scene.canvas.GraphicsContext;
 import uet.project.arkanoid.game.GameSetup;

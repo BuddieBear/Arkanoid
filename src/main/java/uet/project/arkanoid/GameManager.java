@@ -37,10 +37,6 @@ public class GameManager extends Application {
     // HandleInput
     private final Set<KeyCode> pressedKeys = new HashSet<>();
 
-    public static String getResultCollection() {
-        return resultCollection;
-    }
-
     // Game and Stage setup
     public GameState currentState = GameState.MENU;
     public Level currentLevel = Level.STAGE_3;
@@ -133,8 +129,6 @@ public class GameManager extends Application {
                 paddle.update();
             }
             for (Ball ball : stage.getBalls()) {
-                ball.Collision(stage.getBricks());
-                ball.Collision(stage.getPaddles());
                 ball.update();
             }
             stage.addPowerUp(stage.getBricks());
@@ -146,7 +140,7 @@ public class GameManager extends Application {
             for (Brick brick : stage.getBricks()) {
                 brick.update();
                 if (brick.isDestroy()) {
-                    stage.addScore(brick.getMaxHp()*10);
+                    stage.addScore(brick.getMaxHp() * 10);
                 }
             }
             stage.getBricks().removeIf(Brick::isDestroy);
@@ -168,7 +162,7 @@ public class GameManager extends Application {
         gc.scale(scaleX, scaleY);
         if (currentState == GameState.MENU) {
             renderMenu.onDraw(gc);
-        } else if (currentState == GameState.SETTING){
+        } else if (currentState == GameState.SETTING) {
             renderSetting.onDraw(gc);
         } else if (currentState == GameState.OPTION) {
             renderOption.onDraw(gc);
@@ -197,14 +191,14 @@ public class GameManager extends Application {
 
             if (currentState == GameState.MENU) {
                 if (mouseX >= Basis.PLAY_X && mouseX <= Basis.PLAY_X + Basis.PLAY_W
-                 && mouseY >= Basis.PLAY_Y && mouseY <= Basis.PLAY_Y + Basis.PLAY_H) {
+                        && mouseY >= Basis.PLAY_Y && mouseY <= Basis.PLAY_Y + Basis.PLAY_H) {
                     currentState = GameState.PLAYING;
                     render();
                 } else if (mouseX >= Basis.SETTING_X && mouseX <= Basis.SETTING_X + Basis.SETTING_W
                         && mouseY >= Basis.SETTING_Y && mouseY <= Basis.SETTING_Y + Basis.SETTING_H) {
                     currentState = GameState.SETTING;
                     render();
-                } else if (mouseX >= Basis.OPTION_X && mouseX <= Basis.OPTION_X+ Basis.OPTION_W
+                } else if (mouseX >= Basis.OPTION_X && mouseX <= Basis.OPTION_X + Basis.OPTION_W
                         && mouseY >= Basis.OPTION_Y && mouseY <= Basis.OPTION_Y + Basis.OPTION_H) {
                     currentState = GameState.OPTION;
                     render();
@@ -246,8 +240,7 @@ public class GameManager extends Application {
         }
 
         if (pressedKeys.contains(KeyCode.R)) {
-            ball.setX(Basis.SCREEN_WIDTH + 1);
-            ball.setY(Basis.SCREEN_HEIGHT + 1);
+            ball.setCenter(Basis.SCREEN_WIDTH + Basis.BALL_DIAMETER/2 + 1, Basis.SCREEN_HEIGHT + Basis.BALL_DIAMETER/2 + 1 );
         }
 
         if (pressedKeys.contains(KeyCode.SPACE)) {
@@ -261,4 +254,5 @@ public class GameManager extends Application {
             }
         }
     }
+}
 

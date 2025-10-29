@@ -1,4 +1,4 @@
-package uet.project.arkanoid.objects.BrickVariants;
+package uet.project.arkanoid.objects.brickVariants;
 
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.Basis;

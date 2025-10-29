@@ -3,10 +3,10 @@ package uet.project.arkanoid.utils;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import java.io.File;
-import uet.project.arkanoid.*;
+
 import uet.project.arkanoid.game.*;
-import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
-import uet.project.arkanoid.objects.BrickVariants.NormalBrick;
+import uet.project.arkanoid.objects.brickVariants.IndestructibleBrick;
+import uet.project.arkanoid.objects.brickVariants.NormalBrick;
 
 public class MapLoader {
     public void loadBricksFromTiled(GameSetup stage, String filePath) {

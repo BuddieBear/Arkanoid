@@ -3,22 +3,19 @@ package uet.project.arkanoid.objects;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.project.arkanoid.game.GameSetup;
-import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
-import uet.project.arkanoid.utils.Basis;
-
-import java.util.Objects;
-import java.util.List;
-import java.util.ArrayList;
 
 
 public class Brick extends GameObject {
     private int hitPoints;
     private int maxHp;
+
     private BrickType type;
     protected Image brickImage;
     private GameSetup stage;
+
     private final double originalWidth;
     private final double originalHeight;
+
 
     public enum BrickType {
         INDESTRUCTIBLE,

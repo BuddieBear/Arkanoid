@@ -1,12 +1,11 @@
 package uet.project.arkanoid.game;
 
 import uet.project.arkanoid.objects.*;
-import uet.project.arkanoid.objects.DeBuffVariants.HarderBrickPowerDown;
-import uet.project.arkanoid.objects.PowerUpVariants.*;
+import uet.project.arkanoid.objects.deBuffVariants.HarderBrickPowerDown;
+import uet.project.arkanoid.objects.powerUpVariants.*;
 import uet.project.arkanoid.utils.AudioSet;
 import uet.project.arkanoid.utils.Basis;
-import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
-import uet.project.arkanoid.objects.BrickVariants.NormalBrick;
+import uet.project.arkanoid.objects.brickVariants.NormalBrick;
 import uet.project.arkanoid.utils.FileManager;
 import uet.project.arkanoid.utils.MapLoader;
 

@@ -2,7 +2,11 @@ package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import uet.project.arkanoid.GameManager;
+import uet.project.arkanoid.base.Circle;
+import uet.project.arkanoid.base.Point;
+import uet.project.arkanoid.base.Rectangle;
+import uet.project.arkanoid.base.Shape;
+import uet.project.arkanoid.base.Vector2D;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.AudioSet;
 import uet.project.arkanoid.utils.Basis;
@@ -15,7 +19,13 @@ public class Ball extends MovableObject {
     private double centerY;
 
     private double speed;
-    private double angle; // in degrees
+
+    // 'angle' is now ONLY for the movement vector
+    // 0 = right, 180 = left, 270 = up
+    private double angle;
+
+    // NEW: A separate variable just for the visual arrow
+    private double visualAngle = 0;
 
     private boolean invincible = false;
     private boolean hasLaunch = false;
@@ -24,6 +34,9 @@ public class Ball extends MovableObject {
     private final Paddle paddleMain;
     private final GameSetup stage;
     private Image ballImage = Basis.BALL_TEXTURE;
+
+    private Circle hitbox;
+
 
     // ===== Constructor =====
     public Ball(double centerX, double centerY, double radius, double speed, GameSetup stage) {
@@ -34,6 +47,14 @@ public class Ball extends MovableObject {
         this.speed = speed;
         this.stage = stage;
         this.paddleMain = stage.getPaddles().get(0);
+        this.hitbox = new Circle(new Point(centerX, centerY), radius);
+        this.angle = 270; // Default movement angle (up)
+        this.visualAngle = 0; // Default visual angle (straight)
+    }
+
+    @Override
+    public Shape getHitbox() {
+        return this.hitbox;
     }
 
     // ===== Basic Getters / Setters =====
@@ -45,46 +66,20 @@ public class Ball extends MovableObject {
         this.hasLaunch = hasLaunch;
     }
 
-    public double getRadius() {
-        return radius;
-    }
-
-    public double getCenterX() {
-        return centerX;
-    }
-
-    public double getCenterY() {
-        return centerY;
-    }
+    // ... (other getters/setters) ...
 
     public void setCenter(double x, double y) {
         this.centerX = x;
         this.centerY = y;
         super.setX((int)(x - radius));
         super.setY((int)(y - radius));
+        this.hitbox.setCenter(new Point(x, y));
     }
 
-    public void setBallImage(Image img) {
-        this.ballImage = img;
-    }
-
-    public void setInvincible(boolean invincible) {
-        this.invincible = invincible;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    // ===== Velocity Update =====
     public void updateVelocity() {
         double rad = Math.toRadians(angle);
-        setDx((int)(speed * Math.cos(rad)));
-        setDy((int)(speed * Math.sin(rad)));
+        setDx(speed * Math.cos(rad));
+        setDy(speed * Math.sin(rad));
     }
 
     // ===== Movement =====
@@ -94,29 +89,32 @@ public class Ball extends MovableObject {
             if (check.equals("Right") || check.equals("Left")) {
                 AudioSet.wallBounceSound.stop();
                 AudioSet.wallBounceSound.play();
-                setDx(-getDx());
-            } else if (check.equals("Up") || check.equals("Paddle")) {
+                // Reflect horizontally
+                this.angle = 180 - this.angle;
+                updateVelocity();
+            } else if (check.equals("Up")) { // CHANGED: Don't bounce on "Paddle" string
                 AudioSet.wallBounceSound.stop();
                 AudioSet.wallBounceSound.play();
-                setDy(-getDy());
+                // Reflect vertically
+                this.angle = 360 - this.angle;
+                updateVelocity();
             }
         }
 
         this.Collision(stage.getBricks());
         this.Collision(stage.getPaddles());
 
-        centerX += getDx();
-        centerY += getDy();
-
-        super.setX((int)(centerX - radius));
-        super.setY((int)(centerY - radius));
+        // Use the dx/dy set by updateVelocity()
+        setCenter(centerX + getDx(), centerY + getDy());
     }
 
     // ===== Collision Handling =====
     public boolean Collision(List<? extends GameObject> others) {
         boolean hit = false;
         for (GameObject obj : others) {
-            if (circleIntersectsRect(centerX, centerY, radius, obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight())) {
+            if (obj.getHitbox() == null) continue; // Safety check
+
+            if (this.hitbox.intersect(obj.getHitbox())) {
                 if (obj instanceof Brick) {
                     if (!invincible) {
                         ((Brick) obj).takeHit();
@@ -145,29 +143,78 @@ public class Ball extends MovableObject {
             return;
         }
 
+        if (other instanceof Brick) {
+            Rectangle rect = (Rectangle) other.getHitbox();
+            Circle circle = this.hitbox;
+
+            // 1 to 5: same as Circle vs Rectangle
+            // 1. Transform Circle Center to Rect's Local Space
+            Point rectCenter = rect.getCenter();
+            Vector2D rectSize = rect.getSize();
+
+            double rectRotation = rect.getRotation();
+
+            double dx_c = circle.getCenter().getX() - rectCenter.getX();
+            double dy_c = circle.getCenter().getY() - rectCenter.getY();
+
+            double cos_local = Math.cos(-rectRotation);
+            double sin_local = Math.sin(-rectRotation);
+
+            double localCircleX = dx_c * cos_local - dy_c * sin_local;
+            double localCircleY = dx_c * sin_local + dy_c * cos_local;
+
+            double closestX = Ball.clamp(localCircleX, -rectSize.getX() / 2.0, rectSize.getX() / 2.0);
+            double closestY = Ball.clamp(localCircleY, - rectSize.getY() / 2.0, rectSize.getY() / 2.0);
+
+            // 3. Get Collision Normal (Local Space)
+            double localNormalX = localCircleX - closestX;
+            double localNormalY = localCircleY - closestY;
+
+            // 4. Rotate Normal back to World Space
+            double cos_pos = Math.cos(rectRotation);
+            double sin_pos = Math.sin(rectRotation);
+            double worldNormalX = localNormalX * cos_pos - localNormalY * sin_pos;
+            double worldNormalY = localNormalX * sin_pos + localNormalY * cos_pos;
+
+            // 5. Reflect Velocity Vector
+            Vector2D normal = new Vector2D(worldNormalX, worldNormalY).normalize();
+            Vector2D v_in = new Vector2D(getDx(), getDy());
+            double dotProduct = v_in.dot(normal);
+            Vector2D v_out = v_in.subtract(normal.multiply(2 * dotProduct));
+
+
+            this.angle = Math.toDegrees(Math.atan2(v_out.getY(), v_out.getX()));
+            updateVelocity();
+
+            // 6. FIX FOR STICKY COLLISIONS
+            double distDx = localCircleX - closestX;
+            double distDy = localCircleY - closestY;
+            double distance = Math.sqrt((distDx * distDx) + (distDy * distDy));
+            double penetration = radius - distance;
+
+            if (penetration > 0) {
+                // Push the ball out along the collision normal
+                double pushX = normal.getX() * (penetration + 0.1);
+                double pushY = normal.getY() * (penetration + 0.1);
+                setCenter(getCenterX() + pushX, getCenterY() + pushY);
+            }
+        }
     }
 
     private void handlePaddleCollision(Paddle paddle) {
         double paddleCenter = paddle.getX() + paddle.getWidth() / 2.0;
-
         double hitPos = (centerX - paddleCenter) / (paddle.getWidth() / 2.0);
-
-        if (hitPos < -1) {
-            hitPos = -1;
-        } else if (hitPos > 1) {
-            hitPos = 1;
-        }
+        hitPos = clamp(hitPos, -1, 1); // Clamp hit position
 
         double maxBounce = 60.0;
 
+        // Use 270 degrees as "up"
         double newAngle = 270.0 + hitPos * maxBounce;
 
-        if (newAngle < 195.0) {
-            newAngle = 195.0;
-        } else if (newAngle > 345.0) {
-            newAngle = 345.0;
-        }
+        // Clamp angles to be between 195 (up-left) and 345 (up-right)
+        newAngle = clamp(newAngle, 195, 345);
 
+        // CHANGED: Set the *movement* angle
         this.angle = newAngle;
         updateVelocity();
     }
@@ -176,24 +223,23 @@ public class Ball extends MovableObject {
     public void prepareLaunch() {
         setCenter(paddleMain.getX() + paddleMain.getWidth() / 2.0, paddleMain.getY() - radius - 10);
 
+        // CHANGED: This now updates the visualAngle
         if (!back) {
-            if (++angle >= 75) back = true;
+            if (++visualAngle >= 75) back = true;
         } else {
-            if (--angle <= -75) back = false;
+            if (--visualAngle <= -75) back = false;
         }
-        System.out.println("Arrow angle: " + angle);
     }
 
     public void launch() {
         if (hasLaunch) {
             return;
         }
-
-        angle = 90 - angle;
-        double rad = Math.toRadians(angle);
-        setDx((int)(speed * Math.cos(rad)));
-        setDy((int)(-speed * Math.sin(rad)));
+        this.angle = 270 + this.visualAngle;
+        updateVelocity();
         hasLaunch = true;
+        System.out.println("Launched: " + this.angle + "/ " + this.getDx() + "/ " + this.getDy());
+
     }
 
     // ===== Death Check =====
@@ -202,7 +248,8 @@ public class Ball extends MovableObject {
             hasLaunch = false;
             setDx(0);
             setDy(0);
-            angle = 0;
+            visualAngle = 0; // Reset visual sweeping angle
+            angle = 270;     // Reset movement angle to "up"
             AudioSet.lossHpSound.play();
             stage.setLives(stage.getLives() - 1);
         }
@@ -213,7 +260,8 @@ public class Ball extends MovableObject {
         if (!hasLaunch) {
             gc.save();
             gc.translate(centerX, centerY);
-            gc.rotate(angle);
+            // CHANGED: Rotate by the visualAngle
+            gc.rotate(visualAngle);
             gc.drawImage(
                     Basis.ARROW_TEXTURE,
                     -Basis.ARROW_WIDTH / 2.0,
@@ -236,15 +284,6 @@ public class Ball extends MovableObject {
     }
 
     // ===== Collision Helper Functions =====
-    private static boolean circleIntersectsRect(double cx, double cy, double r,
-                                                double rx, double ry, double rw, double rh) {
-        double closestX = clamp(cx, rx, rx + rw);
-        double closestY = clamp(cy, ry, ry + rh);
-        double dx = cx - closestX;
-        double dy = cy - closestY;
-        return dx * dx + dy * dy <= r * r;
-    }
-
     private static double clamp(double value, double min, double max) {
         return Math.max(min, Math.min(max, value));
     }
@@ -252,14 +291,17 @@ public class Ball extends MovableObject {
     public String checkBorderCollision() {
         // Right wall
         if (centerX + radius >= Basis.STAGE_X + Basis.STAGE_WIDTH) {
+            setCenter(Basis.STAGE_X + Basis.STAGE_WIDTH - radius, centerY); // Prevent sticking
             return "Right";
         }
         // Left wall
         else if (centerX - radius <= Basis.STAGE_X) {
+            setCenter(Basis.STAGE_X + radius, centerY); // Prevent sticking
             return "Left";
         }
         // Top wall
         else if (centerY - radius <= Basis.STAGE_Y) {
+            setCenter(centerX, Basis.STAGE_Y + radius); // Prevent sticking
             return "Up";
         }
         // Bottom (death zone)
@@ -267,5 +309,57 @@ public class Ball extends MovableObject {
             return "Down";
         }
         return "";
+    }
+
+    public double getCenterX() {
+        return centerX;
+    }
+
+    public void setCenterX(double centerX) {
+        this.centerX = centerX;
+    }
+
+    public double getCenterY() {
+        return centerY;
+    }
+
+    public void setCenterY(double centerY) {
+        this.centerY = centerY;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public Paddle getPaddleMain() {
+        return paddleMain;
+    }
+
+    public Image getBallImage() {
+        return ballImage;
+    }
+
+    public void setBallImage(Image ballImage) {
+        this.ballImage = ballImage;
+    }
+
+    public boolean isInvincible() {
+        return invincible;
+    }
+
+    public void setInvincible(boolean invincible) {
+        this.invincible = invincible;
     }
 }

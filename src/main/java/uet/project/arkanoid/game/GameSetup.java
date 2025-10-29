@@ -42,7 +42,7 @@ public class GameSetup {
 
             balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
                     paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 -  10,
-                    Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
+                    (double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
 
             mapLoader.loadBricksFromTiled(this, Basis.STAGE_1);
         } else if (currentStage == Level.STAGE_2) {
@@ -53,7 +53,7 @@ public class GameSetup {
 
             balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
                     paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 - 10,
-                    Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
+                    (double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
 
 
             mapLoader.loadBricksFromTiled(this, Basis.STAGE_2);
@@ -65,7 +65,7 @@ public class GameSetup {
 
             balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
                     paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 -  10,
-                    Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
+                    (double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
 
 
             mapLoader.loadBricksFromTiled(this, Basis.STAGE_3);
@@ -76,7 +76,7 @@ public class GameSetup {
         for (Brick brick : bricks1) {
             if (brick.isDestroy()) {
                 brick_streak++;
-                System.out.println("Brick Destroyed: " + brick_streak);
+                //System.out.println("Brick Destroyed: " + brick_streak);
                 if (brick_streak >= 3) {
                     brick_streak = 0;
                     int choice = (int) (Math.random() * 9); // 0 → 8

@@ -17,6 +17,12 @@ public class Rectangle implements Shape {
         this.rotation  = rotation;
     }
 
+    public Rectangle(Rectangle hitbox) {
+        this.center = hitbox.center;
+        this.size = hitbox.size;
+        this.rotation = hitbox.rotation;
+    }
+
     public boolean contains(Point p) {
         double cos = Math.cos(-rotation);
         double sin = Math.sin(-rotation);
@@ -33,66 +39,14 @@ public class Rectangle implements Shape {
     }
 
     public boolean intersect(Shape other) {
-        if (other instanceof Rectangle rect) {
-            return intersectsRectangle(rect);
-        }
-        // you can later add Circle support, e.g. `else if (other instanceof Circle circle)`
         return false;
-    }
-
-    public boolean intersectsRectangle(Rectangle other) {
-        Vector2D[] axes = getAxes(other);
-
-        for (Vector2D axis : axes) {
-            if (!overlapOnAxis(axis, this, other)) {
-                return false; // gap found → no collision
-            }
-        }
-        return true; // all projections overlap
-    }
-
-    private Vector2D[] getAxes(Rectangle other) {
-        Vector2D[] axes = new Vector2D[4];
-        Vector2D[] corners = getCorners();
-
-        // 2 unique axes for this rect (edges)
-        axes[0] = corners[1].subtract(corners[0]).normalize();
-        axes[1] = corners[3].subtract(corners[0]).normalize();
-
-        // 2 for other rect
-        Vector2D[] otherCorners = other.getCorners();
-        axes[2] = otherCorners[1].subtract(otherCorners[0]).normalize();
-        axes[3] = otherCorners[3].subtract(otherCorners[0]).normalize();
-
-        return axes;
-    }
-
-    private boolean overlapOnAxis(Vector2D axis, Rectangle a, Rectangle b) {
-        double[] aProj = a.projectOnto(axis);
-        double[] bProj = b.projectOnto(axis);
-        return !(aProj[1] < bProj[0] || bProj[1] < aProj[0]);
-    }
-
-    private double[] projectOnto(Vector2D axis) {
-        Vector2D[] corners = getCorners();
-        double min = corners[0].dot(axis);
-        double max = min;
-        for (int i = 1; i < 4; i++) {
-            double p = corners[i].dot(axis);
-            if (p < min) {
-                min = p;
-            }
-            if (p > max) {
-                max = p;
-            }
-        }
-        return new double[]{min, max};
     }
 
     public Vector2D[] getCorners() {
         double hw = size.getX() / 2.0;
         double hh = size.getY() / 2.0;
 
+        // From Center = (0, 0) + Centered
         Vector2D[] localCorners = new Vector2D[]{
                 new Vector2D(-hw, -hh),
                 new Vector2D(hw, -hh),
@@ -100,6 +54,7 @@ public class Rectangle implements Shape {
                 new Vector2D(-hw, hh)
         };
 
+        // From (0, 0) + Rotated
         Vector2D[] worldCorners = new Vector2D[4];
         double cos = Math.cos(rotation);
         double sin = Math.sin(rotation);

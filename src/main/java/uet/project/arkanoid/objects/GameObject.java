@@ -1,6 +1,7 @@
 package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
+import uet.project.arkanoid.base.Shape; // Import new Shape interface
 
 public abstract class GameObject {
     protected double width;
@@ -14,6 +15,8 @@ public abstract class GameObject {
         this.width = width;
         this.height = height;
     }
+
+    public abstract Shape getHitbox();
 
     public double getWidth() {
         return width;
@@ -45,13 +48,6 @@ public abstract class GameObject {
 
     public void setY(double y) {
         this.y = y;
-    }
-
-    public boolean checkCollision(GameObject other) {
-        return this.getX() < other.getX() + other.getWidth()
-                && this.getX() + this.getWidth() > other.getX()
-                && this.getY() < other.getY() + other.getHeight()
-                && this.getY() + this.getHeight() > other.getY();
     }
 
     public abstract void update();

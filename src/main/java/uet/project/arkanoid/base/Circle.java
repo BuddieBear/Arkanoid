@@ -1,5 +1,7 @@
 package uet.project.arkanoid.base;
 
+import uet.project.arkanoid.utils.HelperFunction;
+
 public class Circle implements Shape {
     private Point center;
     private double radius;
@@ -28,33 +30,42 @@ public class Circle implements Shape {
         return distanceToPoint <= radius;
     }
 
+    /**
+     * Checks for intersection with a (potentially rotated) rectangle.
+     * This works by transforming the circle's center into the rectangle's
+     * local (unrotated) coordinate space. In that space, the rectangle
+     * is an AABB centered at (0,0), making the check simple.
+     */
     private boolean intersectsRectangle(Rectangle rect) {
-        // For now assume rectangle is axis-aligned (no rotation)
-        if (rect.getRotation() == 0) {
-            double rx = rect.getCenter().getX() - rect.getSize().getX() / 2.0;
-            double ry = rect.getCenter().getY() - rect.getSize().getY() / 2.0;
-            double rw = rect.getSize().getX();
-            double rh = rect.getSize().getY();
+        // Get rectangle properties
+        Point rectCenter = rect.getCenter();
+        Vector2D rectSize = rect.getSize();
+        double rectRotation = rect.getRotation();
 
-            // Find closest point on rectangle to circle center
-            double closestX = clamp(center.getX(), rx, rx + rw);
-            double closestY = clamp(center.getY(), ry, ry + rh);
+        // Vector of Center to Center
+        double dx = this.center.getX() - rectCenter.getX();
+        double dy = this.center.getY() - rectCenter.getY();
 
-            double dx = center.getX() - closestX;
-            double dy = center.getY() - closestY;
+        // Rotate the rect to align with the Oxy (Undo rotation) and centered at (0, 0)
+        double cos = Math.cos(-rectRotation);
+        double sin = Math.sin(-rectRotation);
 
-            return dx * dx + dy * dy <= radius * radius;
-        }
+        double localCircleX = dx * cos - dy * sin;
+        double localCircleY = dx * sin + dy * cos;
+
+        // Find the closest point on the AABB (centered at 0,0) to the local circle center (hinh chieu)
+        double closestX = HelperFunction.clamp(localCircleX, - rectSize.getX()/2, rectSize.getX()/2);
+        double closestY = HelperFunction.clamp(localCircleY, - rectSize.getY()/2, rectSize.getY()/2);
+
+        // Calculate distance from local circle center to this closest point (duong cao)
+        double distDx = localCircleX - closestX;
+        double distDy = localCircleY - closestY;
+        double distance = Math.sqrt((distDx * distDx) + (distDy * distDy));
+
+        return distance <= this.radius;
     }
 
-    private double clamp(double value, double min, double max) {
-        if (value > max) {
-            return max;
-        } else if (value < min) {
-            return min;
-        }
-        return value;
-    }
+
 
     public Point getCenter() {
         return center;

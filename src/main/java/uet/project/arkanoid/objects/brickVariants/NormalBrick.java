@@ -13,8 +13,8 @@ public class NormalBrick extends Brick {
         THREE
     }
 
-    public NormalBrick(int x, int y, double width, double height, int hitPoints, GameSetup stage) {
-        super(x, y, width, height, hitPoints, BrickType.NORMAL, stage);
+    public NormalBrick(int x, int y, double width, double height, double rotation, int hitPoints, GameSetup stage) {
+        super(x, y, width, height, rotation, hitPoints, BrickType.NORMAL, stage);
         if (hitPoints == 1) {
             this.brickImage = Basis.BRICK_NORMAL_TEXTURE_1;
             this.type = TextureType.ONE;

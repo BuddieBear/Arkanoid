@@ -19,7 +19,7 @@ public class Brick extends GameObject {
     private final double originalWidth;
     private final double originalHeight;
 
-    private Rectangle hitBox; // <-- This was already here!
+    private Rectangle hitBox;
 
     public enum BrickType {
         INDESTRUCTIBLE,
@@ -28,7 +28,7 @@ public class Brick extends GameObject {
 
     @Override
     public Shape getHitbox() {
-        return this.hitBox; // <-- Implement the abstract method
+        return this.hitBox;
     }
 
     public double getOriginalWidth() {
@@ -47,7 +47,6 @@ public class Brick extends GameObject {
         this.stage = stage;
         this.originalWidth = width;
         this.originalHeight = height;
-        // Initialize hitbox with center point and rotation
         this.hitBox = new Rectangle(x + width / 2.0, y + height / 2.0, width, height, rotation);
     }
 
@@ -83,7 +82,6 @@ public class Brick extends GameObject {
     }
 
     public void render(GraphicsContext gc) {
-        // --- New render logic for rotated bricks ---
         Point center = hitBox.getCenter();
         double rotationDegrees = Math.toDegrees(hitBox.getRotation());
         double w = hitBox.getSize().getX();

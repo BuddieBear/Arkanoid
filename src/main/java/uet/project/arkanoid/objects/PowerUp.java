@@ -36,7 +36,6 @@ public abstract class PowerUp extends GameObject {
     }
 
     public PowerUp(GameObject object, double width, double height, GameSetup stage) {
-        // Center the powerup on the object that spawned it
         super(object.getX() + object.getWidth() / 2 - width / 2,
                 object.getY(), width, height);
         this.stage = stage;
@@ -51,7 +50,6 @@ public abstract class PowerUp extends GameObject {
         );
     }
 
-    // --- Copy Constructor ---
     public PowerUp(PowerUp other) {
         super(other.getX(), other.getY(), other.width, other.height);
         this.type = other.type;
@@ -80,15 +78,14 @@ public abstract class PowerUp extends GameObject {
 
     public void update() {
         if (!catchedPowerUp) {
-
             setY(getY() + 10); // Move down
-            // Sync hitbox to new position
+
             this.hitbox.setCenter(new Point(
                     getX() + this.width / 2.0,
                     getY() + this.height / 2.0
             ));
 
-            // --- Collision Check Logic ---
+
             // Use the new hitbox intersect method
             if (this.hitbox.intersect(stage.getPaddles().get(0).getHitbox())) {
                 catchedPowerUp = true;
@@ -106,8 +103,7 @@ public abstract class PowerUp extends GameObject {
                 }
             }
         } else {
-            // --- Effect Timer Logic ---
-            // Check if the timer is running (startTime > 0)
+
             if (startTime > 0) {
                 long elapsed = System.currentTimeMillis() - startTime;
                 if (elapsed >= effectDurationMillis) {

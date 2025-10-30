@@ -42,34 +42,6 @@ public class Rectangle implements Shape {
         return false;
     }
 
-    public Vector2D[] getCorners() {
-        double hw = size.getX() / 2.0;
-        double hh = size.getY() / 2.0;
-
-        // From Center = (0, 0) + Centered
-        Vector2D[] localCorners = new Vector2D[]{
-                new Vector2D(-hw, -hh),
-                new Vector2D(hw, -hh),
-                new Vector2D(hw, hh),
-                new Vector2D(-hw, hh)
-        };
-
-        // From (0, 0) + Rotated
-        Vector2D[] worldCorners = new Vector2D[4];
-        double cos = Math.cos(rotation);
-        double sin = Math.sin(rotation);
-
-        for (int i = 0; i < 4; i++) {
-            double x = localCorners[i].getX();
-            double y = localCorners[i].getY();
-            double worldX = center.getX() + x * cos - y * sin;
-            double worldY = center.getY() + x * sin + y * cos;
-            worldCorners[i] = new Vector2D(worldX, worldY);
-        }
-
-        return worldCorners;
-    }
-
     public double getRotation() {
         return rotation;
     }

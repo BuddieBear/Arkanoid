@@ -27,8 +27,12 @@ public class Vector2D {
     }
 
     public Vector2D divide(double scalar) {
-        if (scalar == 0) throw new IllegalArgumentException("Cannot divide by zero.");
-        return new Vector2D(this.x / scalar, this.y / scalar);
+        try {
+            return new Vector2D(this.x / scalar, this.y / scalar);
+        } catch (ArithmeticException e) {
+            System.err.println("Division by zero");
+        }
+        return new Vector2D(0, 0);
     }
 
 

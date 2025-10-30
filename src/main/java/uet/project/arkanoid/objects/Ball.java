@@ -10,6 +10,7 @@ import uet.project.arkanoid.base.Vector2D;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.AudioSet;
 import uet.project.arkanoid.utils.Basis;
+import uet.project.arkanoid.utils.HelperFunction;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class Ball extends MovableObject {
     private Circle hitbox;
 
 
-    // ===== Constructor =====
+
     public Ball(double centerX, double centerY, double radius, double speed, GameSetup stage) {
         super((int)(centerX - radius), (int)(centerY - radius), radius * 2, radius * 2);
         this.centerX = centerX;
@@ -57,7 +58,6 @@ public class Ball extends MovableObject {
         return this.hitbox;
     }
 
-    // ===== Basic Getters / Setters =====
     public boolean getLaunchState() {
         return hasLaunch;
     }
@@ -66,7 +66,6 @@ public class Ball extends MovableObject {
         this.hasLaunch = hasLaunch;
     }
 
-    // ... (other getters/setters) ...
 
     public void setCenter(double x, double y) {
         this.centerX = x;
@@ -82,7 +81,7 @@ public class Ball extends MovableObject {
         setDy(speed * Math.sin(rad));
     }
 
-    // ===== Movement =====
+
     public void move() {
         if (hasLaunch) {
             String check = checkBorderCollision();
@@ -108,7 +107,6 @@ public class Ball extends MovableObject {
         setCenter(centerX + getDx(), centerY + getDy());
     }
 
-    // ===== Collision Handling =====
     public boolean Collision(List<? extends GameObject> others) {
         boolean hit = false;
         for (GameObject obj : others) {
@@ -136,7 +134,6 @@ public class Ball extends MovableObject {
         return hit;
     }
 
-    // ===== Bounce Reflection =====
     public void bounceOff(GameObject other) {
         if (other instanceof Paddle) {
             handlePaddleCollision((Paddle) other);
@@ -163,8 +160,8 @@ public class Ball extends MovableObject {
             double localCircleX = dx_c * cos_local - dy_c * sin_local;
             double localCircleY = dx_c * sin_local + dy_c * cos_local;
 
-            double closestX = Ball.clamp(localCircleX, -rectSize.getX() / 2.0, rectSize.getX() / 2.0);
-            double closestY = Ball.clamp(localCircleY, - rectSize.getY() / 2.0, rectSize.getY() / 2.0);
+            double closestX = HelperFunction.clamp(localCircleX, -rectSize.getX() / 2.0, rectSize.getX() / 2.0);
+            double closestY = HelperFunction.clamp(localCircleY, - rectSize.getY() / 2.0, rectSize.getY() / 2.0);
 
             // 3. Get Collision Normal (Local Space)
             double localNormalX = localCircleX - closestX;
@@ -204,7 +201,7 @@ public class Ball extends MovableObject {
     private void handlePaddleCollision(Paddle paddle) {
         double paddleCenter = paddle.getX() + paddle.getWidth() / 2.0;
         double hitPos = (centerX - paddleCenter) / (paddle.getWidth() / 2.0);
-        hitPos = clamp(hitPos, -1, 1); // Clamp hit position
+        hitPos = HelperFunction.clamp(hitPos, -1, 1); // Clamp hit position
 
         double maxBounce = 60.0;
 
@@ -212,14 +209,13 @@ public class Ball extends MovableObject {
         double newAngle = 270.0 + hitPos * maxBounce;
 
         // Clamp angles to be between 195 (up-left) and 345 (up-right)
-        newAngle = clamp(newAngle, 195, 345);
+        newAngle = HelperFunction.clamp(newAngle, 195, 345);
 
         // CHANGED: Set the *movement* angle
         this.angle = newAngle;
         updateVelocity();
     }
 
-    // ===== Launch =====
     public void prepareLaunch() {
         setCenter(paddleMain.getX() + paddleMain.getWidth() / 2.0, paddleMain.getY() - radius - 10);
 
@@ -242,7 +238,6 @@ public class Ball extends MovableObject {
 
     }
 
-    // ===== Death Check =====
     public void ifDead() {
         if (centerY > Basis.STAGE_Y + Basis.STAGE_HEIGHT && this == stage.getBalls().get(0)) {
             hasLaunch = false;
@@ -255,7 +250,6 @@ public class Ball extends MovableObject {
         }
     }
 
-    // ===== Rendering =====
     public void render(GraphicsContext gc) {
         if (!hasLaunch) {
             gc.save();
@@ -281,11 +275,6 @@ public class Ball extends MovableObject {
             move();
             ifDead();
         }
-    }
-
-    // ===== Collision Helper Functions =====
-    private static double clamp(double value, double min, double max) {
-        return Math.max(min, Math.min(max, value));
     }
 
     public String checkBorderCollision() {

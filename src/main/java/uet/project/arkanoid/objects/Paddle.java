@@ -8,7 +8,7 @@ public class Paddle extends MovableObject {
     private double speed;
     private PowerUp currentPowerUp = null;
 
-    private Rectangle hitbox; // <-- New Shape-based hitbox
+    private Rectangle hitbox;
 
     public Paddle(int x, int y, double width, double height, int speed) {
         super(x, y, width, height);
@@ -56,18 +56,14 @@ public class Paddle extends MovableObject {
     }
 
     public void update() {
-        // Move the paddle based on its dx
-        move();
 
-        // Prevent paddle from leaving stage boundaries
-        // 33 is the padding of the paddle.
+        move();
         if (getX() <= Basis.STAGE_X) {
             setX(Basis.STAGE_X);
         } else if (getX() + this.width >= Basis.STAGE_X + Basis.STAGE_WIDTH) {
             setX(Basis.STAGE_X + Basis.STAGE_WIDTH - (int)this.width);
         }
 
-        // Sync the hitbox to the paddle's final position
         this.hitbox.setCenter(new Point(getX() + this.width / 2.0, getY() + this.height / 2.0));
     }
 }

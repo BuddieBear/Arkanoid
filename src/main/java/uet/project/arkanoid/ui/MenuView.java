@@ -14,7 +14,7 @@ public class MenuView {
         gc.drawImage(Basis.PLAY_BUTTON, Basis.PLAY_X, Basis.PLAY_Y, Basis.PLAY_W, Basis.PLAY_H);
 
         // option button
-        gc.drawImage(Basis.OPTION_BUTTON, Basis.OPTION_X, Basis.OPTION_Y, Basis.OPTION_W, Basis.OPTION_H);
+        gc.drawImage(Basis.OPTION_BUTTON, Basis.INSTRUCTION_X, Basis.INSTRUCTION_Y, Basis.INSTRUCTION_W, Basis.INSTRUCTION_H);
 
         // setting button
         gc.drawImage(Basis.SETTING_BUTTON, Basis.SETTING_X, Basis.SETTING_Y, Basis.SETTING_W, Basis.SETTING_H);

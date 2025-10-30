@@ -39,6 +39,7 @@ public class GameManager extends Application {
 
     private static String resultCollection = "";  // TODO: Rework this into ball
     private boolean gameOver = false;
+    private boolean autoMovePaddle = false;
 
     public static String getResultCollection() {
         return resultCollection;
@@ -214,8 +215,8 @@ public class GameManager extends Application {
                         && mouseY >= Basis.SETTING_Y && mouseY <= Basis.SETTING_Y + Basis.SETTING_H) {
                     currentState = GameState.SETTING;
                     render();
-                } else if (mouseX >= Basis.OPTION_X && mouseX <= Basis.OPTION_X+ Basis.OPTION_W
-                        && mouseY >= Basis.OPTION_Y && mouseY <= Basis.OPTION_Y + Basis.OPTION_H) {
+                } else if (mouseX >= Basis.INSTRUCTION_X && mouseX <= Basis.INSTRUCTION_X+ Basis.INSTRUCTION_W
+                        && mouseY >= Basis.INSTRUCTION_Y && mouseY <= Basis.INSTRUCTION_Y+ Basis.INSTRUCTION_H) {
                     currentState = GameState.OPTION;
                     render();
                 }
@@ -272,13 +273,23 @@ public class GameManager extends Application {
 
         boolean left = pressedKeys.contains(KeyCode.A);
         boolean right = pressedKeys.contains(KeyCode.D);
+        if (pressedKeys.contains(KeyCode.S)) {
+            autoMovePaddle = true;
+        }
+        
 
         if (left && !right) {
             paddle.moveLeft();
+            autoMovePaddle = false;
         } else if (right && !left) {
             paddle.moveRight();
+            autoMovePaddle = false;
         } else {
             paddle.setDx(0); // stop smoothly
+        }
+
+        if (autoMovePaddle) {
+            stage.getPaddle().autoMovePaddle(stage);
         }
 
         if (pressedKeys.contains(KeyCode.R)) {

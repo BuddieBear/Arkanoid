@@ -10,7 +10,7 @@ public class Basis {
     public static final int SCREEN_HEIGHT = 720;
 
     //stage
-    public static final int STAGE_WIDTH = 1030;
+    public static final int STAGE_WIDTH = 1025;//1030;
     public static final int STAGE_HEIGHT = 680;
     public static final int STAGE_X = 32;
     public static final int STAGE_Y = 32;
@@ -41,13 +41,13 @@ public class Basis {
     public static final int PLAY_W = 200;
     public static final int PLAY_H = 60;
 
-    public static final int OPTION_X = SCREEN_WIDTH / 2 - 100 - 35;
-    public static final int OPTION_Y = PLAY_Y - 120;
-    public static final int OPTION_W = 200;
-    public static final int OPTION_H = 60;
+    public static final int INSTRUCTION_X = SCREEN_WIDTH / 2 - 100 - 35;
+    public static final int INSTRUCTION_Y = PLAY_Y - 120;
+    public static final int INSTRUCTION_W = 200;
+    public static final int INSTRUCTION_H = 60;
 
     public static final int SETTING_X = SCREEN_WIDTH / 2 - 100 - 35;
-    public static final int SETTING_Y = OPTION_Y - 120;
+    public static final int SETTING_Y = INSTRUCTION_Y - 120;
     public static final int SETTING_W = 200;
     public static final int SETTING_H = 60;
 

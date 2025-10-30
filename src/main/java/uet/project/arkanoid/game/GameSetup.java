@@ -26,7 +26,7 @@ public class GameSetup {
     int brick_streak = 0;
 
     // Constructor initializes all lists and adds test objects
-    public GameSetup(Level currentStage) {
+    public GameSetup(Level currentLevel) {
         // Initialize the lists
         bricks = new ArrayList<>();
         balls = new ArrayList<>();
@@ -34,45 +34,24 @@ public class GameSetup {
         powerUps = new ArrayList<>();
         MapLoader mapLoader = new MapLoader();
 
+        paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
+        Paddle paddleMain = paddles.get(0);
+
+        balls.add(new Ball(
+                paddleMain.getX() + (int)paddleMain.getWidth() / 2 - Basis.BALL_DIAMETER/2,
+                paddleMain.getY() - Basis.BALL_DIAMETER - 5, Basis.BALL_DIAMETER, Basis.BALL_DIAMETER,
+                Basis.BALL_SPEED, this
+        ));
+
         //TODO: Switch - Case to create different Stage
-        if (currentStage == Level.STAGE_1) {
+        if (currentLevel == Level.STAGE_1) {
             lives = 5;
-
-            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
-            Paddle paddleMain = paddles.get(0);
-
-            balls.add(new Ball(
-                    paddleMain.getX() + (int)paddleMain.getWidth() / 2 - Basis.BALL_DIAMETER/2,
-                    paddleMain.getY() - Basis.BALL_DIAMETER - 5, Basis.BALL_DIAMETER, Basis.BALL_DIAMETER,
-                    Basis.BALL_SPEED, this
-            ));
-
             mapLoader.loadBricksFromTiled(this, Basis.STAGE_1);
-        } else if (currentStage == Level.STAGE_2) {
+        } else if (currentLevel == Level.STAGE_2) {
             lives = 8;
-
-            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
-            Paddle paddleMain = paddles.get(0);
-
-            balls.add(new Ball(
-                    paddleMain.getX() + (int)paddleMain.getWidth() / 2 - Basis.BALL_DIAMETER/2,
-                    paddleMain.getY() - Basis.BALL_DIAMETER - 5, Basis.BALL_DIAMETER, Basis.BALL_DIAMETER,
-                    Basis.BALL_SPEED, this
-            ));
-
             mapLoader.loadBricksFromTiled(this, Basis.STAGE_2);
-        } else if (currentStage == Level.STAGE_3) {
-            lives = 5;
-
-            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
-            Paddle paddleMain = paddles.get(0);
-
-            balls.add(new Ball(
-                    paddleMain.getX() + (int)paddleMain.getWidth() / 2 - Basis.BALL_DIAMETER/2,
-                    paddleMain.getY() - Basis.BALL_DIAMETER - 5, Basis.BALL_DIAMETER, Basis.BALL_DIAMETER,
-                    Basis.BALL_SPEED, this
-            ));
-
+        } else if (currentLevel == Level.STAGE_3) {
+            lives = 1;//5;
             mapLoader.loadBricksFromTiled(this, Basis.STAGE_3);
         }
     }
@@ -84,7 +63,7 @@ public class GameSetup {
                 System.out.println("Brick Destroyed: " + brick_streak);
                 if (brick_streak >= 3) {
                     brick_streak = 0;
-                    int choice = (int) (Math.random() * 9); // 0 → 8
+                    int choice = 9 + (int) (2 * Math.random());//(int) (Math.random() * 9); // 0 → 8
                     switch (choice) {
                         case 0:
                             powerUps.add(new DamageBrickPowerUp(brick, 30, 30, this));
@@ -112,6 +91,12 @@ public class GameSetup {
                             break;
                         case 8:
                             powerUps.add(new RespawnFreePowerUp(brick, 30, 30, this));
+                            break;
+                        case 9:
+                            powerUps.add(new ExtendPaddle(brick, 30, 30, this));
+                            break;
+                        case 10: 
+                            powerUps.add(new ShrinkPaddle(brick, 30, 30, this));
                             break;
                     }
                 }

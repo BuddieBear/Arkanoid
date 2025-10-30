@@ -12,15 +12,15 @@ import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.game.GameState;
 import uet.project.arkanoid.game.GameView;
 import uet.project.arkanoid.game.Level;
+import uet.project.arkanoid.ui.LevelPlay;
 import uet.project.arkanoid.ui.MenuView;
 import uet.project.arkanoid.ui.Setting;
-import uet.project.arkanoid.ui.Option;
+import uet.project.arkanoid.ui.Instruction;
 import uet.project.arkanoid.ui.PausedMenuView;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
 import uet.project.arkanoid.objects.PowerUp;
-import uet.project.arkanoid.utils.AudioSet;
 import uet.project.arkanoid.utils.Basis;
 
 import java.util.HashSet;
@@ -38,6 +38,8 @@ public class GameManager extends Application {
     private final Set<KeyCode> pressedKeys = new HashSet<>();
 
     private static String resultCollection = "";  // TODO: Rework this into ball
+    private boolean gameOver = false;
+    private boolean autoMovePaddle = false;
 
     public static String getResultCollection() {
         return resultCollection;
@@ -45,7 +47,7 @@ public class GameManager extends Application {
 
     // Game and Stage setup
     public GameState currentState = GameState.MENU;
-    public Level currentLevel = Level.STAGE_3;
+    public Level currentLevel = Level.STAGE_1;
 
     GameSetup stage;
 
@@ -53,7 +55,8 @@ public class GameManager extends Application {
     GameView renderGame;
     MenuView renderMenu;
     Setting renderSetting;
-    Option renderOption;
+    Instruction renderOption;
+    LevelPlay renderLevel;
     PausedMenuView renderPausedMenu;
 
 
@@ -106,7 +109,8 @@ public class GameManager extends Application {
         renderGame = new GameView(stage); // TODO: similar to stage
         renderMenu = new MenuView();
         renderSetting = new Setting();
-        renderOption = new Option();
+        renderOption = new Instruction();
+        renderLevel = new LevelPlay();
         renderPausedMenu = new PausedMenuView();
 
         // Game loop
@@ -128,7 +132,10 @@ public class GameManager extends Application {
     public void update() {
         if (currentState == GameState.PLAYING) {
             if (stage.gameWin() || stage.gameLose()) {
-                gameLoop.stop();
+                //currentState = GameState.GAME_OVER;
+                gameOver = true;
+                //GameOverView.onDraw(gc);
+                // gameLoop.stop();
                 return;
             }
             // TODO: Runs update() on every GameObject.
@@ -180,8 +187,9 @@ public class GameManager extends Application {
         } else if (currentState == GameState.PAUSED) {
             renderGame.onDraw(gc);
             renderPausedMenu.onDraw(gc);
+        } else if (currentState == GameState.LEVEL) {
+            renderLevel.onDraw(gc);
         }
-
         gc.restore();
     }
 
@@ -201,14 +209,14 @@ public class GameManager extends Application {
             if (currentState == GameState.MENU) {
                 if (mouseX >= Basis.PLAY_X && mouseX <= Basis.PLAY_X + Basis.PLAY_W
                  && mouseY >= Basis.PLAY_Y && mouseY <= Basis.PLAY_Y + Basis.PLAY_H) {
-                    currentState = GameState.PLAYING;
+                    currentState = GameState.LEVEL;
                     render();
                 } else if (mouseX >= Basis.SETTING_X && mouseX <= Basis.SETTING_X + Basis.SETTING_W
                         && mouseY >= Basis.SETTING_Y && mouseY <= Basis.SETTING_Y + Basis.SETTING_H) {
                     currentState = GameState.SETTING;
                     render();
-                } else if (mouseX >= Basis.OPTION_X && mouseX <= Basis.OPTION_X+ Basis.OPTION_W
-                        && mouseY >= Basis.OPTION_Y && mouseY <= Basis.OPTION_Y + Basis.OPTION_H) {
+                } else if (mouseX >= Basis.INSTRUCTION_X && mouseX <= Basis.INSTRUCTION_X+ Basis.INSTRUCTION_W
+                        && mouseY >= Basis.INSTRUCTION_Y && mouseY <= Basis.INSTRUCTION_Y+ Basis.INSTRUCTION_H) {
                     currentState = GameState.OPTION;
                     render();
                 }
@@ -229,6 +237,32 @@ public class GameManager extends Application {
                         && mouseY >= Basis.SAVEGAME_BTN_Y && mouseY <= Basis.SAVEGAME_BTN_Y + Basis.PAUSE_BTN_HEIGHT) {
                     System.out.println("chưa làm");
                 }
+            } else if (currentState == GameState.LEVEL) {
+                int level = LevelPlay.selectLevel(mouseX, mouseY);
+                if (level == 1) {
+                    currentLevel = Level.STAGE_1;
+                } else if (level == 2) {
+                    currentLevel = Level.STAGE_2;
+                } else if (level == 3){
+                    currentLevel = Level.STAGE_3;
+                } else if (level == 4) {
+                    currentState = GameState.MENU;
+                    return;
+                } else {
+                    return;
+                }
+
+                stage = new GameSetup(currentLevel);
+                renderGame = new GameView(stage); 
+                currentState = GameState.PLAYING;
+            } else if (currentState == GameState.SETTING) {
+                if (Setting.back(mouseX, mouseY)) {
+                    currentState = GameState.MENU;
+                }
+            } else if (currentState == GameState.OPTION) {
+                if (Instruction.back(mouseX, mouseY)) {
+                    currentState = GameState.MENU;
+                }
             }
         });
     }
@@ -239,13 +273,23 @@ public class GameManager extends Application {
 
         boolean left = pressedKeys.contains(KeyCode.A);
         boolean right = pressedKeys.contains(KeyCode.D);
+        if (pressedKeys.contains(KeyCode.S)) {
+            autoMovePaddle = true;
+        }
+        
 
         if (left && !right) {
             paddle.moveLeft();
+            autoMovePaddle = false;
         } else if (right && !left) {
             paddle.moveRight();
+            autoMovePaddle = false;
         } else {
             paddle.setDx(0); // stop smoothly
+        }
+
+        if (autoMovePaddle) {
+            stage.getPaddle().autoMovePaddle(stage);
         }
 
         if (pressedKeys.contains(KeyCode.R)) {

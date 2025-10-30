@@ -36,20 +36,41 @@ public class Basis {
     public static final int PADDLE_SPEED = 8;
 
     // Menu
-    public static final int PLAY_X = SCREEN_WIDTH / 2 - 100;
+    public static final int PLAY_X = SCREEN_WIDTH / 2 - 100 - 35;
     public static final int PLAY_Y = SCREEN_HEIGHT - 120;
     public static final int PLAY_W = 200;
-    public static final int PLAY_H = 80;
+    public static final int PLAY_H = 60;
 
-    public static final int OPTION_X = 20;
-    public static final int OPTION_Y = 20;
-    public static final int OPTION_W = 80;
-    public static final int OPTION_H = 80;
+    public static final int OPTION_X = SCREEN_WIDTH / 2 - 100 - 35;
+    public static final int OPTION_Y = PLAY_Y - 120;
+    public static final int OPTION_W = 200;
+    public static final int OPTION_H = 60;
 
-    public static final int SETTING_X = SCREEN_WIDTH - 100;
-    public static final int SETTING_Y = 20;
-    public static final int SETTING_W = 80;
-    public static final int SETTING_H = 80;
+    public static final int SETTING_X = SCREEN_WIDTH / 2 - 100 - 35;
+    public static final int SETTING_Y = OPTION_Y - 120;
+    public static final int SETTING_W = 200;
+    public static final int SETTING_H = 60;
+
+    public static final int BACK_X = 5;
+    public static final int BACK_Y = 5;
+    public static final int BACK_W = 200;
+    public static final int BACK_H = 60;
+
+    public static final int LEVEL_IMAGE_W = 340;
+    public static final int LEVEL_IMAGE_H = 400;
+    public static final int LEVEL_IMAGE_Y = 250;
+
+    public static final int LEVEL_1_IMAGE_X = (Basis.SCREEN_WIDTH - 3 * LEVEL_IMAGE_W) / 4;
+    public static final int LEVEL_2_IMAGE_X = 2 * LEVEL_1_IMAGE_X + LEVEL_IMAGE_W;
+    public static final int LEVEL_3_IMAGE_X = 3 * LEVEL_1_IMAGE_X + 2 * LEVEL_IMAGE_W;
+
+    public static final int TEXT_LEVEL_Y = 140;
+    public static final int TEXT_LEVEL_W = 200;
+    public static final int TEXT_LEVEL_H = 60;
+
+    public static final int TEXT_LEVEL_1_X = LEVEL_1_IMAGE_X + 70;
+    public static final int TEXT_LEVEL_2_X = LEVEL_2_IMAGE_X + 70;
+    public static final int TEXT_LEVEL_3_X = LEVEL_3_IMAGE_X + 70;
 
     //Pause Menu
     public static final int PAUSE_MENU_WIDTH = 400;
@@ -89,6 +110,13 @@ public class Basis {
     public static final Image PLAY_BUTTON;
     public static final Image OPTION_BUTTON;
     public static final Image SETTING_BUTTON;
+    public static final Image LEVEL_1;
+    public static final Image LEVEL_2;
+    public static final Image LEVEL_3;
+    public static final Image TEXT_LEVEL_1;
+    public static final Image TEXT_LEVEL_2;
+    public static final Image TEXT_LEVEL_3;
+    public static final Image BACK_BUTTON;
     public static final Image PAUSE_CONTINUE_BUTTON;
     public static final Image PAUSE_MENU_BUTTON;
     public static final Image PAUSE_OPTIONS_BUTTON;
@@ -120,10 +148,17 @@ public class Basis {
         OBJECTIVE_BOARD_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/InGame/Objective_Board.jpg")).toExternalForm());
 
         // Menu
-        MENU = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/menu.png")).toExternalForm());
+        MENU = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/menu.jpeg")).toExternalForm());
         PLAY_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/play.png")).toExternalForm());
-        OPTION_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/option.png")).toExternalForm());
+        OPTION_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/instruction.png")).toExternalForm());
         SETTING_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/setting.png")).toExternalForm());
+        LEVEL_1 = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/Level1.png")).toExternalForm());
+        LEVEL_2 = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/Level2.png")).toExternalForm());
+        LEVEL_3 = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/Level3.png")).toExternalForm());
+        TEXT_LEVEL_1 = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/textLevel_1.png")).toExternalForm());
+        TEXT_LEVEL_2 = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/textLevel_2.png")).toExternalForm());
+        TEXT_LEVEL_3 = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/textLevel_3.png")).toExternalForm());
+        BACK_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/back.png")).toExternalForm());
 
         // PausedMenu
         PAUSE_MENU_PANEL = new Image(Objects.requireNonNull(Basis.class.getResource("/PausedMenu/Panel.png")).toExternalForm());

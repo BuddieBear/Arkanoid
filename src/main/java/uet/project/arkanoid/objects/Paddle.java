@@ -1,6 +1,10 @@
 package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
+import uet.project.arkanoid.base.Point;
+import uet.project.arkanoid.base.Rectangle;
+import uet.project.arkanoid.base.Shape;
+import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.Basis;
 
 public class Paddle extends MovableObject {

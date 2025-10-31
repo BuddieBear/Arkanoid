@@ -122,6 +122,13 @@ public class Basis {
     public static final Image PAUSE_OPTIONS_BUTTON;
     public static final Image PAUSE_SAVEGAME_BUTTON;
     public static final Image PAUSE_MENU_PANEL;
+    public static final Image GAME_OVER_MENU_BUTTON;
+    public static final Image GAME_OVER_EXIT_BUTTON;
+    public static final Image GAME_OVER_REPLAY_BUTTON;
+    public static final Image GAME_WIN_TEXT;
+    public static final Image GAME_LOSE_TEXT;
+    public static final Image GAME_WIN_TROPHY;
+    public static final Image GAME_LOSE_HEART;
 
     static {
         // Paddle + Ball
@@ -166,5 +173,14 @@ public class Basis {
         PAUSE_MENU_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/PausedMenu/Menu.png")).toExternalForm());
         PAUSE_OPTIONS_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/PausedMenu/Options.png")).toExternalForm());
         PAUSE_SAVEGAME_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/PausedMenu/SaveGame.png")).toExternalForm());
+
+        // GameOver
+        GAME_OVER_MENU_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Menu.png")).toExternalForm());
+        GAME_OVER_EXIT_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Exit.png")).toExternalForm());
+        GAME_OVER_REPLAY_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Menu.png")).toExternalForm());;
+        GAME_WIN_TEXT = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Won.png")).toExternalForm());;
+        GAME_LOSE_TEXT = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Lost.png")).toExternalForm());;
+        GAME_WIN_TROPHY = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Trophy.png")).toExternalForm());;
+        GAME_LOSE_HEART = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Shattered_heart.png")).toExternalForm());;
     }
 }

@@ -12,11 +12,7 @@ import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.game.GameState;
 import uet.project.arkanoid.game.GameView;
 import uet.project.arkanoid.game.Level;
-import uet.project.arkanoid.ui.LevelPlay;
-import uet.project.arkanoid.ui.MenuView;
-import uet.project.arkanoid.ui.Setting;
-import uet.project.arkanoid.ui.Instruction;
-import uet.project.arkanoid.ui.PausedMenuView;
+import uet.project.arkanoid.ui.*;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
@@ -37,7 +33,7 @@ public class GameManager extends Application {
     // HandleInput
     private final Set<KeyCode> pressedKeys = new HashSet<>();
 
-    private boolean gameOver = false;
+    private static String resultCollection = "";  // TODO: Rework this into ball
     private boolean autoMovePaddle = false;
 
     public static String getResultCollection() {
@@ -117,6 +113,7 @@ public class GameManager extends Application {
             @Override
             public void handle(long time) { //TODO: Set up delta time
                 processInput();
+                resultCollection = checkCollisions();
                 update();
                 render();
             }
@@ -130,17 +127,17 @@ public class GameManager extends Application {
     public void update() {
         if (currentState == GameState.PLAYING) {
             if (stage.gameWin() || stage.gameLose()) {
-                //currentState = GameState.GAME_OVER;
-                gameOver = true;
-                //GameOverView.onDraw(gc);
-                // gameLoop.stop();
+                currentState = GameState.GAME_OVER;
                 return;
             }
+
             // TODO: Runs update() on every GameObject.
             for (Paddle paddle : stage.getPaddles()) {
                 paddle.update();
             }
             for (Ball ball : stage.getBalls()) {
+                ball.Collision(stage.getBricks());
+                ball.Collision(stage.getPaddles());
                 ball.update();
             }
             stage.addPowerUp(stage.getBricks());
@@ -152,7 +149,7 @@ public class GameManager extends Application {
             for (Brick brick : stage.getBricks()) {
                 brick.update();
                 if (brick.isDestroy()) {
-                    stage.addScore(brick.getMaxHp() * 10);
+                    stage.addScore(brick.getMaxHp()*10);
                 }
             }
             stage.getBricks().removeIf(Brick::isDestroy);
@@ -172,9 +169,10 @@ public class GameManager extends Application {
         gc.save();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         gc.scale(scaleX, scaleY);
+
         if (currentState == GameState.MENU) {
             renderMenu.onDraw(gc);
-        } else if (currentState == GameState.SETTING) {
+        } else if (currentState == GameState.SETTING){
             renderSetting.onDraw(gc);
         } else if (currentState == GameState.OPTION) {
             renderOption.onDraw(gc);
@@ -185,6 +183,8 @@ public class GameManager extends Application {
             renderPausedMenu.onDraw(gc);
         } else if (currentState == GameState.LEVEL) {
             renderLevel.onDraw(gc);
+        } else if (currentState == GameState.GAME_OVER) {
+            GameOverView.OnDraw(gc, stage);
         }
 
         gc.restore();
@@ -250,7 +250,7 @@ public class GameManager extends Application {
                 }
 
                 stage = new GameSetup(currentLevel);
-                renderGame = new GameView(stage);
+                renderGame = new GameView(stage); 
                 currentState = GameState.PLAYING;
             } else if (currentState == GameState.SETTING) {
                 if (Setting.back(mouseX, mouseY)) {
@@ -260,6 +260,8 @@ public class GameManager extends Application {
                 if (Instruction.back(mouseX, mouseY)) {
                     currentState = GameState.MENU;
                 }
+            } else if (currentState == GameState.GAME_OVER) {
+                GameOverView.handleClick(mouseX, mouseY, stage, currentState);
             }
         });
     }
@@ -273,7 +275,7 @@ public class GameManager extends Application {
         if (pressedKeys.contains(KeyCode.S)) {
             autoMovePaddle = true;
         }
-
+        
 
         if (left && !right) {
             paddle.moveLeft();
@@ -290,7 +292,8 @@ public class GameManager extends Application {
         }
 
         if (pressedKeys.contains(KeyCode.R)) {
-            ball.setCenter(Basis.SCREEN_WIDTH + Basis.BALL_DIAMETER/2 + 1, Basis.SCREEN_HEIGHT + Basis.BALL_DIAMETER/2 + 1 );
+            ball.setX(Basis.SCREEN_WIDTH + 1);
+            ball.setY(Basis.SCREEN_HEIGHT + 1);
         }
 
         if (pressedKeys.contains(KeyCode.SPACE)) {
@@ -304,5 +307,25 @@ public class GameManager extends Application {
             }
         }
     }
-}
 
+    private String checkCollisions() { //TODO: Rework this to call checkCollision of different objects (if exists)
+        Ball ballMain = stage.getBalls().get(0);
+        Paddle paddleMain = stage.getPaddles().get(0);
+        int testX = (int) (ballMain.getX() + ballMain.getWidth() / 2);
+        int testY = (int) (ballMain.getY() + ballMain.getHeight() - paddleMain.getY());
+
+        if (ballMain.getX() + ballMain.getWidth() >= Basis.STAGE_X + Basis.STAGE_WIDTH) {
+            return "Right";
+        } else if (ballMain.getX() <= Basis.STAGE_X) {
+            return "Left";
+        } else if (ballMain.getY() <= Basis.STAGE_Y){
+            return "Up";
+        }
+
+        return "";
+    }
+
+    public GameSetup getStage() {
+        return stage;
+    }
+}

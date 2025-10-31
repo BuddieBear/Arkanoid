@@ -107,7 +107,7 @@ public class GameSetup {
                             powerUps.add(new RespawnFreePowerUp(brick, 30, 30, this));
                             break;
                         case 9:
-                            powerUps.add(new ExtendPaddle(brick, 30, 30, this));
+                            powerUps.add(new uet.project.arkanoid.objects.PowerUpVariants.ExtendPaddle(brick, 30, 30, this));
                             break;
                         case 10:
                             powerUps.add(new ShrinkPaddle(brick, 30, 30, this));

@@ -1,6 +1,7 @@
 package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
+import uet.project.arkanoid.base.*;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.utils.AudioSet;
@@ -9,9 +10,14 @@ import java.util.List;
 
 public abstract class PowerUp extends GameObject {
     protected PowerUpType type;
-    private long duration = 10; // so it wont check isDead
     private boolean catchedPowerUp = false;
     protected GameSetup stage;
+
+    private Rectangle hitbox; // <-- New Shape-based hitbox
+
+    // New timer logic
+    private long startTime = 0; // The time the effect was applied
+    private long effectDurationMillis = 3000; // 3 seconds
 
     public enum PowerUpType {
         EXPAND_PADDLE,
@@ -30,9 +36,35 @@ public abstract class PowerUp extends GameObject {
     }
 
     public PowerUp(GameObject object, double width, double height, GameSetup stage) {
-        super( (int)(object.getX() + object.getWidth() / 2 - width),
+        super(object.getX() + object.getWidth() / 2 - width / 2,
                 object.getY(), width, height);
         this.stage = stage;
+
+        // Initialize the hitbox (0 rotation)
+        this.hitbox = new Rectangle(
+                getX() + width / 2.0,
+                getY() + height / 2.0,
+                width,
+                height,
+                0
+        );
+    }
+
+    public PowerUp(PowerUp other) {
+        super(other.getX(), other.getY(), other.width, other.height);
+        this.type = other.type;
+        this.catchedPowerUp = other.catchedPowerUp;
+        this.stage = other.stage; // Share stage reference
+        this.startTime = other.startTime;
+        this.effectDurationMillis = other.effectDurationMillis;
+
+        // Deep copy the hitbox
+        this.hitbox = new Rectangle(other.hitbox);
+    }
+
+    @Override
+    public Shape getHitbox() {
+        return this.hitbox;
     }
 
     public abstract void applyEffect();
@@ -40,32 +72,50 @@ public abstract class PowerUp extends GameObject {
     public abstract void removeEffect();
 
     public boolean isDead() {
-        return this.getY() > Basis.STAGE_Y + Basis.STAGE_HEIGHT || duration == 0;
+        return this.getY() > Basis.STAGE_Y + Basis.STAGE_HEIGHT ||
+                (catchedPowerUp && startTime == 0);
     }
 
     public void update() {
-        if(!catchedPowerUp) {
-            setY(getY() + 10);
-        }
-        if (checkCollision(stage.getPaddles().get(0)) && !catchedPowerUp) {
-            catchedPowerUp = true;
-            applyEffect();
-            duration = System.currentTimeMillis();
-            // add music
-            AudioSet.powerUpSound.play();
-        }
-        if (catchedPowerUp) {
-            if (type == PowerUpType.EXTRA_LIFE || type == PowerUpType.DOUBLE_SCORE
-                    || type == PowerUpType.RESPAWN_FREE) {
-                duration = 0;
-            } else if ((System.currentTimeMillis() - duration) >= 3000) {
-                duration = 0;
-                removeEffect();
+        if (!catchedPowerUp) {
+            setY(getY() + 10); // Move down
+
+            this.hitbox.setCenter(new Point(
+                    getX() + this.width / 2.0,
+                    getY() + this.height / 2.0
+            ));
+
+
+            // Use the new hitbox intersect method
+            if (this.hitbox.intersect(stage.getPaddles().get(0).getHitbox())) {
+                catchedPowerUp = true;
+                applyEffect();
+                AudioSet.powerUpSound.play();
+
+                // Check if this is an instant-effect powerup
+                if (type == PowerUpType.EXTRA_LIFE || type == PowerUpType.DOUBLE_SCORE
+                        || type == PowerUpType.RESPAWN_FREE) {
+                    // Apply effect and die immediately
+                    startTime = 0; // This will cause isDead() to return true
+                } else {
+                    // Start the 3-second timer
+                    startTime = System.currentTimeMillis();
+                }
+            }
+        } else {
+
+            if (startTime > 0) {
+                long elapsed = System.currentTimeMillis() - startTime;
+                if (elapsed >= effectDurationMillis) {
+                    startTime = 0; // Signal for removal
+                    removeEffect();
+                }
             }
         }
     }
 
     public void render(GraphicsContext gc) {
+        // Only render if it hasn't been caught yet
         if (!catchedPowerUp) {
             gc.drawImage(Basis.POWERUP_TEXTURE, getX(), getY(), this.width, this.height);
         }
@@ -76,7 +126,7 @@ public abstract class PowerUp extends GameObject {
     }
 
     public long getDuration() {
-        return duration;
+        if (startTime == 0) return 0;
+        return Math.max(0, effectDurationMillis - (System.currentTimeMillis() - startTime));
     }
-
 }

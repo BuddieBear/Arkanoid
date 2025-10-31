@@ -1,12 +1,11 @@
 package uet.project.arkanoid.game;
 
 import uet.project.arkanoid.objects.*;
-import uet.project.arkanoid.objects.DeBuffVariants.HarderBrickPowerDown;
-import uet.project.arkanoid.objects.PowerUpVariants.*;
+import uet.project.arkanoid.objects.deBuffVariants.HarderBrickPowerDown;
+import uet.project.arkanoid.objects.powerUpVariants.*;
 import uet.project.arkanoid.utils.AudioSet;
 import uet.project.arkanoid.utils.Basis;
-import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
-import uet.project.arkanoid.objects.BrickVariants.NormalBrick;
+import uet.project.arkanoid.objects.brickVariants.NormalBrick;
 import uet.project.arkanoid.utils.FileManager;
 import uet.project.arkanoid.utils.MapLoader;
 
@@ -26,7 +25,7 @@ public class GameSetup {
     int brick_streak = 0;
 
     // Constructor initializes all lists and adds test objects
-    public GameSetup(Level currentLevel) {
+    public GameSetup(Level currentStage) {
         // Initialize the lists
         bricks = new ArrayList<>();
         balls = new ArrayList<>();
@@ -34,24 +33,41 @@ public class GameSetup {
         powerUps = new ArrayList<>();
         MapLoader mapLoader = new MapLoader();
 
-        paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
-        Paddle paddleMain = paddles.get(0);
-
-        balls.add(new Ball(
-                paddleMain.getX() + (int)paddleMain.getWidth() / 2 - Basis.BALL_DIAMETER/2,
-                paddleMain.getY() - Basis.BALL_DIAMETER - 5, Basis.BALL_DIAMETER, Basis.BALL_DIAMETER,
-                Basis.BALL_SPEED, this
-        ));
-
         //TODO: Switch - Case to create different Stage
-        if (currentLevel == Level.STAGE_1) {
+        if (currentStage == Level.STAGE_1) {
             lives = 5;
+
+            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
+            Paddle paddleMain = paddles.get(0);
+
+            balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
+                    paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 -  10,
+                    (double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
+
             mapLoader.loadBricksFromTiled(this, Basis.STAGE_1);
-        } else if (currentLevel == Level.STAGE_2) {
+        } else if (currentStage == Level.STAGE_2) {
             lives = 8;
+
+            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
+            Paddle paddleMain = paddles.get(0);
+
+            balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
+                    paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 - 10,
+                    (double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
+
+
             mapLoader.loadBricksFromTiled(this, Basis.STAGE_2);
-        } else if (currentLevel == Level.STAGE_3) {
-            lives = 1;//5;
+        } else if (currentStage == Level.STAGE_3) {
+            lives = 5;
+
+            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
+            Paddle paddleMain = paddles.get(0);
+
+            balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
+                    paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 -  10,
+                    (double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
+
+
             mapLoader.loadBricksFromTiled(this, Basis.STAGE_3);
         }
     }
@@ -60,7 +76,7 @@ public class GameSetup {
         for (Brick brick : bricks1) {
             if (brick.isDestroy()) {
                 brick_streak++;
-                System.out.println("Brick Destroyed: " + brick_streak);
+                //System.out.println("Brick Destroyed: " + brick_streak);
                 if (brick_streak >= 3) {
                     brick_streak = 0;
                     int choice = 9 + (int) (2 * Math.random());//(int) (Math.random() * 9); // 0 → 8
@@ -75,8 +91,6 @@ public class GameSetup {
                             powerUps.add(new MultiBallPowerUp(brick, 30, 30, this));
                             break;
                         case 3:
-                            powerUps.add(new SmallBrickPowerUp(brick, 30, 30, this));
-                            break;
                         case 4:
                             powerUps.add(new SuperBallPowerUp(brick, 30, 30, this));
                             break;
@@ -95,7 +109,7 @@ public class GameSetup {
                         case 9:
                             powerUps.add(new ExtendPaddle(brick, 30, 30, this));
                             break;
-                        case 10: 
+                        case 10:
                             powerUps.add(new ShrinkPaddle(brick, 30, 30, this));
                             break;
                     }

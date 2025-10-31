@@ -3,10 +3,10 @@ package uet.project.arkanoid.utils;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import java.io.File;
-import uet.project.arkanoid.*;
+
 import uet.project.arkanoid.game.*;
-import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
-import uet.project.arkanoid.objects.BrickVariants.NormalBrick;
+import uet.project.arkanoid.objects.brickVariants.IndestructibleBrick;
+import uet.project.arkanoid.objects.brickVariants.NormalBrick;
 
 public class MapLoader {
     public void loadBricksFromTiled(GameSetup stage, String filePath) {
@@ -41,10 +41,10 @@ public class MapLoader {
                     y = y - height;
 
                     switch (gid) {
-                        case 1 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 1, stage));
-                        case 3 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 2, stage));
-                        case 4 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 3, stage));
-                        case 5 -> stage.getBricks().add(new IndestructibleBrick(x, y, width, height, stage));
+                        case 1 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 1,stage));
+                        case 3 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 2, stage));
+                        case 4 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 3, stage));
+                        case 5 -> stage.getBricks().add(new IndestructibleBrick(x, y, width, height, 0, stage));
                         default -> System.out.println("Unknown gid: " + gid);
                     }
                 }

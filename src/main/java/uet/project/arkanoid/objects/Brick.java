@@ -2,27 +2,33 @@ package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.project.arkanoid.base.Point;
+import uet.project.arkanoid.base.Rectangle;
+import uet.project.arkanoid.base.Shape;
 import uet.project.arkanoid.game.GameSetup;
-import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
-import uet.project.arkanoid.utils.Basis;
-
-import java.util.Objects;
-import java.util.List;
-import java.util.ArrayList;
 
 
 public class Brick extends GameObject {
     private int hitPoints;
     private int maxHp;
+
     private BrickType type;
     protected Image brickImage;
     private GameSetup stage;
+
     private final double originalWidth;
     private final double originalHeight;
+
+    private Rectangle hitBox;
 
     public enum BrickType {
         INDESTRUCTIBLE,
         NORMAL
+    }
+
+    @Override
+    public Shape getHitbox() {
+        return this.hitBox;
     }
 
     public double getOriginalWidth() {
@@ -33,7 +39,7 @@ public class Brick extends GameObject {
         return originalHeight;
     }
 
-    public Brick(int x, int y, double width, double height, int hitPoints, BrickType type, GameSetup stage) {
+    public Brick(int x, int y, double width, double height, double rotation, int hitPoints, BrickType type, GameSetup stage) {
         super(x, y, width, height);
         this.maxHp = hitPoints;
         this.hitPoints = hitPoints;
@@ -41,6 +47,7 @@ public class Brick extends GameObject {
         this.stage = stage;
         this.originalWidth = width;
         this.originalHeight = height;
+        this.hitBox = new Rectangle(x + width / 2.0, y + height / 2.0, width, height, rotation);
     }
 
     public BrickType getType() {
@@ -67,7 +74,7 @@ public class Brick extends GameObject {
 
 
     public void takeHit() {
-            hitPoints--;
+        hitPoints--;
     }
 
     public boolean isDestroy() {
@@ -75,7 +82,19 @@ public class Brick extends GameObject {
     }
 
     public void render(GraphicsContext gc) {
-        gc.drawImage(brickImage, getX(), getY(), this.width, this.height);
+        Point center = hitBox.getCenter();
+        double rotationDegrees = Math.toDegrees(hitBox.getRotation());
+        double w = hitBox.getSize().getX();
+        double h = hitBox.getSize().getY();
+
+        gc.save(); // Save the current graphics state
+        gc.translate(center.getX(), center.getY()); // Move origin to brick's center
+        gc.rotate(rotationDegrees); // Rotate the canvas
+
+        // Draw the image centered at the new (0,0) origin
+        gc.drawImage(brickImage, -w / 2.0, -h / 2.0, w, h);
+
+        gc.restore(); // Restore the original state
     }
 
     @Override

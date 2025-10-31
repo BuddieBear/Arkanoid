@@ -1,8 +1,7 @@
-package uet.project.arkanoid.objects.PowerUpVariants;
+package uet.project.arkanoid.objects.powerUpVariants;
 
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.objects.GameObject;
-import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.objects.PowerUp;
 
 public class RespawnFreePowerUp extends PowerUp {

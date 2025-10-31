@@ -1,11 +1,8 @@
-package uet.project.arkanoid.objects.PowerUpVariants;
+package uet.project.arkanoid.objects.powerUpVariants;
 
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.objects.Ball;
-import uet.project.arkanoid.objects.Brick;
-import uet.project.arkanoid.objects.BrickVariants.IndestructibleBrick;
 import uet.project.arkanoid.objects.GameObject;
-import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.objects.PowerUp;
 
 public class SuperBallPowerUp extends PowerUp {
@@ -21,7 +18,7 @@ public class SuperBallPowerUp extends PowerUp {
         super(object, width, height, stage);
         type = PowerUpType.SUPER_BALL;
         ball = stage.getBalls().get(0);
-        oldSpeed = ball.getSpeed();
+        oldSpeed = (int) ball.getSpeed();
         oldWidth = ball.getWidth();
         oldHeight = ball.getHeight();
     }

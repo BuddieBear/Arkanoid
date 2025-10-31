@@ -19,4 +19,6 @@ module uet.project.arkanoid {
     opens uet.project.arkanoid.game to javafx.fxml;
     exports uet.project.arkanoid.utils;
     opens uet.project.arkanoid.utils to javafx.fxml;
+    exports uet.project.arkanoid.base;
+    opens uet.project.arkanoid.base to javafx.fxml;
 }

@@ -32,7 +32,7 @@ public class Basis {
     public static final int OBJECTIVE_BOARD_Y = 230;
 
     // Base stats
-    public static final int BALL_SPEED = 7;
+    public static final int BALL_SPEED = 5;
     public static final int PADDLE_SPEED = 8;
 
     // Menu

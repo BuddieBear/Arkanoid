@@ -206,7 +206,7 @@ public class Basis {
         // GameOver
         GAME_OVER_MENU_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Menu.png")).toExternalForm());
         GAME_OVER_EXIT_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Exit.png")).toExternalForm());
-        GAME_OVER_REPLAY_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Menu.png")).toExternalForm());;
+        GAME_OVER_REPLAY_BUTTON = null;
         GAME_WIN_TEXT = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Won.png")).toExternalForm());;
         GAME_LOSE_TEXT = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Lost.png")).toExternalForm());;
         GAME_WIN_TROPHY = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Trophy.png")).toExternalForm());;

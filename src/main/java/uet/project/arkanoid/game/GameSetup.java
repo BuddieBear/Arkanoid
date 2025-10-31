@@ -33,12 +33,15 @@ public class GameSetup {
         balls = new ArrayList<>();
         paddles = new ArrayList<>();
         powerUps = new ArrayList<>();
-        MapLoader mapLoader = new MapLoader();
-
         this.currentLevel = currentStage;
 
+        loadLevel(currentStage);
+    }
+
+    public void loadLevel(Level lvl) {
+        this.clearLevel();
         //TODO: Switch - Case to create different Stage
-        if (currentStage == Level.STAGE_1) {
+        if (lvl == Level.STAGE_1) {
             lives = 5;
 
             paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
@@ -48,8 +51,8 @@ public class GameSetup {
                     paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 -  10,
                     (double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
 
-            mapLoader.loadBricksFromTiled(this, Basis.STAGE_1);
-        } else if (currentStage == Level.STAGE_2) {
+            MapLoader.loadBricksFromTiled(this, Basis.STAGE_1);
+        } else if (lvl == Level.STAGE_2) {
             lives = 8;
 
             paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
@@ -60,8 +63,8 @@ public class GameSetup {
                     (double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
 
 
-            mapLoader.loadBricksFromTiled(this, Basis.STAGE_2);
-        } else if (currentStage == Level.STAGE_3) {
+            MapLoader.loadBricksFromTiled(this, Basis.STAGE_2);
+        } else if (lvl == Level.STAGE_3) {
             lives = 5;
 
             paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
@@ -72,10 +75,16 @@ public class GameSetup {
                     (double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
 
 
-            mapLoader.loadBricksFromTiled(this, Basis.STAGE_3);
+            MapLoader.loadBricksFromTiled(this, Basis.STAGE_3);
         }
     }
 
+    public void clearLevel() {
+        bricks.clear();
+        balls.clear();
+        paddles.clear();
+        powerUps.clear();
+    }
     public void addPowerUp(List<? extends Brick> bricks1) {
         for (Brick brick : bricks1) {
             if (brick.isDestroy()) {
@@ -111,7 +120,7 @@ public class GameSetup {
                             powerUps.add(new RespawnFreePowerUp(brick, 30, 30, this));
                             break;
                         case 9:
-                            powerUps.add(new uet.project.arkanoid.objects.PowerUpVariants.ExtendPaddle(brick, 30, 30, this));
+                            powerUps.add(new ExtendPaddle(brick, 30, 30, this));
                             break;
                         case 10:
                             powerUps.add(new ShrinkPaddle(brick, 30, 30, this));

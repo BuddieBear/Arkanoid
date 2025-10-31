@@ -2,11 +2,35 @@ package uet.project.arkanoid.ui;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import uet.project.arkanoid.base.*;
+import uet.project.arkanoid.game.*;
 import uet.project.arkanoid.utils.Basis;
-import uet.project.arkanoid.game.Level;
 
-public class LoadScreenView {
+public class LoadScreenView implements View {
+
+    private static final Rectangle LEVEL_1_HITBOX = new Rectangle(
+            new Point(Basis.LEVEL_1_BTN_X + Basis.LEVEL_BTN_WIDTH / 2.0,
+                    Basis.LEVEL_1_BTN_Y + Basis.LEVEL_BTN_HEIGHT / 2.0),
+            new Vector2D(Basis.LEVEL_BTN_WIDTH, Basis.LEVEL_BTN_HEIGHT),
+            0
+    );
+
+    private static final Rectangle LEVEL_2_HITBOX = new Rectangle(
+            new Point(Basis.LEVEL_2_BTN_X + Basis.LEVEL_BTN_WIDTH / 2.0,
+                    Basis.LEVEL_2_BTN_Y + Basis.LEVEL_BTN_HEIGHT / 2.0),
+            new Vector2D(Basis.LEVEL_BTN_WIDTH, Basis.LEVEL_BTN_HEIGHT),
+            0
+    );
+
+    private static final Rectangle LEVEL_3_HITBOX = new Rectangle(
+            new Point(Basis.LEVEL_3_BTN_X + Basis.LEVEL_BTN_WIDTH / 2.0,
+                    Basis.LEVEL_3_BTN_Y + Basis.LEVEL_BTN_HEIGHT / 2.0),
+            new Vector2D(Basis.LEVEL_BTN_WIDTH, Basis.LEVEL_BTN_HEIGHT),
+            0
+    );
+
     public void onDraw(GraphicsContext gc) {
+        gc.drawImage(Basis.MENU, 0, 0, Basis.SCREEN_WIDTH, Basis.SCREEN_HEIGHT);
         gc.setFill(Color.rgb(0, 0, 0, 0.5));
         gc.fillRect(0, 0, Basis.SCREEN_WIDTH, Basis.SCREEN_HEIGHT);
 
@@ -27,16 +51,34 @@ public class LoadScreenView {
                 Basis.LEVEL_BTN_HEIGHT);
     }
 
-    public Level getClickLevel(double mouseX, double mouseY) {
-        if (mouseX >= Basis.LEVEL_1_BTN_X && mouseX <= Basis.LEVEL_1_BTN_X + Basis.LEVEL_BTN_WIDTH
-                && mouseY >= Basis.LEVEL_1_BTN_Y && mouseY <= Basis.LEVEL_1_BTN_Y + Basis.LEVEL_BTN_HEIGHT) {
+    public static Level getClickLevel(double mouseX, double mouseY) {
+        Point clickPoint = new Point(mouseX, mouseY);
+
+        if (LEVEL_1_HITBOX.contains(clickPoint)) {
             return Level.STAGE_1;
-        } else if (mouseX >= Basis.LEVEL_2_BTN_X && mouseX <= Basis.LEVEL_2_BTN_X + Basis.LEVEL_BTN_WIDTH
-                && mouseY >= Basis.LEVEL_2_BTN_Y && mouseY <= Basis.LEVEL_2_BTN_Y + Basis.LEVEL_BTN_HEIGHT) {
+        } else if (LEVEL_2_HITBOX.contains(clickPoint)) {
             return Level.STAGE_2;
-        } else if (mouseX >= Basis.LEVEL_3_BTN_X && mouseX <= Basis.LEVEL_3_BTN_X + Basis.LEVEL_BTN_WIDTH
-                && mouseY >= Basis.LEVEL_3_BTN_Y && mouseY <= Basis.LEVEL_3_BTN_Y + Basis.LEVEL_BTN_HEIGHT) {
+        } else if (LEVEL_3_HITBOX.contains(clickPoint)) {
             return Level.STAGE_3;
-        } else return null;
+        }
+        return null;
+    }
+
+    public GameState handleClick(double mouseX, double mouseY, GameSetup stage) {
+        Level clickedLevel = LoadScreenView.getClickLevel(mouseX, mouseY);
+
+        if (clickedLevel != null) {
+            try {
+                Saves slotToLoad = SaveManager.levelSave(clickedLevel);
+                if (SaveManager.isSaveFile(slotToLoad)) {
+                    stage.loadLevel(LoadScreenView.getClickLevel(mouseX, mouseY));
+                    SaveManager.loadGame(slotToLoad, stage);
+                    return GameState.PAUSED;
+                }
+            } catch (IllegalArgumentException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        return GameState.LOAD_GAME;
     }
 }

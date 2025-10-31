@@ -9,7 +9,7 @@ import uet.project.arkanoid.objects.brickVariants.IndestructibleBrick;
 import uet.project.arkanoid.objects.brickVariants.NormalBrick;
 
 public class MapLoader {
-    public void loadBricksFromTiled(GameSetup stage, String filePath) {
+    public static void loadBricksFromTiled(GameSetup stage, String filePath) {
         try {
             // Read the TMX file
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -17,7 +17,7 @@ public class MapLoader {
             Document doc = builder.parse(new File(filePath));
             doc.getDocumentElement().normalize();
 
-            // Find all objectgroups
+            // Find all object groups
             NodeList objectGroups = doc.getElementsByTagName("objectgroup");
 
             for (int i = 0; i < objectGroups.getLength(); i++) {
@@ -42,9 +42,9 @@ public class MapLoader {
 
                     switch (gid) {
                         case 1 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 1,stage));
-                        case 3 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 2, stage));
-                        case 4 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 3, stage));
-                        case 5 -> stage.getBricks().add(new IndestructibleBrick(x, y, width, height, 0, stage));
+                        //case 3 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 2, stage));
+                        //case 4 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 3, stage));
+                        //case 5 -> stage.getBricks().add(new IndestructibleBrick(x, y, width, height, 0, stage));
                         default -> System.out.println("Unknown gid: " + gid);
                     }
                 }

@@ -19,7 +19,6 @@ public class GameOverView {
     // Button positions
     private static final double CENTER_X = Basis.SCREEN_WIDTH / 2.0;
     private static final double MENU_Y = 400;
-    private static final double REPLAY_Y = 500;
     private static final double EXIT_Y = 600;
 
     // Hitboxes
@@ -27,10 +26,7 @@ public class GameOverView {
             CENTER_X, MENU_Y + BUTTON_HEIGHT / 2.0,
             BUTTON_WIDTH, BUTTON_HEIGHT, 0
     );
-    private static final Rectangle REPLAY_BUTTON_HITBOX = new Rectangle(
-            CENTER_X, REPLAY_Y + BUTTON_HEIGHT / 2.0,
-            BUTTON_WIDTH, BUTTON_HEIGHT, 0
-    );
+
     private static final Rectangle EXIT_BUTTON_HITBOX = new Rectangle(
             CENTER_X, EXIT_Y + BUTTON_HEIGHT / 2.0,
             BUTTON_WIDTH, BUTTON_HEIGHT, 0
@@ -40,31 +36,26 @@ public class GameOverView {
         gc.setFill(Color.rgb(0, 0, 0, 0.5));
         gc.fillRect(0, 0, Basis.SCREEN_WIDTH, Basis.SCREEN_HEIGHT);
 
-        // Win or Lose visuals
         if (stage.gameWin()) {
-            gc.drawImage(Basis.GAME_WIN_TEXT, Basis.SCREEN_WIDTH / 2.0 - 200, 150);
-            gc.drawImage(Basis.GAME_WIN_TROPHY, Basis.SCREEN_WIDTH / 2.0 - 100, 250);
+            gc.drawImage(Basis.GAME_WIN_TEXT, 400, 80, 550, 200);
+            gc.drawImage(Basis.GAME_WIN_TROPHY, 725, 235);
         } else {
-            gc.drawImage(Basis.GAME_LOSE_TEXT, Basis.SCREEN_WIDTH / 2.0 - 200, 150);
-            gc.drawImage(Basis.GAME_LOSE_HEART, Basis.SCREEN_WIDTH / 2.0 - 100, 250);
+            gc.drawImage(Basis.GAME_LOSE_TEXT, 400, 80, 550, 200);
+            gc.drawImage(Basis.GAME_LOSE_HEART, 625, 140);
         }
 
-        // Buttons
         gc.drawImage(Basis.GAME_OVER_MENU_BUTTON, CENTER_X - BUTTON_WIDTH / 2.0, MENU_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
-        gc.drawImage(Basis.GAME_OVER_REPLAY_BUTTON, CENTER_X - BUTTON_WIDTH / 2.0, REPLAY_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
         gc.drawImage(Basis.GAME_OVER_EXIT_BUTTON, CENTER_X - BUTTON_WIDTH / 2.0, EXIT_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
     }
 
-    public static void handleClick(double mouseX, double mouseY, GameSetup stage, GameState currentState) {
+    public static GameState handleClick(double mouseX, double mouseY, GameSetup stage) {
         Point clickPoint = new Point(mouseX, mouseY);
 
         if (MENU_BUTTON_HITBOX.contains(clickPoint)) {
-            currentState = GameState.MENU;
-        } else if (REPLAY_BUTTON_HITBOX.contains(clickPoint)) {
-            // stage.restartGame();
-            // stage.setGameState(GameSetup.GameState.PLAYING);
+            return GameState.MENU;
         } else if (EXIT_BUTTON_HITBOX.contains(clickPoint)) {
-            currentState = GameState.EXIT;
+            return GameState.EXIT;
         }
+        return GameState.GAME_OVER;
     }
 }

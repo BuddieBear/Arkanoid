@@ -17,11 +17,11 @@ public class SaveManager {
     private static String getFileName(Saves slot) {
         switch (slot) {
             case SLOT_1:
-                return "SLOT_1.txt";
+                return "Saves/SLOT_1.txt";
             case SLOT_2:
-                return "SLOT_2.txt";
+                return "Saves/SLOT_2.txt";
             case SLOT_3:
-                return "SLOT_3.txt";
+                return "Saves/SLOT_3.txt";
             default:
                 throw new IllegalArgumentException("Unknown slot: " + slot);
         }

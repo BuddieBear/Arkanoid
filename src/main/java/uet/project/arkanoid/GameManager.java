@@ -8,14 +8,12 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import uet.project.arkanoid.game.GameSetup;
-import uet.project.arkanoid.game.GameState;
-import uet.project.arkanoid.game.GameView;
-import uet.project.arkanoid.game.Level;
+import uet.project.arkanoid.game.*;
 import uet.project.arkanoid.ui.MenuView;
 import uet.project.arkanoid.ui.Setting;
 import uet.project.arkanoid.ui.Option;
 import uet.project.arkanoid.ui.PausedMenuView;
+import uet.project.arkanoid.ui.LoadScreenView;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
@@ -49,6 +47,7 @@ public class GameManager extends Application {
     Setting renderSetting;
     Option renderOption;
     PausedMenuView renderPausedMenu;
+    LoadScreenView renderLoadScreen;
 
 
     public static void main(String[] args) {
@@ -102,6 +101,7 @@ public class GameManager extends Application {
         renderSetting = new Setting();
         renderOption = new Option();
         renderPausedMenu = new PausedMenuView();
+        renderLoadScreen = new LoadScreenView();
 
         // Game loop
         gameLoop = new AnimationTimer() {
@@ -171,6 +171,9 @@ public class GameManager extends Application {
         } else if (currentState == GameState.PAUSED) {
             renderGame.onDraw(gc);
             renderPausedMenu.onDraw(gc);
+        } else if(currentState == GameState.LOAD_GAME) {
+            renderMenu.onDraw(gc);
+            renderLoadScreen.onDraw(gc);
         }
 
         gc.restore();
@@ -202,6 +205,10 @@ public class GameManager extends Application {
                         && mouseY >= Basis.OPTION_Y && mouseY <= Basis.OPTION_Y + Basis.OPTION_H) {
                     currentState = GameState.OPTION;
                     render();
+                } else if (mouseX >= Basis.LOAD_GAME_BTN_X && mouseX <= Basis.LOAD_GAME_BTN_X + Basis.LOAD_GAME_BTN_W
+                        && mouseY >= Basis.LOAD_GAME_BTN_Y && mouseY <= Basis.LOAD_GAME_BTN_Y + Basis.LOAD_GAME_BTN_H) {
+                    currentState = GameState.LOAD_GAME;
+                    render();
                 }
             } else if (currentState == GameState.PAUSED) {
                 if (mouseX >= Basis.CONTINUE_BTN_X && mouseX <= Basis.CONTINUE_BTN_X + Basis.PAUSE_BTN_WIDTH
@@ -218,7 +225,28 @@ public class GameManager extends Application {
                     System.out.println("chưa làm");
                 } else if (mouseX >= Basis.SAVEGAME_BTN_X && mouseX <= Basis.SAVEGAME_BTN_X + Basis.PAUSE_BTN_WIDTH
                         && mouseY >= Basis.SAVEGAME_BTN_Y && mouseY <= Basis.SAVEGAME_BTN_Y + Basis.PAUSE_BTN_HEIGHT) {
-                    System.out.println("chưa làm");
+                    try {
+                        Level levelToSave = stage.getCurrentLevel();
+                        Saves saveSlot = SaveManager.levelSave(levelToSave);
+                        SaveManager.saveGame(saveSlot, stage);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Lỗi khi đang lưu game: " + e.getMessage());
+                    }
+                }
+            } else if (currentState == GameState.LOAD_GAME) {
+                Level clickedLevel = renderLoadScreen.getClickLevel(mouseX, mouseY);
+                if (clickedLevel != null) {
+                    try {
+                        Saves slotToLoad = SaveManager.levelSave(clickedLevel);
+                        if (SaveManager.isSaveFile(slotToLoad)) {
+                            stage = new GameSetup(clickedLevel);
+                            renderGame = new GameView(stage);
+                            SaveManager.loadGame(slotToLoad, stage);
+                            currentState = GameState.PAUSED;
+                        }
+                    } catch (IllegalArgumentException e) {
+                        System.err.println(e.getMessage());
+                    }
                 }
             }
         });

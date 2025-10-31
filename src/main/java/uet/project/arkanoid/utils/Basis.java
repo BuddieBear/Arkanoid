@@ -73,6 +73,25 @@ public class Basis {
     public static final int SAVEGAME_BTN_X = PAUSE_MENU_X + PAUSE_BTN_X_OFFSET;
     public static final int SAVEGAME_BTN_Y = PAUSE_MENU_Y + 375;
 
+    // Load Game
+    public static final int LOAD_GAME_BTN_X = PLAY_X;
+    public static final int LOAD_GAME_BTN_Y = PLAY_Y - PLAY_H - 15;
+    public static final int LOAD_GAME_BTN_W = PLAY_W;
+    public static final int LOAD_GAME_BTN_H = PLAY_H;
+
+    public static final int LEVEL_BTN_WIDTH = 350;
+    public static final int LEVEL_BTN_HEIGHT = 60;
+    public static final int LEVEL_BTN_X_CENTER = (SCREEN_WIDTH - LEVEL_BTN_WIDTH) / 2;
+
+    public static final int LEVEL_1_BTN_X = LEVEL_BTN_X_CENTER;
+    public static final int LEVEL_1_BTN_Y = 250;
+
+    public static final int LEVEL_2_BTN_X = LEVEL_BTN_X_CENTER;
+    public static final int LEVEL_2_BTN_Y = 330;
+
+    public static final int LEVEL_3_BTN_X = LEVEL_BTN_X_CENTER;
+    public static final int LEVEL_3_BTN_Y = 410;
+
     // Textures
     public static final Image PADDLE_TEXTURE;
     public static final Image BALL_TEXTURE;
@@ -94,6 +113,10 @@ public class Basis {
     public static final Image PAUSE_OPTIONS_BUTTON;
     public static final Image PAUSE_SAVEGAME_BUTTON;
     public static final Image PAUSE_MENU_PANEL;
+    public static final Image LOAD_GAME_BUTTON;
+    public static final Image LEVEL_1_BUTTON;
+    public static final Image LEVEL_2_BUTTON;
+    public static final Image LEVEL_3_BUTTON;
 
     static {
         // Paddle + Ball
@@ -124,6 +147,7 @@ public class Basis {
         PLAY_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/play.png")).toExternalForm());
         OPTION_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/option.png")).toExternalForm());
         SETTING_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/setting.png")).toExternalForm());
+        LOAD_GAME_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/LoadGame.png")).toExternalForm());
 
         // PausedMenu
         PAUSE_MENU_PANEL = new Image(Objects.requireNonNull(Basis.class.getResource("/PausedMenu/Panel.png")).toExternalForm());
@@ -131,5 +155,10 @@ public class Basis {
         PAUSE_MENU_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/PausedMenu/Menu.png")).toExternalForm());
         PAUSE_OPTIONS_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/PausedMenu/Options.png")).toExternalForm());
         PAUSE_SAVEGAME_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/PausedMenu/SaveGame.png")).toExternalForm());
+
+        //LoadGame
+        LEVEL_1_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/LoadScreen/Level1.png")).toExternalForm());
+        LEVEL_2_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/LoadScreen/Level2.png")).toExternalForm());
+        LEVEL_3_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/LoadScreen/Level3.png")).toExternalForm());
     }
 }

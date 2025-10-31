@@ -18,5 +18,6 @@ public class ExtraLifePowerUp extends PowerUp {
 
     @Override
     public void removeEffect() {
+        alive = false;
     }
 }

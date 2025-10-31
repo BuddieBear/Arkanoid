@@ -154,6 +154,7 @@ public class GameManager extends Application {
                     stage.addScore(brick.getMaxHp()*10);
                 }
             }
+            stage.getPowerUps().removeIf(PowerUp::isDead);
             stage.getBricks().removeIf(Brick::isDestroy);
         }
     }

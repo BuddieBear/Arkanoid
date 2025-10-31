@@ -9,11 +9,12 @@ import uet.project.arkanoid.utils.AudioSet;
 import java.util.List;
 
 public abstract class PowerUp extends GameObject {
+    protected boolean alive = true;
     protected PowerUpType type;
     private boolean catchedPowerUp = false;
     protected GameSetup stage;
 
-    private Rectangle hitbox; // <-- New Shape-based hitbox
+    private Rectangle hitbox;
 
     // New timer logic
     private long startTime = 0; // The time the effect was applied
@@ -72,7 +73,7 @@ public abstract class PowerUp extends GameObject {
     public abstract void removeEffect();
 
     public boolean isDead() {
-        return this.getY() > Basis.STAGE_Y + Basis.STAGE_HEIGHT ||
+        return !alive|| this.getY() > Basis.STAGE_Y + Basis.STAGE_HEIGHT ||
                 (catchedPowerUp && startTime == 0);
     }
 

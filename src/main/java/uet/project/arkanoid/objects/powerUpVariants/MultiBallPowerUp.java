@@ -50,5 +50,6 @@ public class MultiBallPowerUp extends PowerUp {
     public void removeEffect() {
         stage.getBalls().remove(b1);
         stage.getBalls().remove(b2);
+        alive = false;
     }
 }

@@ -41,5 +41,6 @@ public class SuperBallPowerUp extends PowerUp {
         // Restore old position
         ball.setX(ball.getX() + (int) (oldWidth / 2));
         ball.setY(ball.getY() + (int) (oldHeight / 2));
+        alive = false;
     }
 }

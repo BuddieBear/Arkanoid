@@ -8,6 +8,12 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import uet.project.arkanoid.game.*;
+import uet.project.arkanoid.ui.MenuView;
+import uet.project.arkanoid.ui.Setting;
+import uet.project.arkanoid.ui.Option;
+import uet.project.arkanoid.ui.PausedMenuView;
+import uet.project.arkanoid.ui.LoadScreenView;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.game.GameState;
 import uet.project.arkanoid.game.GameView;
@@ -53,6 +59,7 @@ public class GameManager extends Application {
     Instruction renderOption;
     LevelPlay renderLevel;
     PausedMenuView renderPausedMenu;
+    LoadScreenView renderLoadScreen;
 
 
     public static void main(String[] args) {
@@ -107,13 +114,13 @@ public class GameManager extends Application {
         renderOption = new Instruction();
         renderLevel = new LevelPlay();
         renderPausedMenu = new PausedMenuView();
+        renderLoadScreen = new LoadScreenView();
 
         // Game loop
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long time) { //TODO: Set up delta time
                 processInput();
-                resultCollection = checkCollisions();
                 update();
                 render();
             }
@@ -185,6 +192,9 @@ public class GameManager extends Application {
             renderLevel.onDraw(gc);
         } else if (currentState == GameState.GAME_OVER) {
             GameOverView.OnDraw(gc, stage);
+        } else if(currentState == GameState.LOAD_GAME) {
+            renderMenu.onDraw(gc);
+            renderLoadScreen.onDraw(gc);
         }
 
         gc.restore();
@@ -216,6 +226,10 @@ public class GameManager extends Application {
                         && mouseY >= Basis.INSTRUCTION_Y && mouseY <= Basis.INSTRUCTION_Y+ Basis.INSTRUCTION_H) {
                     currentState = GameState.OPTION;
                     render();
+                } else if (mouseX >= Basis.LOAD_GAME_BTN_X && mouseX <= Basis.LOAD_GAME_BTN_X + Basis.LOAD_GAME_BTN_W
+                        && mouseY >= Basis.LOAD_GAME_BTN_Y && mouseY <= Basis.LOAD_GAME_BTN_Y + Basis.LOAD_GAME_BTN_H) {
+                    currentState = GameState.LOAD_GAME;
+                    render();
                 }
             } else if (currentState == GameState.PAUSED) {
                 if (mouseX >= Basis.CONTINUE_BTN_X && mouseX <= Basis.CONTINUE_BTN_X + Basis.PAUSE_BTN_WIDTH
@@ -232,7 +246,28 @@ public class GameManager extends Application {
                     System.out.println("chưa làm");
                 } else if (mouseX >= Basis.SAVEGAME_BTN_X && mouseX <= Basis.SAVEGAME_BTN_X + Basis.PAUSE_BTN_WIDTH
                         && mouseY >= Basis.SAVEGAME_BTN_Y && mouseY <= Basis.SAVEGAME_BTN_Y + Basis.PAUSE_BTN_HEIGHT) {
-                    System.out.println("chưa làm");
+                    try {
+                        Level levelToSave = stage.getCurrentLevel();
+                        Saves saveSlot = SaveManager.levelSave(levelToSave);
+                        SaveManager.saveGame(saveSlot, stage);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Lỗi khi đang lưu game: " + e.getMessage());
+                    }
+                }
+            } else if (currentState == GameState.LOAD_GAME) {
+                Level clickedLevel = renderLoadScreen.getClickLevel(mouseX, mouseY);
+                if (clickedLevel != null) {
+                    try {
+                        Saves slotToLoad = SaveManager.levelSave(clickedLevel);
+                        if (SaveManager.isSaveFile(slotToLoad)) {
+                            stage = new GameSetup(clickedLevel);
+                            renderGame = new GameView(stage);
+                            SaveManager.loadGame(slotToLoad, stage);
+                            currentState = GameState.PAUSED;
+                        }
+                    } catch (IllegalArgumentException e) {
+                        System.err.println(e.getMessage());
+                    }
                 }
             } else if (currentState == GameState.LEVEL) {
                 int level = LevelPlay.selectLevel(mouseX, mouseY);
@@ -250,7 +285,7 @@ public class GameManager extends Application {
                 }
 
                 stage = new GameSetup(currentLevel);
-                renderGame = new GameView(stage); 
+                renderGame = new GameView(stage);
                 currentState = GameState.PLAYING;
             } else if (currentState == GameState.SETTING) {
                 if (Setting.back(mouseX, mouseY)) {
@@ -275,7 +310,6 @@ public class GameManager extends Application {
         if (pressedKeys.contains(KeyCode.S)) {
             autoMovePaddle = true;
         }
-        
 
         if (left && !right) {
             paddle.moveLeft();
@@ -292,8 +326,7 @@ public class GameManager extends Application {
         }
 
         if (pressedKeys.contains(KeyCode.R)) {
-            ball.setX(Basis.SCREEN_WIDTH + 1);
-            ball.setY(Basis.SCREEN_HEIGHT + 1);
+            ball.setCenter(Basis.SCREEN_WIDTH + Basis.BALL_DIAMETER/2 + 1, Basis.SCREEN_HEIGHT + Basis.BALL_DIAMETER/2 + 1 );
         }
 
         if (pressedKeys.contains(KeyCode.SPACE)) {
@@ -307,25 +340,5 @@ public class GameManager extends Application {
             }
         }
     }
-
-    private String checkCollisions() { //TODO: Rework this to call checkCollision of different objects (if exists)
-        Ball ballMain = stage.getBalls().get(0);
-        Paddle paddleMain = stage.getPaddles().get(0);
-        int testX = (int) (ballMain.getX() + ballMain.getWidth() / 2);
-        int testY = (int) (ballMain.getY() + ballMain.getHeight() - paddleMain.getY());
-
-        if (ballMain.getX() + ballMain.getWidth() >= Basis.STAGE_X + Basis.STAGE_WIDTH) {
-            return "Right";
-        } else if (ballMain.getX() <= Basis.STAGE_X) {
-            return "Left";
-        } else if (ballMain.getY() <= Basis.STAGE_Y){
-            return "Up";
-        }
-
-        return "";
-    }
-
-    public GameSetup getStage() {
-        return stage;
-    }
 }
+

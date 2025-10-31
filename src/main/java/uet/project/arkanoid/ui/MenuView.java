@@ -18,5 +18,8 @@ public class MenuView {
 
         // setting button
         gc.drawImage(Basis.SETTING_BUTTON, Basis.SETTING_X, Basis.SETTING_Y, Basis.SETTING_W, Basis.SETTING_H);
+
+        // load game button
+        gc.drawImage(Basis.LOAD_GAME_BUTTON, Basis.LOAD_GAME_BTN_X, Basis.LOAD_GAME_BTN_Y, Basis.LOAD_GAME_BTN_W, Basis.LOAD_GAME_BTN_H);
     }
 }

@@ -24,6 +24,8 @@ public class GameSetup {
     int score;
     int brick_streak = 0;
 
+    private Level currentLevel;
+
     // Constructor initializes all lists and adds test objects
     public GameSetup(Level currentStage) {
         // Initialize the lists
@@ -32,6 +34,8 @@ public class GameSetup {
         paddles = new ArrayList<>();
         powerUps = new ArrayList<>();
         MapLoader mapLoader = new MapLoader();
+
+        this.currentLevel = currentStage;
 
         //TODO: Switch - Case to create different Stage
         if (currentStage == Level.STAGE_1) {
@@ -179,5 +183,9 @@ public class GameSetup {
 
     public void addScore(int extra) {
         this.score = this.score + extra;
+    }
+
+    public Level getCurrentLevel() {
+        return currentLevel;
     }
 }

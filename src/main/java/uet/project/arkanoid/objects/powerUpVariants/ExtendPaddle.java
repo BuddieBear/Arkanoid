@@ -1,4 +1,4 @@
-package uet.project.arkanoid.objects.PowerUpVariants;
+package uet.project.arkanoid.objects.powerUpVariants;
 
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.objects.GameObject;

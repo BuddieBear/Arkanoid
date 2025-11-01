@@ -23,6 +23,7 @@ import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
 import uet.project.arkanoid.objects.PowerUp;
 import uet.project.arkanoid.utils.Basis;
+import uet.project.arkanoid.utils.MapLoader;
 
 import java.util.HashSet;
 import java.util.Set;

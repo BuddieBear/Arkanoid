@@ -22,13 +22,9 @@ public abstract class PowerUp extends GameObject {
         EXPAND_PADDLE,
         SHRINK_PADDLE,
         MULTI_BALL,
-        SPEED_UP,
         DAMAGE_BRICK,
-        SMALL_BRICK,
-        HARDER_BRICK,
         SUPER_BALL,
         INVINCIBLE_BALL,
-        SLOW_DOWN,
         EXTRA_LIFE,
         DOUBLE_SCORE,
         RESPAWN_FREE
@@ -136,8 +132,25 @@ public abstract class PowerUp extends GameObject {
         }
     }
 
+    public void startEffectTimer() {
+        if (type == PowerUpType.EXTRA_LIFE || type == PowerUpType.DOUBLE_SCORE
+                || type == PowerUpType.RESPAWN_FREE) {
+            this.startTime = 0;
+        } else {
+            this.startTime = System.currentTimeMillis();
+        }
+    }
+
     public PowerUpType getType() {
         return type;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     public long getEffectDurationMillis() {

@@ -54,28 +54,6 @@ public class Ball extends MovableObject {
         this.visualAngle = 0; // Default visual angle (straight)
     }
 
-    @Override
-    public Shape getHitbox() {
-        return this.hitbox;
-    }
-
-    public boolean getLaunchState() {
-        return hasLaunch;
-    }
-
-    public void setHasLaunch(boolean hasLaunch) {
-        this.hasLaunch = hasLaunch;
-    }
-
-
-    public void setCenter(double x, double y) {
-        this.centerX = x;
-        this.centerY = y;
-        super.setX((int)(x - radius));
-        super.setY((int)(y - radius));
-        this.hitbox.setCenter(new Point(x, y));
-    }
-
     public void updateVelocity() {
         double rad = Math.toRadians(angle);
         setDx(speed * Math.cos(rad));
@@ -372,4 +350,27 @@ public class Ball extends MovableObject {
     public void setInvincible(boolean invincible) {
         this.invincible = invincible;
     }
+
+    @Override
+    public Shape getHitbox() {
+        return this.hitbox;
+    }
+
+    public boolean getLaunchState() {
+        return hasLaunch;
+    }
+
+    public void setHasLaunch(boolean hasLaunch) {
+        this.hasLaunch = hasLaunch;
+    }
+
+
+    public void setCenter(double x, double y) {
+        this.centerX = x;
+        this.centerY = y;
+        super.setX((int)(x - radius));
+        super.setY((int)(y - radius));
+        this.hitbox.setCenter(new Point(x, y));
+    }
+
 }

@@ -51,6 +51,8 @@ public class Rectangle implements Shape {
 
                 return dx <= (halfW + otherHalfW) && dy <= (halfH + otherHalfH);
             }
+        } else if (other instanceof Circle circle) {
+            return circle.intersect(this);
         }
         return false;
     }

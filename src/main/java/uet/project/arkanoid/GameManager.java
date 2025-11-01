@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import uet.project.arkanoid.game.*;
+import uet.project.arkanoid.objects.*;
 import uet.project.arkanoid.ui.MenuView;
 import uet.project.arkanoid.ui.Setting;
 import uet.project.arkanoid.ui.PausedMenuView;
@@ -18,10 +19,6 @@ import uet.project.arkanoid.game.GameState;
 import uet.project.arkanoid.game.GameView;
 import uet.project.arkanoid.game.Level;
 import uet.project.arkanoid.ui.*;
-import uet.project.arkanoid.objects.Ball;
-import uet.project.arkanoid.objects.Brick;
-import uet.project.arkanoid.objects.Paddle;
-import uet.project.arkanoid.objects.PowerUp;
 import uet.project.arkanoid.utils.Basis;
 
 import java.util.HashSet;
@@ -55,7 +52,7 @@ public class GameManager extends Application {
     LevelPlay renderLevel;
     PausedMenuView renderPausedMenu;
     LoadScreenView renderLoadScreen;
-
+    ChestMenu renderChestMenu;
 
     public static void main(String[] args) {
         Application.launch(GameManager.class);
@@ -100,7 +97,7 @@ public class GameManager extends Application {
         handleInput(scene);
 
         // Set up stage
-        stage = new GameSetup(currentLevel);
+        stage = new GameSetup(currentLevel, currentState);
 
         // Set up renderer for Game
         renderGame = new GameView(stage);
@@ -110,6 +107,7 @@ public class GameManager extends Application {
         renderLevel = new LevelPlay();
         renderPausedMenu = new PausedMenuView();
         renderLoadScreen = new LoadScreenView();
+        renderChestMenu = new ChestMenu();
 
         // Game loop
         gameLoop = new AnimationTimer() {
@@ -135,7 +133,7 @@ public class GameManager extends Application {
                 currentState = GameState.GAME_OVER;
                 return;
             }
-
+            stage.setCurrentState(GameState.PLAYING);
             // TODO: Runs update() on every GameObject.
             for (Paddle paddle : stage.getPaddles()) {
                 paddle.update();
@@ -157,9 +155,16 @@ public class GameManager extends Application {
                     stage.addScore(brick.getMaxHp()*10);
                 }
             }
+
+            for (Chest chest : stage.getChests()) {
+                chest.update();
+            }
+
             stage.getBalls().removeIf(Ball::isMarkedForRemoval);
             stage.getPowerUps().removeIf(PowerUp::isDead);
             stage.getBricks().removeIf(Brick::isDestroy);
+
+            currentState = stage.getCurrentState();
         }
     }
 
@@ -193,9 +198,13 @@ public class GameManager extends Application {
         } else if (currentState == GameState.GAME_OVER) {
             renderGame.onDraw(gc);
             GameOverView.OnDraw(gc, stage);
-        } else if(currentState == GameState.LOAD_GAME) {
+        } else if (currentState == GameState.LOAD_GAME) {
             renderMenu.onDraw(gc);
             renderLoadScreen.onDraw(gc);
+        } else if (currentState == GameState.CHEST_MENU) {
+            renderGame.onDraw(gc);
+            renderChestMenu.onDraw(gc);
+            renderChestMenu.openChestMenu(stage);
         }
 
         gc.restore();
@@ -235,7 +244,7 @@ public class GameManager extends Application {
                     return;
                 }
 
-                stage = new GameSetup(currentLevel);
+                stage = new GameSetup(currentLevel, currentState);
                 renderGame = new GameView(stage);
                 currentState = GameState.PLAYING;
             } else if (currentState == GameState.SETTING) {
@@ -248,6 +257,8 @@ public class GameManager extends Application {
                 }
             } else if (currentState == GameState.GAME_OVER) {
                 currentState = GameOverView.handleClick(mouseX, mouseY, stage);
+            } else if (currentState == GameState.CHEST_MENU) {
+                currentState = renderChestMenu.handleClick(mouseX, mouseY, stage);
             }
         });
     }

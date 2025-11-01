@@ -21,29 +21,9 @@ public class Paddle extends MovableObject {
     public Paddle(int x, int y, double width, double height, int speed) {
         super(x, y, width, height);
         this.speed = speed;
-        // Initialize hitbox, assuming 0 rotation for paddle
+        originalWidth = width;
+        originalHeight = height;
         this.hitbox = new Rectangle(x + width / 2.0, y + height / 2.0, width, height, 0);
-    }
-
-    @Override
-    public Shape getHitbox() {
-        return this.hitbox;
-    }
-
-    public double getSpeed() {
-        return this.speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    public PowerUp getCurrentPowerUp() {
-        return this.currentPowerUp;
-    }
-
-    public void setCurrentPowerUp(PowerUp current) {
-        this.currentPowerUp = current;
     }
 
     public void moveLeft() {
@@ -102,7 +82,7 @@ public class Paddle extends MovableObject {
     }
 
     public void restorePaddle() {
-        setWidth(210);
+        setWidth(originalWidth);
         updateHitBox();
     }
 
@@ -121,5 +101,26 @@ public class Paddle extends MovableObject {
         } else {
             setX(center - getWidth() / 2);
         }
+    }
+
+    @Override
+    public Shape getHitbox() {
+        return this.hitbox;
+    }
+
+    public double getSpeed() {
+        return this.speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public PowerUp getCurrentPowerUp() {
+        return this.currentPowerUp;
+    }
+
+    public void setCurrentPowerUp(PowerUp current) {
+        this.currentPowerUp = current;
     }
 }

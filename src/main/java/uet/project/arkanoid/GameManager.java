@@ -115,6 +115,9 @@ public class GameManager extends Application {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long time) { //TODO: Set up delta time
+                if (currentState == GameState.EXIT) {
+                    gameLoop.stop();
+                }
                 processInput();
                 update();
                 render();
@@ -154,6 +157,7 @@ public class GameManager extends Application {
                     stage.addScore(brick.getMaxHp()*10);
                 }
             }
+            stage.getBalls().removeIf(Ball::isMarkedForRemoval);
             stage.getPowerUps().removeIf(PowerUp::isDead);
             stage.getBricks().removeIf(Brick::isDestroy);
         }

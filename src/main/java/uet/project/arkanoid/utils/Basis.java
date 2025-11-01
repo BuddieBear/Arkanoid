@@ -23,7 +23,7 @@ public class Basis {
     // Fixed width, height
     public static final int ARROW_WIDTH = 45;
     public static final int ARROW_HEIGHT = 90;
-    public static final int BALL_DIAMETER = 40;
+    public static final int BALL_DIAMETER = 30;
     public static final int OBJECTIVE_BOARD_WIDTH = 180;
     public static final int OBJECTIVE_BOARD_HEIGHT = 360;
 

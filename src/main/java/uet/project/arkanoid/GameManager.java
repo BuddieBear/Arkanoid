@@ -284,6 +284,9 @@ public class GameManager extends Application {
             if (currentState == GameState.PLAYING) {
                 currentState = GameState.PAUSED;
                 pressedKeys.remove(KeyCode.ESCAPE);
+            } else if (currentState == GameState.PAUSED) {
+                currentState = GameState.PLAYING;
+                pressedKeys.remove(KeyCode.ESCAPE);
             }
         }
     }

@@ -119,6 +119,7 @@ public class Basis {
     public static final Image MULTI_BALL_TEXTURE;
     public static final Image ARROW_TEXTURE;
     public static final Image POWERUP_TEXTURE;
+    public static final Image AMMO_TEXTURE;
     public static final Image BRICK_NORMAL_TEXTURE_1;
     public static final Image[] BRICK_NORMAL_TEXTURE_2 = new Image[2];
     public static final Image[] BRICK_NORMAL_TEXTURE_3 = new Image[3];
@@ -160,6 +161,7 @@ public class Basis {
         MULTI_BALL_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Ball_3.png")).toExternalForm());
 
         ARROW_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Arrow.png")).toExternalForm());
+        AMMO_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/ammo.png")).toExternalForm());
 
         // Bricks
         BRICK_NORMAL_TEXTURE_1 = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Brick_1.png")).toExternalForm());

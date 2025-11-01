@@ -1,10 +1,7 @@
 package uet.project.arkanoid.game;
 
 import javafx.scene.canvas.GraphicsContext;
-import uet.project.arkanoid.objects.Ball;
-import uet.project.arkanoid.objects.Brick;
-import uet.project.arkanoid.objects.Paddle;
-import uet.project.arkanoid.objects.PowerUp;
+import uet.project.arkanoid.objects.*;
 import uet.project.arkanoid.ui.gameUI;
 
 import java.util.List;
@@ -35,6 +32,9 @@ public class GameView {
         }
         for (Paddle paddle : stage.getPaddles()) {
             paddle.render(gc);
+        }
+        for (Ammo ammo : stage.getAmmos()) {
+            ammo.render(gc);
         }
         for (PowerUp powerUp : stage.getPowerUps()) {
             powerUp.render(gc);

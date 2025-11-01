@@ -18,6 +18,7 @@ public class GameSetup {
     protected List<Ball> balls;
     protected List<Paddle> paddles;
     protected List<PowerUp> powerUps;
+    protected List<Ammo> ammos;
 
     // Objectives
     int lives;
@@ -33,6 +34,7 @@ public class GameSetup {
         balls = new ArrayList<>();
         paddles = new ArrayList<>();
         powerUps = new ArrayList<>();
+        ammos = new ArrayList<>();
         this.currentLevel = currentStage;
 
         loadLevel(currentStage);
@@ -84,6 +86,7 @@ public class GameSetup {
         balls.clear();
         paddles.clear();
         powerUps.clear();
+        ammos.clear();
     }
     public void addPowerUp(List<? extends Brick> bricks1) {
         for (Brick brick : bricks1) {
@@ -172,6 +175,10 @@ public class GameSetup {
 
     public List<PowerUp> getPowerUps() {
         return powerUps;
+    }
+
+    public List<Ammo> getAmmos() {
+        return ammos;
     }
 
     public int getLives() {

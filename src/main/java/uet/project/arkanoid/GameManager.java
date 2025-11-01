@@ -19,6 +19,7 @@ import uet.project.arkanoid.game.GameView;
 import uet.project.arkanoid.game.Level;
 import uet.project.arkanoid.ui.*;
 import uet.project.arkanoid.objects.Ball;
+import uet.project.arkanoid.objects.Ammo;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
 import uet.project.arkanoid.objects.PowerUp;
@@ -96,11 +97,11 @@ public class GameManager extends Application {
         canvas.widthProperty().bind(scene.widthProperty());
         canvas.heightProperty().bind(scene.heightProperty());
 
-        // Set up input
-        handleInput(scene);
-
         // Set up stage
         stage = new GameSetup(currentLevel);
+
+        // Set up input
+        handleInput(scene);
 
         // Set up renderer for Game
         renderGame = new GameView(stage);
@@ -148,6 +149,11 @@ public class GameManager extends Application {
                 powerUp.update();
             }
 
+            for (Ammo ammo : stage.getAmmos()) {
+                ammo.update();
+                ammo.Collision(stage.getBricks());
+            }
+
             for (Brick brick : stage.getBricks()) {
                 brick.update();
                 if (brick.isDestroy()) {
@@ -156,6 +162,7 @@ public class GameManager extends Application {
             }
             stage.getPowerUps().removeIf(PowerUp::isDead);
             stage.getBricks().removeIf(Brick::isDestroy);
+            stage.getAmmos().removeIf(Ammo::getIsDestroy);
         }
     }
 
@@ -234,6 +241,15 @@ public class GameManager extends Application {
                 stage = new GameSetup(currentLevel);
                 renderGame = new GameView(stage);
                 currentState = GameState.PLAYING;
+            } else if (currentState == GameState.PLAYING) {
+                // Add this block here
+                if(stage.getScore() >= 20) {
+                    stage.getAmmos().add(new Ammo(stage.getPaddles().get(0).getX()
+                            + stage.getPaddles().get(0).getWidth() /2 - 10,
+                            stage.getPaddles().get(0).getY(),
+                            30, 30));
+                    stage.setScore(stage.getScore() - 20);
+                }
             } else if (currentState == GameState.SETTING) {
                 if (Setting.back(mouseX, mouseY)) {
                     currentState = GameState.MENU;

@@ -20,5 +20,6 @@ public class ShrinkPaddle extends PowerUp{
     @Override
     public void removeEffect() {
         paddleMain.restorePaddle();
+        alive = false;
     }
 }

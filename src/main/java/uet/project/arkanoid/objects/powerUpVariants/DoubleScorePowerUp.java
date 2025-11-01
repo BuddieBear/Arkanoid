@@ -18,5 +18,6 @@ public class DoubleScorePowerUp extends PowerUp {
 
     @Override
     public void removeEffect() {
+        alive = false;
     }
 }

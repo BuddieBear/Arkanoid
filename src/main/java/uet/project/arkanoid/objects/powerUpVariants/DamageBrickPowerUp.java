@@ -21,5 +21,6 @@ public class DamageBrickPowerUp extends PowerUp {
     }
 
     public void removeEffect() {
+        alive = false;
     }
 }

@@ -20,5 +20,6 @@ public class RespawnFreePowerUp extends PowerUp {
 
     @Override
     public void removeEffect() {
+        alive = false;
     }
 }

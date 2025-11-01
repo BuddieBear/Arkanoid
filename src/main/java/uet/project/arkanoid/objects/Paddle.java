@@ -1,6 +1,10 @@
 package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
+import uet.project.arkanoid.base.Point;
+import uet.project.arkanoid.base.Rectangle;
+import uet.project.arkanoid.base.Shape;
+import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.Basis;
 
 public class Paddle extends MovableObject {
@@ -89,18 +93,18 @@ public class Paddle extends MovableObject {
 
     public void autoMovePaddle(GameSetup stage) {
         Ball ball = null;
-        if (stage.getBalls().size() != 0) {
+        if (!stage.getBalls().isEmpty()) {
             ball = stage.getBalls().get(0);
         }
-        int center = ball.getX() + (int)ball.getWidth() / 2;
-        int condition1 = Basis.STAGE_X + ((int)getWidth()) / 2;
-        int condition2 = Basis.STAGE_WIDTH - Basis.STAGE_X - ((int)getWidth()) / 2;
+        double center = ball.getX() + ball.getWidth() / 2;
+        double condition1 = Basis.STAGE_X + getWidth() / 2;
+        double condition2 = Basis.STAGE_WIDTH - Basis.STAGE_X - getWidth() / 2;
         if (center < condition1) {
             setX(Basis.STAGE_X);
         } else if (center > condition2) {
-            setX(Basis.STAGE_WIDTH - Basis.STAGE_X - (int)getWidth() / 2);
+            setX(Basis.STAGE_WIDTH - Basis.STAGE_X - getWidth() / 2);
         } else {
-            setX(center - (int)getWidth() / 2);
+            setX(center - getWidth() / 2);
         }
     }
 }

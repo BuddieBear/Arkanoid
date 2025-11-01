@@ -16,6 +16,11 @@ public class GameView {
         this.stage = stage;
     }
 
+    // Load new Stage
+    public void updateStage(GameSetup stage) {
+        this.stage = stage;
+    }
+
     // Render objects and background in the stages
     public void onDraw(GraphicsContext gc) {
         //Background

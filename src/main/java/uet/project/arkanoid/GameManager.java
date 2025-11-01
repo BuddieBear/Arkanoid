@@ -8,15 +8,16 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import uet.project.arkanoid.game.*;
+import uet.project.arkanoid.ui.MenuView;
+import uet.project.arkanoid.ui.Setting;
+import uet.project.arkanoid.ui.PausedMenuView;
+import uet.project.arkanoid.ui.LoadScreenView;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.game.GameState;
 import uet.project.arkanoid.game.GameView;
 import uet.project.arkanoid.game.Level;
-import uet.project.arkanoid.ui.LevelPlay;
-import uet.project.arkanoid.ui.MenuView;
-import uet.project.arkanoid.ui.Setting;
-import uet.project.arkanoid.ui.Instruction;
-import uet.project.arkanoid.ui.PausedMenuView;
+import uet.project.arkanoid.ui.*;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
@@ -37,12 +38,8 @@ public class GameManager extends Application {
     // HandleInput
     private final Set<KeyCode> pressedKeys = new HashSet<>();
 
-    private boolean gameOver = false;
     private boolean autoMovePaddle = false;
 
-    public static String getResultCollection() {
-        return resultCollection;
-    }
 
     // Game and Stage setup
     public GameState currentState = GameState.MENU;
@@ -57,6 +54,7 @@ public class GameManager extends Application {
     Instruction renderOption;
     LevelPlay renderLevel;
     PausedMenuView renderPausedMenu;
+    LoadScreenView renderLoadScreen;
 
 
     public static void main(String[] args) {
@@ -102,15 +100,16 @@ public class GameManager extends Application {
         handleInput(scene);
 
         // Set up stage
-        stage = new GameSetup(currentLevel); // TODO: Only update when currentState is playing
+        stage = new GameSetup(currentLevel);
 
-        // Set up renderers
-        renderGame = new GameView(stage); // TODO: similar to stage
+        // Set up renderer for Game
+        renderGame = new GameView(stage);
         renderMenu = new MenuView();
         renderSetting = new Setting();
         renderOption = new Instruction();
         renderLevel = new LevelPlay();
         renderPausedMenu = new PausedMenuView();
+        renderLoadScreen = new LoadScreenView();
 
         // Game loop
         gameLoop = new AnimationTimer() {
@@ -130,17 +129,17 @@ public class GameManager extends Application {
     public void update() {
         if (currentState == GameState.PLAYING) {
             if (stage.gameWin() || stage.gameLose()) {
-                //currentState = GameState.GAME_OVER;
-                gameOver = true;
-                //GameOverView.onDraw(gc);
-                // gameLoop.stop();
+                currentState = GameState.GAME_OVER;
                 return;
             }
+
             // TODO: Runs update() on every GameObject.
             for (Paddle paddle : stage.getPaddles()) {
                 paddle.update();
             }
             for (Ball ball : stage.getBalls()) {
+                ball.Collision(stage.getBricks());
+                ball.Collision(stage.getPaddles());
                 ball.update();
             }
             stage.addPowerUp(stage.getBricks());
@@ -152,9 +151,10 @@ public class GameManager extends Application {
             for (Brick brick : stage.getBricks()) {
                 brick.update();
                 if (brick.isDestroy()) {
-                    stage.addScore(brick.getMaxHp() * 10);
+                    stage.addScore(brick.getMaxHp()*10);
                 }
             }
+            stage.getPowerUps().removeIf(PowerUp::isDead);
             stage.getBricks().removeIf(Brick::isDestroy);
         }
     }
@@ -172,9 +172,10 @@ public class GameManager extends Application {
         gc.save();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         gc.scale(scaleX, scaleY);
+
         if (currentState == GameState.MENU) {
             renderMenu.onDraw(gc);
-        } else if (currentState == GameState.SETTING) {
+        } else if (currentState == GameState.SETTING){
             renderSetting.onDraw(gc);
         } else if (currentState == GameState.OPTION) {
             renderOption.onDraw(gc);
@@ -185,6 +186,12 @@ public class GameManager extends Application {
             renderPausedMenu.onDraw(gc);
         } else if (currentState == GameState.LEVEL) {
             renderLevel.onDraw(gc);
+        } else if (currentState == GameState.GAME_OVER) {
+            renderGame.onDraw(gc);
+            GameOverView.OnDraw(gc, stage);
+        } else if(currentState == GameState.LOAD_GAME) {
+            renderMenu.onDraw(gc);
+            renderLoadScreen.onDraw(gc);
         }
 
         gc.restore();
@@ -204,36 +211,11 @@ public class GameManager extends Application {
             System.out.println(mouseX + " " + mouseY);
 
             if (currentState == GameState.MENU) {
-                if (mouseX >= Basis.PLAY_X && mouseX <= Basis.PLAY_X + Basis.PLAY_W
-                 && mouseY >= Basis.PLAY_Y && mouseY <= Basis.PLAY_Y + Basis.PLAY_H) {
-                    currentState = GameState.LEVEL;
-                    render();
-                } else if (mouseX >= Basis.SETTING_X && mouseX <= Basis.SETTING_X + Basis.SETTING_W
-                        && mouseY >= Basis.SETTING_Y && mouseY <= Basis.SETTING_Y + Basis.SETTING_H) {
-                    currentState = GameState.SETTING;
-                    render();
-                } else if (mouseX >= Basis.INSTRUCTION_X && mouseX <= Basis.INSTRUCTION_X+ Basis.INSTRUCTION_W
-                        && mouseY >= Basis.INSTRUCTION_Y && mouseY <= Basis.INSTRUCTION_Y+ Basis.INSTRUCTION_H) {
-                    currentState = GameState.OPTION;
-                    render();
-                }
+                currentState = renderMenu.handleClick(mouseX, mouseY, stage);
             } else if (currentState == GameState.PAUSED) {
-                if (mouseX >= Basis.CONTINUE_BTN_X && mouseX <= Basis.CONTINUE_BTN_X + Basis.PAUSE_BTN_WIDTH
-                        && mouseY >= Basis.CONTINUE_BTN_Y && mouseY <= Basis.CONTINUE_BTN_Y + Basis.PAUSE_BTN_HEIGHT) {
-                    currentState = GameState.PLAYING;
-                } else if (mouseX >= Basis.MENU_BTN_X && mouseX <= Basis.MENU_BTN_X + Basis.PAUSE_BTN_WIDTH
-                        && mouseY >= Basis.MENU_BTN_Y && mouseY <= Basis.MENU_BTN_Y + Basis.PAUSE_BTN_HEIGHT) {
-                    stage = new GameSetup(currentLevel);
-                    renderGame = new GameView(stage);
-                    currentState = GameState.MENU;
-                    render();
-                } else if (mouseX >= Basis.OPTIONS_BTN_X && mouseX <= Basis.OPTIONS_BTN_X + Basis.PAUSE_BTN_WIDTH
-                        && mouseY >= Basis.OPTIONS_BTN_Y && mouseY <= Basis.OPTIONS_BTN_Y + Basis.PAUSE_BTN_HEIGHT) {
-                    System.out.println("chưa làm");
-                } else if (mouseX >= Basis.SAVEGAME_BTN_X && mouseX <= Basis.SAVEGAME_BTN_X + Basis.PAUSE_BTN_WIDTH
-                        && mouseY >= Basis.SAVEGAME_BTN_Y && mouseY <= Basis.SAVEGAME_BTN_Y + Basis.PAUSE_BTN_HEIGHT) {
-                    System.out.println("chưa làm");
-                }
+                currentState = renderPausedMenu.handleClick(mouseX, mouseY, stage);
+            } else if (currentState == GameState.LOAD_GAME) {
+                currentState = renderLoadScreen.handleClick(mouseX, mouseY, stage);
             } else if (currentState == GameState.LEVEL) {
                 int level = LevelPlay.selectLevel(mouseX, mouseY);
                 if (level == 1) {
@@ -260,6 +242,8 @@ public class GameManager extends Application {
                 if (Instruction.back(mouseX, mouseY)) {
                     currentState = GameState.MENU;
                 }
+            } else if (currentState == GameState.GAME_OVER) {
+                currentState = GameOverView.handleClick(mouseX, mouseY, stage);
             }
         });
     }
@@ -273,7 +257,6 @@ public class GameManager extends Application {
         if (pressedKeys.contains(KeyCode.S)) {
             autoMovePaddle = true;
         }
-
 
         if (left && !right) {
             paddle.moveLeft();
@@ -300,6 +283,9 @@ public class GameManager extends Application {
         if (pressedKeys.contains(KeyCode.ESCAPE)) {
             if (currentState == GameState.PLAYING) {
                 currentState = GameState.PAUSED;
+                pressedKeys.remove(KeyCode.ESCAPE);
+            } else if (currentState == GameState.PAUSED) {
+                currentState = GameState.PLAYING;
                 pressedKeys.remove(KeyCode.ESCAPE);
             }
         }

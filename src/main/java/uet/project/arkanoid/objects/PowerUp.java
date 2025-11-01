@@ -18,7 +18,7 @@ public abstract class PowerUp extends GameObject {
 
     // New timer logic
     private long startTime = 0; // The time the effect was applied
-    private long effectDurationMillis = 3000; // 3 seconds
+    private long effectDurationMillis = 10000; // 3 seconds
 
     public enum PowerUpType {
         EXPAND_PADDLE,

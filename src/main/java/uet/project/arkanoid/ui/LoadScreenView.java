@@ -49,6 +49,7 @@ public class LoadScreenView implements View {
                 Basis.LEVEL_3_BTN_Y,
                 Basis.LEVEL_BTN_WIDTH,
                 Basis.LEVEL_BTN_HEIGHT);
+         gc.drawImage(Basis.BACK_BUTTON, Basis.BACK_X, Basis.BACK_Y, Basis.BACK_W, Basis.BACK_H);
     }
 
     public static Level getClickLevel(double mouseX, double mouseY) {
@@ -78,6 +79,11 @@ public class LoadScreenView implements View {
             } catch (IllegalArgumentException e) {
                 System.err.println(e.getMessage());
             }
+        }
+
+        if (mouseX >= Basis.BACK_X && mouseX <= Basis.BACK_X + Basis.BACK_W 
+        && mouseY >= Basis.BACK_Y && mouseY <= Basis.BACK_Y + Basis.BACK_H) {
+            return GameState.MENU;
         }
         return GameState.LOAD_GAME;
     }

@@ -10,6 +10,9 @@ public enum GameState {
     NEW_GAME,
     SETTING,
     OPTION,
+    INSTRUCTION,
+    HELP,
+    POWER_UP,
     LEVEL;
 }
 

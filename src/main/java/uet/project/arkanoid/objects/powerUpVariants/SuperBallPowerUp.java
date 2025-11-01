@@ -24,9 +24,9 @@ public class SuperBallPowerUp extends PowerUp {
     }
 
     public void applyEffect() {
-        ball.setSpeed(100);
-        ball.setWidth(oldWidth * 1.5);
-        ball.setHeight(oldHeight * 1.5);
+        ball.setSpeed(10);
+        ball.setWidth(oldWidth * 3);
+        ball.setHeight(oldHeight * 3);
         // Adjust position so ball stays visually centered
         ball.setX(ball.getX() - (int) (oldWidth / 2));
         ball.setY(ball.getY() - (int) (oldHeight / 2));

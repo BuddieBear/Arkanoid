@@ -51,7 +51,9 @@ public class GameManager extends Application {
     GameView renderGame;
     MenuView renderMenu;
     Setting renderSetting;
-    Instruction renderOption;
+    Instruction renderInstruction;
+    Help renderHelp;
+    Power_Up_View renderPower_Up_View;
     LevelPlay renderLevel;
     PausedMenuView renderPausedMenu;
     LoadScreenView renderLoadScreen;
@@ -106,7 +108,9 @@ public class GameManager extends Application {
         renderGame = new GameView(stage);
         renderMenu = new MenuView();
         renderSetting = new Setting();
-        renderOption = new Instruction();
+        renderInstruction = new Instruction();
+        renderHelp = new Help();
+        renderPower_Up_View = new Power_Up_View();
         renderLevel = new LevelPlay();
         renderPausedMenu = new PausedMenuView();
         renderLoadScreen = new LoadScreenView();
@@ -177,8 +181,13 @@ public class GameManager extends Application {
             renderMenu.onDraw(gc);
         } else if (currentState == GameState.SETTING){
             renderSetting.onDraw(gc);
-        } else if (currentState == GameState.OPTION) {
-            renderOption.onDraw(gc);
+        } else if (currentState == GameState.INSTRUCTION) {
+            renderInstruction.onDraw(gc);
+        } else if (currentState == GameState.HELP) {
+            renderHelp.onDraw(gc);
+        } else if (currentState == GameState.POWER_UP) {
+            renderPower_Up_View.onDraw(gc);
+            renderPower_Up_View.onDraw(gc, canvas);
         } else if (currentState == GameState.PLAYING) {
             renderGame.onDraw(gc);
         } else if (currentState == GameState.PAUSED) {
@@ -238,10 +247,12 @@ public class GameManager extends Application {
                 if (Setting.back(mouseX, mouseY)) {
                     currentState = GameState.MENU;
                 }
-            } else if (currentState == GameState.OPTION) {
-                if (Instruction.back(mouseX, mouseY)) {
-                    currentState = GameState.MENU;
-                }
+            } else if (currentState == GameState.INSTRUCTION) {
+                currentState = renderInstruction.handleClick(mouseX, mouseY, stage);
+            } else if (currentState == GameState.HELP) {
+                currentState = renderHelp.handleClick(mouseX, mouseY, stage);
+            } else if (currentState == GameState.POWER_UP) {
+                currentState = renderPower_Up_View.handleClick(mouseX, mouseY, stage);
             } else if (currentState == GameState.GAME_OVER) {
                 currentState = GameOverView.handleClick(mouseX, mouseY, stage);
             }

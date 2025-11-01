@@ -1,5 +1,6 @@
 package uet.project.arkanoid.game;
 
+import javafx.scene.paint.Color;
 import uet.project.arkanoid.objects.*;
 import uet.project.arkanoid.objects.deBuffVariants.HarderBrickPowerDown;
 import uet.project.arkanoid.objects.powerUpVariants.*;
@@ -18,6 +19,7 @@ public class GameSetup {
     protected List<Ball> balls;
     protected List<Paddle> paddles;
     protected List<PowerUp> powerUps;
+    protected List<FloatingText> floatingTexts;
 
     // Objectives
     int lives;
@@ -26,13 +28,22 @@ public class GameSetup {
 
     private Level currentLevel;
 
+    //time
+    protected double lastTime;
+    protected double deltaTime;
+    protected double currentTime;
+
     // Constructor initializes all lists and adds test objects
     public GameSetup(Level currentStage) {
+        lastTime = System.nanoTime();
+        currentTime = lastTime;
+        deltaTime = 0;
         // Initialize the lists
         bricks = new ArrayList<>();
         balls = new ArrayList<>();
         paddles = new ArrayList<>();
         powerUps = new ArrayList<>();
+        floatingTexts = new ArrayList<>();
         this.currentLevel = currentStage;
 
         loadLevel(currentStage);
@@ -84,15 +95,22 @@ public class GameSetup {
         balls.clear();
         paddles.clear();
         powerUps.clear();
+        floatingTexts.clear();
     }
     public void addPowerUp(List<? extends Brick> bricks1) {
         for (Brick brick : bricks1) {
             if (brick.isDestroy()) {
                 brick_streak++;
+                // add flying texts
+                floatingTexts.add(new FloatingText("+" + String.valueOf(brick.getMaxHp() * 10),
+                        brick.getX() + brick.getWidth(),
+                        brick.getY() + brick.getHeight() / 2,
+                        Color.GREEN));
+
                 //System.out.println("Brick Destroyed: " + brick_streak);
-                if (brick_streak >= 3) {
+                if (brick_streak >= 1) {
                     brick_streak = 0;
-                    int choice = 9 + (int) (2 * Math.random());//(int) (Math.random() * 9); // 0 → 8
+                    int choice = (int) (Math.random() * 9);//(int) (Math.random() * 9); // 0 → 8
                     switch (choice) {
                         case 0:
                             powerUps.add(new DamageBrickPowerUp(brick, 30, 30, this));
@@ -152,10 +170,23 @@ public class GameSetup {
         return true;
     }
 
+    public void updateDeltaTime() {
+        currentTime = System.nanoTime();
+        deltaTime = (currentTime - lastTime) / 1_000_000_000.0;
+        lastTime = currentTime;
+    }
 
     // Getter - Setter methods
     public List<Brick> getBricks() {
         return bricks;
+    }
+
+    public double getDeltaTime() {
+        return deltaTime;
+    }
+
+    public List<FloatingText> getFloatingBricks() {
+        return floatingTexts;
     }
 
     public List<Ball> getBalls() {

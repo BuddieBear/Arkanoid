@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import uet.project.arkanoid.game.*;
+import uet.project.arkanoid.objects.*;
 import uet.project.arkanoid.ui.MenuView;
 import uet.project.arkanoid.ui.Setting;
 import uet.project.arkanoid.ui.PausedMenuView;
@@ -18,10 +19,6 @@ import uet.project.arkanoid.game.GameState;
 import uet.project.arkanoid.game.GameView;
 import uet.project.arkanoid.game.Level;
 import uet.project.arkanoid.ui.*;
-import uet.project.arkanoid.objects.Ball;
-import uet.project.arkanoid.objects.Brick;
-import uet.project.arkanoid.objects.Paddle;
-import uet.project.arkanoid.objects.PowerUp;
 import uet.project.arkanoid.utils.Basis;
 
 import java.util.HashSet;
@@ -56,6 +53,7 @@ public class GameManager extends Application {
     PausedMenuView renderPausedMenu;
     LoadScreenView renderLoadScreen;
 
+    protected double lastTime = System.nanoTime() / 1_000_000_000.0;
 
     public static void main(String[] args) {
         Application.launch(GameManager.class);
@@ -127,6 +125,8 @@ public class GameManager extends Application {
     }
 
     public void update() {
+        stage.updateDeltaTime();
+
         if (currentState == GameState.PLAYING) {
             if (stage.gameWin() || stage.gameLose()) {
                 currentState = GameState.GAME_OVER;
@@ -145,7 +145,10 @@ public class GameManager extends Application {
             stage.addPowerUp(stage.getBricks());
 
             for (PowerUp powerUp : stage.getPowerUps()) {
-                powerUp.update();
+                powerUp.update(stage.getFloatingBricks());
+            }
+            for (FloatingText floatingText : stage.getFloatingBricks()) {
+                floatingText.update(stage.getDeltaTime());
             }
 
             for (Brick brick : stage.getBricks()) {
@@ -156,6 +159,7 @@ public class GameManager extends Application {
             }
             stage.getPowerUps().removeIf(PowerUp::isDead);
             stage.getBricks().removeIf(Brick::isDestroy);
+            stage.getFloatingBricks().removeIf(FloatingText::isExpired);
         }
     }
 

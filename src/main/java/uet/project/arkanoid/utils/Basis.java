@@ -72,6 +72,9 @@ public class Basis {
     public static final int TEXT_LEVEL_2_X = LEVEL_2_IMAGE_X + 70;
     public static final int TEXT_LEVEL_3_X = LEVEL_3_IMAGE_X + 70;
 
+    // duration of flying texts
+    public static final double DURATION = 1.0;
+
     //Pause Menu
     public static final int PAUSE_MENU_WIDTH = 400;
     public static final int PAUSE_MENU_HEIGHT = 500;
@@ -118,6 +121,7 @@ public class Basis {
     public static final Image BALL_TEXTURE;
     public static final Image MULTI_BALL_TEXTURE;
     public static final Image ARROW_TEXTURE;
+    public static final Image SKULL_TEXTURE;
     public static final Image POWERUP_TEXTURE;
     public static final Image BRICK_NORMAL_TEXTURE_1;
     public static final Image[] BRICK_NORMAL_TEXTURE_2 = new Image[2];
@@ -160,6 +164,7 @@ public class Basis {
         MULTI_BALL_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Ball_3.png")).toExternalForm());
 
         ARROW_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Arrow.png")).toExternalForm());
+        SKULL_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Skull.png")).toExternalForm());
 
         // Bricks
         BRICK_NORMAL_TEXTURE_1 = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Brick_1.png")).toExternalForm());

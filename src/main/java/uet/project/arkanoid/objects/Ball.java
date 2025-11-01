@@ -2,6 +2,8 @@ package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import uet.project.arkanoid.objects.FloatingText;
 import uet.project.arkanoid.base.Circle;
 import uet.project.arkanoid.base.Point;
 import uet.project.arkanoid.base.Rectangle;
@@ -12,6 +14,7 @@ import uet.project.arkanoid.utils.AudioSet;
 import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.utils.HelperFunction;
 
+import javax.naming.ldap.LdapName;
 import java.util.List;
 
 public class Ball extends MovableObject {
@@ -264,8 +267,18 @@ public class Ball extends MovableObject {
                     Basis.ARROW_HEIGHT
             );
             gc.restore();
+            gc.drawImage(ballImage, centerX-radius, centerY-radius, radius * 2, radius * 2);
+        } else {
+            gc.save();
+            long now = System.currentTimeMillis();
+            double rotation = ((now / 1000.0) * speed * 300) % 360;
+
+            // spin around its center
+            gc.translate(centerX, centerY);
+            gc.rotate(rotation);
+            gc.drawImage(ballImage, -radius, -radius, radius * 2, radius * 2);
+            gc.restore();
         }
-        gc.drawImage(ballImage, centerX - radius, centerY - radius, radius * 2, radius * 2);
     }
 
     public void update() {

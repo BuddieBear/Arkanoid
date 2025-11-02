@@ -15,7 +15,7 @@ public class MenuView implements View {
             0
     );
 
-    private static final Rectangle OPTION_BUTTON = new Rectangle(
+    private static final Rectangle INSTRUCTION_BUTTON = new Rectangle(
             new Point(Basis.INSTRUCTION_X + Basis.INSTRUCTION_W / 2.0, Basis.INSTRUCTION_Y + Basis.INSTRUCTION_H / 2.0),
             new Vector2D(Basis.INSTRUCTION_W, Basis.INSTRUCTION_H),
             0
@@ -40,8 +40,8 @@ public class MenuView implements View {
             return GameState.LEVEL;
         } else if (SETTING_BUTTON.contains(click)) {
             return GameState.SETTING;
-        } else if (OPTION_BUTTON.contains(click)) {
-            return GameState.OPTION;
+        } else if (INSTRUCTION_BUTTON.contains(click)) {
+            return GameState.INSTRUCTION;
         } else if (LOAD_GAME_BUTTON.contains(click)) {
             return GameState.LOAD_GAME;
         }
@@ -57,7 +57,7 @@ public class MenuView implements View {
         gc.drawImage(Basis.PLAY_BUTTON, Basis.PLAY_X, Basis.PLAY_Y, Basis.PLAY_W, Basis.PLAY_H);
 
         // option button
-        gc.drawImage(Basis.OPTION_BUTTON, Basis.INSTRUCTION_X, Basis.INSTRUCTION_Y, Basis.INSTRUCTION_W, Basis.INSTRUCTION_H);
+        gc.drawImage(Basis.INSTRUCTION_BUTTON, Basis.INSTRUCTION_X, Basis.INSTRUCTION_Y, Basis.INSTRUCTION_W, Basis.INSTRUCTION_H);
 
         // setting button
         gc.drawImage(Basis.SETTING_BUTTON, Basis.SETTING_X, Basis.SETTING_Y, Basis.SETTING_W, Basis.SETTING_H);

@@ -37,19 +37,34 @@ public class Basis {
 
     // Menu
     public static final int PLAY_X = SCREEN_WIDTH / 2 - 100 - 35;
-    public static final int PLAY_Y = SCREEN_HEIGHT - 120;
+    public static final int PLAY_Y = SCREEN_HEIGHT - 80;
     public static final int PLAY_W = 200;
     public static final int PLAY_H = 60;
 
+    public static final int LOAD_GAME_BTN_X = PLAY_X;
+    public static final int LOAD_GAME_BTN_Y = PLAY_Y - 100;
+    public static final int LOAD_GAME_BTN_W = 200;
+    public static final int LOAD_GAME_BTN_H = 60;
+
     public static final int INSTRUCTION_X = SCREEN_WIDTH / 2 - 100 - 35;
-    public static final int INSTRUCTION_Y = PLAY_Y - 120;
+    public static final int INSTRUCTION_Y = LOAD_GAME_BTN_Y - 100;
     public static final int INSTRUCTION_W = 200;
     public static final int INSTRUCTION_H = 60;
 
     public static final int SETTING_X = SCREEN_WIDTH / 2 - 100 - 35;
-    public static final int SETTING_Y = INSTRUCTION_Y - 120;
+    public static final int SETTING_Y = INSTRUCTION_Y - 100;
     public static final int SETTING_W = 200;
     public static final int SETTING_H = 60;
+
+    public static final int HELP_X = SCREEN_WIDTH / 2 - 100;
+    public static final int HELP_Y = 200;
+    public static final int HELP_W = 200;
+    public static final int HELP_H = 60;
+
+    public static final int POWER_UP_X = HELP_X;
+    public static final int POWER_UP_Y = HELP_Y + HELP_H + 60;
+    public static final int POWER_UP_W = HELP_W;
+    public static final int POWER_UP_H = HELP_H;
 
     public static final int BACK_X = 5;
     public static final int BACK_Y = 5;
@@ -95,11 +110,6 @@ public class Basis {
     public static final int SAVEGAME_BTN_Y = PAUSE_MENU_Y + 375;
 
     // Load Game
-    public static final int LOAD_GAME_BTN_X = PLAY_X;
-    public static final int LOAD_GAME_BTN_Y = PLAY_Y - PLAY_H - 15;
-    public static final int LOAD_GAME_BTN_W = PLAY_W;
-    public static final int LOAD_GAME_BTN_H = PLAY_H;
-
     public static final int LEVEL_BTN_WIDTH = 350;
     public static final int LEVEL_BTN_HEIGHT = 60;
     public static final int LEVEL_BTN_X_CENTER = (SCREEN_WIDTH - LEVEL_BTN_WIDTH) / 2;
@@ -128,7 +138,7 @@ public class Basis {
     public static final Image OBJECTIVE_BOARD_TEXTURE;
     public static final Image MENU;
     public static final Image PLAY_BUTTON;
-    public static final Image OPTION_BUTTON;
+    public static final Image INSTRUCTION_BUTTON;
     public static final Image SETTING_BUTTON;
     public static final Image LEVEL_1;
     public static final Image LEVEL_2;
@@ -137,6 +147,10 @@ public class Basis {
     public static final Image TEXT_LEVEL_2;
     public static final Image TEXT_LEVEL_3;
     public static final Image BACK_BUTTON;
+    public static final Image HELP;
+    public static final Image POWER_UP;
+    public static final Image MULTI_BALL_PU;
+    public static final Image SUPER_BALL_PU;
     public static final Image PAUSE_CONTINUE_BUTTON;
     public static final Image PAUSE_MENU_BUTTON;
     public static final Image PAUSE_OPTIONS_BUTTON;
@@ -155,6 +169,8 @@ public class Basis {
     public static final Image GAME_LOSE_HEART;
     public static final Image CHEST_OPEN;
     public static final Image CHEST_CLOSE;
+
+    public static final Image POWERUP_TEMP;
 
     static {
         // Paddle + Ball
@@ -184,7 +200,7 @@ public class Basis {
         // Menu
         MENU = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/menu.jpeg")).toExternalForm());
         PLAY_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/play.png")).toExternalForm());
-        OPTION_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/instruction.png")).toExternalForm());
+        INSTRUCTION_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/instruction.png")).toExternalForm());
         SETTING_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/setting.png")).toExternalForm());
         LEVEL_1 = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/Level1.png")).toExternalForm());
         LEVEL_2 = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/Level2.png")).toExternalForm());
@@ -192,8 +208,14 @@ public class Basis {
         TEXT_LEVEL_1 = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/textLevel_1.png")).toExternalForm());
         TEXT_LEVEL_2 = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/textLevel_2.png")).toExternalForm());
         TEXT_LEVEL_3 = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/textLevel_3.png")).toExternalForm());
+        HELP = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/help.png")).toExternalForm());  // change
+        POWER_UP = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/power_up.png")).toExternalForm());    // change
         BACK_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/back.png")).toExternalForm());
         LOAD_GAME_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/LoadGame.png")).toExternalForm());
+
+        MULTI_BALL_PU = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/multiBall.png")).toExternalForm());
+        SUPER_BALL_PU = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/superBall.png")).toExternalForm());
+        POWERUP_TEMP = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/image.jpg")).toExternalForm());
 
         // PausedMenu
         PAUSE_MENU_PANEL = new Image(Objects.requireNonNull(Basis.class.getResource("/PausedMenu/Panel.png")).toExternalForm());

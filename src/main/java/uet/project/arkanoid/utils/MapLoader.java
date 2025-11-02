@@ -25,22 +25,16 @@ import java.util.List;
 public class MapLoader {
     public static void loadBricksFromTiled(GameSetup stage, String filePath) {
         try {
-            // Read the TMX file
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(new File(filePath));
             doc.getDocumentElement().normalize();
 
-            // Find all object groups
             NodeList objectGroups = doc.getElementsByTagName("objectgroup");
 
             for (int i = 0; i < objectGroups.getLength(); i++) {
                 Element group = (Element) objectGroups.item(i);
-
-                // Only process the Bricks layer
-                if (!"Bricks".equals(group.getAttribute("name"))) {
-                    continue;
-                }
+                if (!"Bricks".equals(group.getAttribute("name"))) continue;
 
                 NodeList objects = group.getElementsByTagName("object");
 
@@ -48,28 +42,59 @@ public class MapLoader {
                     Element obj = (Element) objects.item(j);
 
                     int gid = Integer.parseInt(obj.getAttribute("gid"));
-                    int x = (int) Double.parseDouble(obj.getAttribute("x"));
-                    int y = (int) Double.parseDouble(obj.getAttribute("y"));
-                    int width = (int) Double.parseDouble(obj.getAttribute("width"));
-                    int height = (int) Double.parseDouble(obj.getAttribute("height"));
-                    y = y - height;
+                    double x_t = Double.parseDouble(obj.getAttribute("x"));
+                    double y_t = Double.parseDouble(obj.getAttribute("y"));
+                    double w = Double.parseDouble(obj.getAttribute("width"));
+                    double h = Double.parseDouble(obj.getAttribute("height"));
+
+                    String rotationAttr = obj.getAttribute("rotation");
+                    double rotation = rotationAttr.isEmpty() ? 0.0 : Double.parseDouble(rotationAttr);
+
+                    // Invert rotation direction (Tiled = clockwise)
+                    rotation = -rotation;
+
+                    // Convert bottom-left → top-left
+                    double x0 = x_t;
+                    double y0 = y_t - h;
+
+                    if (rotation != 0) {
+                        double rad = Math.toRadians(rotation);
+
+                        // vector from bottom-left to center
+                        double dx = w / 2.0;
+                        double dy = -h / 2.0;
+
+                        // rotate around bottom-left
+                        double rx = dx * Math.cos(rad) - dy * Math.sin(rad);
+                        double ry = dx * Math.sin(rad) + dy * Math.cos(rad);
+
+                        // adjust so your center pivot aligns
+                        x0 = x_t + rx - w / 2.0;
+                        y0 = (y_t - h) - ry + h / 2.0; // <-- fixed (was -h/2 before)
+                    }
+
+                    int x = (int) Math.round(x0);
+                    int y = (int) Math.round(y0);
+                    int width = (int) Math.round(w);
+                    int height = (int) Math.round(h);
 
                     switch (gid) {
-                        case 1 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 1,stage));
-                        case 3 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 2, stage));
-                        case 4 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 3, stage));
-                        case 5 -> stage.getBricks().add(new IndestructibleBrick(x, y, width, height, 0, stage));
-                        default -> System.out.println("Unknown gid: " + gid);
+                        case 1 -> stage.getBricks().add(new NormalBrick(x, y, width, height, rotation, 1, stage));
+                        case 3 -> stage.getBricks().add(new NormalBrick(x, y, width, height, rotation, 2, stage));
+                        case 4 -> stage.getBricks().add(new NormalBrick(x, y, width, height, rotation, 3, stage));
+                        case 5 -> stage.getBricks().add(new IndestructibleBrick(x, y, width, height, rotation, stage));
+                        case 6 -> stage.getChests().add(new Chest(x, y, width, height, stage));
+                        default -> System.out.println("Unknown gid: " + gid + " at (" + x + ", " + y + ")");
                     }
                 }
             }
 
             System.out.println("✅ Loaded bricks from " + filePath);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     private static String getFileName(Saves slot) {
         switch (slot) {

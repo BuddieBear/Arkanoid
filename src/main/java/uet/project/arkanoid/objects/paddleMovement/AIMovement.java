@@ -7,7 +7,7 @@ import uet.project.arkanoid.utils.Basis;
 
 public class AIMovement implements MovementStrategy {
     @Override
-    public void move(Paddle paddle, GameSetup stage) {
+    public void move(Paddle paddle, GameSetup stage, double deltaTime) {
         Ball ball = null;
         if (!stage.getBalls().isEmpty()) {
             ball = stage.getBalls().get(0);

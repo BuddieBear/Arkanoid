@@ -69,9 +69,6 @@ public class GameManager extends Application {
     LoadScreenView renderLoadScreen;
     ChestMenu renderChestMenu;
 
-    protected double lastTime = System.nanoTime() / 1_000_000_000.0;
-
-
     public static void main(String[] args) {
         Application.launch(GameManager.class);
     }
@@ -131,14 +128,20 @@ public class GameManager extends Application {
 
         // Game loop
         gameLoop = new AnimationTimer() {
+            private long lastTime = System.nanoTime();
+
             @Override
-            public void handle(long time) { //TODO: Set up delta time
+            public void handle(long now) { //TODO: Set up delta time
+                double deltaTime = (now - lastTime) / 1_000_000_000.0;
+                deltaTime = Math.min(deltaTime, 0.05); // max 50 ms
+
                 if (currentState == GameState.EXIT) {
                     gameLoop.stop();
                     Platform.exit();
                 }
+
                 processInput();
-                update();
+                update(deltaTime);
                 render();
             }
         };
@@ -148,8 +151,7 @@ public class GameManager extends Application {
         primaryStage.show();
     }
 
-    public void update() {
-        stage.updateDeltaTime();
+    public void update(double deltaTime) {
 
         if (currentState == GameState.PLAYING) {
             if (stage.gameWin() || stage.gameLose()) {
@@ -160,30 +162,30 @@ public class GameManager extends Application {
             stage.setCurrentState(GameState.PLAYING);
             // TODO: Runs update() on every GameObject.
             for (Paddle paddle : stage.getPaddles()) {
-                paddle.update();
+                paddle.update(deltaTime);
             }
             for (Ball ball : stage.getBalls()) {
                 ball.Collision(stage.getBricks());
                 ball.Collision(stage.getPaddles());
-                ball.update();
+                ball.update(deltaTime);
             }
             stage.addPowerUp(stage.getBricks());
 
             for (PowerUp powerUp : stage.getPowerUps()) {
-                powerUp.update(stage.getFloatingBricks());
+                powerUp.update(stage.getFloatingBricks(), deltaTime);
             }
 
             for (FloatingText floatingText : stage.getFloatingBricks()) {
-                floatingText.update(stage.getDeltaTime());
+                floatingText.update(deltaTime);
             }
 
             for (Ammo ammo : stage.getAmmos()) {
                 ammo.Collision(stage.getBricks());
-                ammo.update();
+                ammo.update(deltaTime);
             }
 
             for (Brick brick : stage.getBricks()) {
-                brick.update();
+                brick.update(deltaTime);
                 if (brick.isDestroy()) {
                     stage.addScore(brick.getMaxHp()*10);
                 }
@@ -193,7 +195,7 @@ public class GameManager extends Application {
                 if (chest.collision(stage.getBalls())) {
                     renderChestMenu.openChestMenu(stage);
                 }
-                chest.update();
+                chest.update(deltaTime);
             }
 
             stage.getBalls().removeIf(Ball::isMarkedForRemoval);
@@ -342,30 +344,47 @@ public class GameManager extends Application {
         Paddle paddle = stage.getPaddles().get(0);
         Ball ball = stage.getBalls().get(0);
 
-        boolean left = pressedKeys.contains(KeyCode.A);
-        boolean right = pressedKeys.contains(KeyCode.D);
         if (pressedKeys.contains(KeyCode.S)) {
-            autoMovePaddle = true;
+            autoMovePaddle = !autoMovePaddle;
+            pressedKeys.remove(KeyCode.S);
         }
 
-        if (paddle.getMovementStrategy() == null) {
-            System.out.println("Assigning default Player Strategy (Safety Net)");
-            paddle.setMovementStrategy(playerStrategy);
+        if (pressedKeys.contains(KeyCode.ESCAPE)) {
+            if (currentState == GameState.PLAYING) {
+                currentState = GameState.PAUSED;
+            } else if (currentState == GameState.PAUSED) {
+                currentState = GameState.PLAYING;
+            }
+            pressedKeys.remove(KeyCode.ESCAPE);
+        }
+
+        boolean left = pressedKeys.contains(KeyCode.A);
+        boolean right = pressedKeys.contains(KeyCode.D);
+
+        if (left || right) {
+            autoMovePaddle = false;
         }
 
         if (autoMovePaddle) {
-            paddle.setMovementStrategy(aiStrategy);
-        }
+            // Set AI strategy if it's not already set
+            if (paddle.getMovementStrategy() != aiStrategy) {
+                paddle.setMovementStrategy(aiStrategy);
+            }
+            // (We assume the aiStrategy's update method is called elsewhere)
 
-
-        if (left && !right) {
-            paddle.moveLeft();
-            autoMovePaddle = false;
-        } else if (right && !left) {
-            paddle.moveRight();
-            autoMovePaddle = false;
         } else {
-            paddle.setDx(0); // stop smoothly
+            // Set Player strategy if it's not already set
+            if (paddle.getMovementStrategy() != playerStrategy) {
+                paddle.setMovementStrategy(playerStrategy);
+            }
+
+            if (left && !right) {
+                paddle.moveLeft();
+            } else if (right && !left) {
+                paddle.moveRight();
+            } else {
+                paddle.setDx(0);
+            }
         }
 
         if (pressedKeys.contains(KeyCode.R)) {
@@ -374,16 +393,6 @@ public class GameManager extends Application {
 
         if (pressedKeys.contains(KeyCode.SPACE)) {
             ball.launch();
-        }
-
-        if (pressedKeys.contains(KeyCode.ESCAPE)) {
-            if (currentState == GameState.PLAYING) {
-                currentState = GameState.PAUSED;
-                pressedKeys.remove(KeyCode.ESCAPE);
-            } else if (currentState == GameState.PAUSED) {
-                currentState = GameState.PLAYING;
-                pressedKeys.remove(KeyCode.ESCAPE);
-            }
         }
     }
 }

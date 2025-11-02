@@ -29,11 +29,10 @@ public class InvincibleBallPowerUp extends PowerUp {
         alive = false;
     }
 
-    @Override
-    public void update() {
+    public void update(double deltaTime) {
         if (!this.isCatchedPowerUp()) {
             // Falling animation
-            setY(getY() + 10);
+            setY(getY() + 10 * deltaTime);
             this.getHitbox().setCenter(new Point(getX() + this.width / 2.0, getY() + this.height / 2.0));
 
             // Check if caught by paddle

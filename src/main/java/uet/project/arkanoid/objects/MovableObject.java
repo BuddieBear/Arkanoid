@@ -10,6 +10,8 @@ public abstract class MovableObject extends GameObject {
         this.direction = new Vector2D(0, 0);
     }
 
+    public abstract void move(double deltaTime);
+
     public void setDx(double dx) {
         this.direction.setX(dx);
     }
@@ -34,5 +36,4 @@ public abstract class MovableObject extends GameObject {
         return direction;
     }
 
-    public abstract void move();
 }

@@ -34,7 +34,7 @@ public class Chest extends GameObject {
     }
 
     @Override
-    public void update() {
+    public void update(double DeltaTime) {
         return;
     }
 

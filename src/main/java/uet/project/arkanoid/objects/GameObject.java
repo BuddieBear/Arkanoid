@@ -50,7 +50,7 @@ public abstract class GameObject {
         this.y = y;
     }
 
-    public abstract void update();
+    public abstract void update(double deltaTime);
 
     public abstract void render(GraphicsContext gc);
 

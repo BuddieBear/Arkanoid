@@ -21,8 +21,8 @@ public class SuperBallPowerUp extends PowerUp {
 
     public void applyEffect() {
         if (ball.isMainBall()) {
-            ball.setSpeed(20);
-            ball.setRadius(oldRadius * 2);
+            ball.setSpeed(oldSpeed * 1.5);
+            ball.setRadius(oldRadius * 1.5);
             ball.updateVelocity();
         }
     }

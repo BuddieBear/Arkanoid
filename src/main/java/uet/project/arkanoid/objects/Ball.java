@@ -74,7 +74,7 @@ public class Ball extends MovableObject {
         updateVelocity();
     }
 
-    public void move() {
+    public void move(double deltaTime) {
         if (hasLaunch) {
             String check = checkBorderCollision();
             if (check.equals("Right") || check.equals("Left")) {
@@ -97,7 +97,7 @@ public class Ball extends MovableObject {
         this.Collision(stage.getBricks());
         this.Collision(stage.getPaddles());
 
-        setCenter(centerX + getDx(), centerY + getDy());
+        setCenter(centerX + getDx() * deltaTime, centerY + getDy() * deltaTime);
     }
 
     public boolean Collision(List<? extends GameObject> others) {
@@ -111,11 +111,12 @@ public class Ball extends MovableObject {
 
                     if (!invincible) {
                         brick.takeHit();
+                        bounceOff(obj);
                     } else if (!(brick instanceof IndestructibleBrick)) {
                         brick.setHitPoints(0);
                     }
+
                     AudioSet.collisionBrickSound.play();
-                    bounceOff(obj); // always bounce off even indestrucible
                 } else if (obj instanceof Paddle) {
                     bounceOff(obj);
                     AudioSet.collisionPaddleSound.play();
@@ -274,12 +275,12 @@ public class Ball extends MovableObject {
         }
     }
 
-    public void update() {
+    public void update(double deltaTime) {
         if (!hasLaunch) {
             prepareLaunch();
         } else {
             rotationAngle = (rotationAngle + speed * 5) % 360;
-            move();
+            move(deltaTime);
             ifDead();
         }
     }

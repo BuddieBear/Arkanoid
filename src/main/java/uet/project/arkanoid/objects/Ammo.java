@@ -12,7 +12,7 @@ import uet.project.arkanoid.utils.Basis;
 import java.util.List;
 
 public class Ammo extends MovableObject {
-    private double speed = 10;
+    private double speed = 100;
     private boolean isDestroy = false;
     private Rectangle hitBox;
 
@@ -41,8 +41,8 @@ public class Ammo extends MovableObject {
         }
     }
 
-    public void update() {
-        move();
+    public void update(double deltaTime) {
+        move(deltaTime);
         if (getY() < 0) {
             isDestroy = true;
         }
@@ -50,8 +50,8 @@ public class Ammo extends MovableObject {
     }
 
     @Override
-    public void move() {
-        setY(getY() - speed);
+    public void move(double deltaTime) {
+        setY(getY() - speed * deltaTime);
     }
 
     public void updateHitbox() {

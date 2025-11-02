@@ -4,6 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import uet.project.arkanoid.base.Point;
 import uet.project.arkanoid.base.Rectangle;
 import uet.project.arkanoid.base.Shape;
+import uet.project.arkanoid.base.Vector2D;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.objects.paddleMovement.MovementStrategy;
 import uet.project.arkanoid.objects.paddleMovement.PlayerMovement;
@@ -42,8 +43,8 @@ public class Paddle extends MovableObject {
     }
 
     @Override
-    public void move() {
-        setX(getX() + getDx());
+    public void move(double deltaTime) {
+        setX(getX() + getDx() * deltaTime);
     }
 
     public void updateHitBox() {
@@ -52,16 +53,16 @@ public class Paddle extends MovableObject {
         double centerY = getY() + getHeight() / 2.0;
 
         this.hitbox.setCenter(new Point(centerX, centerY));
-        this.hitbox.setSize(new uet.project.arkanoid.base.Vector2D(getWidth(), getHeight()));
+        this.hitbox.setSize(new Vector2D(getWidth(), getHeight()));
     }
 
     public void render(GraphicsContext gc) {
         gc.drawImage(Basis.PADDLE_TEXTURE, getX(), getY(), this.width, this.height);
     }
 
-    public void update() {
+    public void update(double deltaTime) {
 
-        this.movementStrategy.move(this, stage);
+        this.movementStrategy.move(this, stage, deltaTime);
 
         if (movementStrategy instanceof PlayerMovement) {
             setDx(0);

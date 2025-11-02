@@ -66,7 +66,7 @@ public class GameSetup {
         if (lvl == Level.STAGE_1) {
             lives = 5;
             chests.add(new Chest(500, 500, 50, 50, this));
-            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED, this));  // 33 is padding
+            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED, this));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 
             balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
@@ -77,7 +77,7 @@ public class GameSetup {
         } else if (lvl == Level.STAGE_2) {
             lives = 8;
             chests.add(new Chest(500, 500, 50, 50, this));
-            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED, this));  // 33 is padding
+            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED, this));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 
             balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
@@ -89,7 +89,7 @@ public class GameSetup {
         } else if (lvl == Level.STAGE_3) {
             lives = 5;
             chests.add(new Chest(500, 500, 50, 50, this));
-            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED, this));  // 33 is padding
+            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED, this));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 
             balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
@@ -178,12 +178,6 @@ public class GameSetup {
         }
         FileManager.saveScore(this.score);
         return true;
-    }
-
-    public void updateDeltaTime() {
-        currentTime = System.nanoTime();
-        deltaTime = (currentTime - lastTime) / 1_000_000_000.0;
-        lastTime = currentTime;
     }
 
     public void resumeGame() {

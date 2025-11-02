@@ -4,11 +4,8 @@ import javafx.scene.paint.Color;
 import uet.project.arkanoid.objects.*;
 import uet.project.arkanoid.objects.deBuffVariants.HarderBrickPowerDown;
 import uet.project.arkanoid.objects.powerUpVariants.*;
-import uet.project.arkanoid.utils.AudioSet;
-import uet.project.arkanoid.utils.Basis;
+import uet.project.arkanoid.utils.*;
 import uet.project.arkanoid.objects.brickVariants.NormalBrick;
-import uet.project.arkanoid.utils.FileManager;
-import uet.project.arkanoid.utils.MapLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,6 +164,12 @@ public class GameSetup {
         }
         AudioSet.gameOverSound.play();
         FileManager.saveScore(this.score);
+
+        int level = getLevelHighScore();
+        if (level > 0) {
+            HighScore newHighScore = new HighScore();
+            newHighScore.saveNewHighScore(level, this.score);
+        }
         return true;
     }
 
@@ -177,11 +180,29 @@ public class GameSetup {
             }
         }
         FileManager.saveScore(this.score);
+        System.out.println("YOU WON!");
+
+        int level = getLevelHighScore();
+        if (level > 0) {
+            HighScore newHighScore = new HighScore();
+            newHighScore.saveNewHighScore(level, this.score);
+        }
         return true;
     }
 
     public void resumeGame() {
         this.currentState = GameState.PLAYING;
+    }
+
+    public int getLevelHighScore() {
+        if (currentLevel == Level.STAGE_1) {
+            return 1;
+        } else if (currentLevel == Level.STAGE_2) {
+            return 2;
+        } else if (currentLevel == Level.STAGE_3) {
+            return 3;
+        }
+        return 0;
     }
 
     // Getter - Setter methods

@@ -48,3 +48,6 @@ mvnw.cmd
 HighScore/
 Saves/*
 !Saves/.gitkeep
+
+# High score
+highscore.txt

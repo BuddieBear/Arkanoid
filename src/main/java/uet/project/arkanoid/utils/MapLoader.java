@@ -144,7 +144,7 @@ public class MapLoader {
                         // FIX: Create the paddle if the list is empty, then set properties
                         if (stage.getPaddles().isEmpty()) {
                             // Assume a default speed and size for creation (required by constructor)
-                            mainPaddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, paddleSpeed);
+                            mainPaddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, paddleSpeed, stage);
                             stage.getPaddles().add(mainPaddle);
                         } else {
                             mainPaddle = stage.getPaddle(); // Will now safely get the newly created paddle

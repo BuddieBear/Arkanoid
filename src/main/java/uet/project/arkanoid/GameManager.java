@@ -11,6 +11,9 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import uet.project.arkanoid.game.*;
 import uet.project.arkanoid.objects.*;
+import uet.project.arkanoid.objects.paddleMovement.AIMovement;
+import uet.project.arkanoid.objects.paddleMovement.MovementStrategy;
+import uet.project.arkanoid.objects.paddleMovement.PlayerMovement;
 import uet.project.arkanoid.ui.MenuView;
 import uet.project.arkanoid.ui.Setting;
 import uet.project.arkanoid.ui.PausedMenuView;
@@ -44,6 +47,9 @@ public class GameManager extends Application {
 
     private boolean autoMovePaddle = false;
 
+    // --- Strategy Instances (NEW) ---
+    private final MovementStrategy playerStrategy = new PlayerMovement();
+    private final MovementStrategy aiStrategy = new AIMovement();
 
     // Game and Stage setup
     public GameState currentState = GameState.MENU;
@@ -150,6 +156,7 @@ public class GameManager extends Application {
                 currentState = GameState.GAME_OVER;
                 return;
             }
+
             stage.setCurrentState(GameState.PLAYING);
             // TODO: Runs update() on every GameObject.
             for (Paddle paddle : stage.getPaddles()) {
@@ -224,7 +231,6 @@ public class GameManager extends Application {
         double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;
         double scaleY = canvas.getHeight() / Basis.SCREEN_HEIGHT;
 
-        System.out.println("Score per hp: " + stage.getScorePerHp());
 
         gc.save();
 
@@ -342,6 +348,16 @@ public class GameManager extends Application {
             autoMovePaddle = true;
         }
 
+        if (paddle.getMovementStrategy() == null) {
+            System.out.println("Assigning default Player Strategy (Safety Net)");
+            paddle.setMovementStrategy(playerStrategy);
+        }
+
+        if (autoMovePaddle) {
+            paddle.setMovementStrategy(aiStrategy);
+        }
+
+
         if (left && !right) {
             paddle.moveLeft();
             autoMovePaddle = false;
@@ -350,10 +366,6 @@ public class GameManager extends Application {
             autoMovePaddle = false;
         } else {
             paddle.setDx(0); // stop smoothly
-        }
-
-        if (autoMovePaddle) {
-            stage.getPaddle().autoMovePaddle(stage);
         }
 
         if (pressedKeys.contains(KeyCode.R)) {

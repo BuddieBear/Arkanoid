@@ -19,14 +19,17 @@ public class GameSetup {
     protected List<Ball> balls;
     protected List<Paddle> paddles;
     protected List<PowerUp> powerUps;
+    protected List<Ammo> ammos;
+    protected List<Chest> chests;
     protected List<FloatingText> floatingTexts;
 
     // Objectives
-    int lives;
-    int score;
-    int brick_streak = 0;
+    private int lives;
+    private int score;
+    private int brick_streak = 0;
 
     private Level currentLevel;
+    private GameState currentState;
 
     //time
     protected double lastTime;
@@ -34,27 +37,33 @@ public class GameSetup {
     protected double currentTime;
 
     // Constructor initializes all lists and adds test objects
+    public GameSetup(Level currentStage, GameState currentState) {
     public GameSetup(Level currentStage) {
         lastTime = System.nanoTime();
         currentTime = lastTime;
         deltaTime = 0;
         // Initialize the lists
-        bricks = new ArrayList<>();
-        balls = new ArrayList<>();
-        paddles = new ArrayList<>();
-        powerUps = new ArrayList<>();
+        this.bricks = new ArrayList<>();
+        this.balls = new ArrayList<>();
+        this.paddles = new ArrayList<>();
+        this.powerUps = new ArrayList<>();
+        this.chests = new ArrayList<>();
+        this.ammos = new ArrayList<>();
+
         floatingTexts = new ArrayList<>();
         this.currentLevel = currentStage;
-
+        this.currentState = currentState;
         loadLevel(currentStage);
     }
 
     public void loadLevel(Level lvl) {
         this.clearLevel();
+
         //TODO: Switch - Case to create different Stage
+
         if (lvl == Level.STAGE_1) {
             lives = 5;
-
+            chests.add(new Chest(500, 500, 50, 50, this));
             paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 
@@ -65,7 +74,7 @@ public class GameSetup {
             MapLoader.loadBricksFromTiled(this, Basis.STAGE_1);
         } else if (lvl == Level.STAGE_2) {
             lives = 8;
-
+            chests.add(new Chest(500, 500, 50, 50, this));
             paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 
@@ -77,7 +86,7 @@ public class GameSetup {
             MapLoader.loadBricksFromTiled(this, Basis.STAGE_2);
         } else if (lvl == Level.STAGE_3) {
             lives = 5;
-
+            chests.add(new Chest(500, 500, 50, 50, this));
             paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 
@@ -95,12 +104,17 @@ public class GameSetup {
         balls.clear();
         paddles.clear();
         powerUps.clear();
+        ammos.clear();
+        chests.clear();
         floatingTexts.clear();
     }
+
     public void addPowerUp(List<? extends Brick> bricks1) {
         for (Brick brick : bricks1) {
             if (brick.isDestroy()) {
                 brick_streak++;
+
+                if (brick_streak >= 3) {
                 // add flying texts
                 floatingTexts.add(new FloatingText("+" + String.valueOf(brick.getMaxHp() * 10),
                         brick.getX() + brick.getWidth(),
@@ -110,45 +124,39 @@ public class GameSetup {
                 //System.out.println("Brick Destroyed: " + brick_streak);
                 if (brick_streak >= 1) {
                     brick_streak = 0;
-                    int choice = (int) (Math.random() * 9);//(int) (Math.random() * 9); // 0 → 8
-                    switch (choice) {
-                        case 0:
-                            powerUps.add(new DamageBrickPowerUp(brick, 30, 30, this));
-                            break;
-                        case 1:
-                            powerUps.add(new InvincibleBallPowerUp(brick, 30, 30, this));
-                            break;
-                        case 2:
-                            powerUps.add(new MultiBallPowerUp(brick, 30, 30, this));
-                            break;
-                        case 3:
-                        case 4:
-                            powerUps.add(new SuperBallPowerUp(brick, 30, 30, this));
-                            break;
-                        case 5:
-                            powerUps.add(new HarderBrickPowerDown(brick, 30, 30, this));
-                            break;
-                        case 6:
-                            powerUps.add(new ExtraLifePowerUp(brick, 30, 30, this));
-                            break;
-                        case 7:
-                            powerUps.add(new DoubleScorePowerUp(brick, 30, 30, this));
-                            break;
-                        case 8:
-                            powerUps.add(new RespawnFreePowerUp(brick, 30, 30, this));
-                            break;
-                        case 9:
-                            powerUps.add(new ExtendPaddle(brick, 30, 30, this));
-                            break;
-                        case 10:
-                            powerUps.add(new ShrinkPaddle(brick, 30, 30, this));
-                            break;
+                    int choice = (int) (Math.random() * 11); // 0 → 10
+
+                    PowerUp newPowerUp = switch (choice) {
+                        case 0 -> new DamageBrickPowerUp(brick, 30, 30, this);
+                        case 1 -> new InvincibleBallPowerUp(brick, 30, 30, this);
+                        case 2 -> new MultiBallPowerUp(brick, 30, 30, this);
+                        case 3 -> new SuperBallPowerUp(brick, 30, 30, this);
+                        case 4 -> new HarderBrickPowerDown(brick, 30, 30, this);
+                        case 5 -> new ExtraLifePowerUp(brick, 30, 30, this);
+                        case 6 -> new DoubleScorePowerUp(brick, 30, 30, this);
+                        case 7 -> new RespawnFreePowerUp(brick, 30, 30, this);
+                        case 8 -> new ExtendPaddle(brick, 30, 30, this);
+                        case 9 -> new ShrinkPaddle(brick, 30, 30, this);
+                        default -> null;
+                    };
+
+                    if (newPowerUp != null) {
+                        // Check if same type is already active
+                        PowerUp existing = powerUps.stream()
+                                .filter(p -> p.getType() == newPowerUp.getType()
+                                        && p.isCatchedPowerUp()).findFirst().orElse(null);
+
+                        if (existing != null) {
+                            // Extend or refresh duration instead of adding a new one
+                            existing.extendDuration(existing.getEffectDurationMillis());
+                        } else {
+                            powerUps.add(newPowerUp);
+                        }
                     }
                 }
             }
         }
     }
-
 
     public boolean gameLose() {
         if (lives > 0) {
@@ -176,7 +184,23 @@ public class GameSetup {
         lastTime = currentTime;
     }
 
+    public void resumeGame() {
+        this.currentState = GameState.PLAYING;
+    }
+
     // Getter - Setter methods
+    public GameState getCurrentState() {
+        return currentState;
+    }
+
+    public void setCurrentState(GameState currentState) {
+        this.currentState = currentState;
+    }
+
+    public List<Chest> getChests() {
+        return chests;
+    }
+
     public List<Brick> getBricks() {
         return bricks;
     }
@@ -203,6 +227,10 @@ public class GameSetup {
 
     public List<PowerUp> getPowerUps() {
         return powerUps;
+    }
+
+    public List<Ammo> getAmmos() {
+        return ammos;
     }
 
     public int getLives() {

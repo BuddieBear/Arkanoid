@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import uet.project.arkanoid.base.*;
 import uet.project.arkanoid.game.*;
 import uet.project.arkanoid.utils.Basis;
+import uet.project.arkanoid.utils.MapLoader;
 
 public class LoadScreenView implements View {
 
@@ -39,16 +40,44 @@ public class LoadScreenView implements View {
                 Basis.LEVEL_1_BTN_Y,
                 Basis.LEVEL_BTN_WIDTH,
                 Basis.LEVEL_BTN_HEIGHT);
+
+        if (MapLoader.isSaveFile(Saves.SLOT_1) == false) {
+            gc.setFill(Color.rgb(0, 0, 0, 0.6));
+            gc.fillRect(Basis.LEVEL_1_BTN_X,
+                    Basis.LEVEL_1_BTN_Y,
+                    Basis.LEVEL_BTN_WIDTH,
+                    Basis.LEVEL_BTN_HEIGHT);
+        }
+
         gc.drawImage(Basis.LEVEL_2_BUTTON,
                 Basis.LEVEL_2_BTN_X,
                 Basis.LEVEL_2_BTN_Y,
                 Basis.LEVEL_BTN_WIDTH,
                 Basis.LEVEL_BTN_HEIGHT);
+
+        if (MapLoader.isSaveFile(Saves.SLOT_2) == false) {
+            gc.setFill(Color.rgb(0, 0, 0, 0.6));
+            gc.fillRect(Basis.LEVEL_2_BTN_X,
+                    Basis.LEVEL_2_BTN_Y,
+                    Basis.LEVEL_BTN_WIDTH,
+                    Basis.LEVEL_BTN_HEIGHT);
+        }
+
         gc.drawImage(Basis.LEVEL_3_BUTTON,
                 Basis.LEVEL_3_BTN_X,
                 Basis.LEVEL_3_BTN_Y,
                 Basis.LEVEL_BTN_WIDTH,
                 Basis.LEVEL_BTN_HEIGHT);
+
+        if (MapLoader.isSaveFile(Saves.SLOT_3) == false) {
+            gc.setFill(Color.rgb(0, 0, 0, 0.6));
+            gc.fillRect(Basis.LEVEL_3_BTN_X,
+                    Basis.LEVEL_3_BTN_Y,
+                    Basis.LEVEL_BTN_WIDTH,
+                    Basis.LEVEL_BTN_HEIGHT);
+        }
+
+        gc.drawImage(Basis.BACK_BUTTON, Basis.BACK_X, Basis.BACK_Y, Basis.BACK_W, Basis.BACK_H);
     }
 
     public static Level getClickLevel(double mouseX, double mouseY) {
@@ -66,19 +95,25 @@ public class LoadScreenView implements View {
 
     public GameState handleClick(double mouseX, double mouseY, GameSetup stage) {
         Level clickedLevel = LoadScreenView.getClickLevel(mouseX, mouseY);
-
         if (clickedLevel != null) {
             try {
-                Saves slotToLoad = SaveManager.levelSave(clickedLevel);
-                if (SaveManager.isSaveFile(slotToLoad)) {
+                Saves slotToLoad = MapLoader.levelSave(clickedLevel);
+                if (MapLoader.isSaveFile(slotToLoad)) {
                     stage.loadLevel(LoadScreenView.getClickLevel(mouseX, mouseY));
-                    SaveManager.loadGame(slotToLoad, stage);
+                    stage.clearLevel();
+                    MapLoader.loadGame(slotToLoad, stage);
                     return GameState.PAUSED;
                 }
             } catch (IllegalArgumentException e) {
                 System.err.println(e.getMessage());
             }
         }
+
+        if (mouseX >= Basis.BACK_X && mouseX <= Basis.BACK_X + Basis.BACK_W &&
+                mouseY >= Basis.BACK_Y && mouseY <= Basis.BACK_Y + Basis.BACK_H) {
+            return GameState.MENU;
+        }
+
         return GameState.LOAD_GAME;
     }
 }

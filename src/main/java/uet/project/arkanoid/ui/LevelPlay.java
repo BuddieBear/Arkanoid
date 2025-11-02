@@ -3,7 +3,11 @@ package uet.project.arkanoid.ui;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import uet.project.arkanoid.utils.Basis;
+import uet.project.arkanoid.utils.HighScore;
 
 public class LevelPlay {
     private static final int radius = 50;
@@ -24,6 +28,37 @@ public class LevelPlay {
         // gc.setFill(Color.BLACK);
         // gc.fillText("LEVEL 1", space + widthImage / 2 - 50, 70 + 400 + 30);
 
+        HighScore scoreManager = new HighScore();
+        gc.setFill(Color.WHITE);
+        gc.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        gc.setTextAlign(TextAlignment.CENTER);
+
+        int score1 = scoreManager.getHighScore(1);
+        String displayScore1;
+        if (score1 == 0) {
+            displayScore1 = "High: 0";
+        } else {
+            displayScore1 = "High: " + score1;
+        }
+        gc.fillText(displayScore1, Basis.TEXT_LEVEL_1_X + Basis.TEXT_LEVEL_W / 2, Basis.TEXT_LEVEL_Y - 30);
+
+        int score2 = scoreManager.getHighScore(2);
+        String displayScore2;
+        if (score2 == 0) {
+            displayScore2 = "High: 0";
+        } else {
+            displayScore2 = "High: " + score2;
+        }
+        gc.fillText(displayScore2, Basis.TEXT_LEVEL_2_X + Basis.TEXT_LEVEL_W / 2, Basis.TEXT_LEVEL_Y - 30);
+
+        int score3 = scoreManager.getHighScore(3);
+        String displayScore3;
+        if (score3 == 0) {
+            displayScore3 = "High: 0";
+        } else {
+            displayScore3 = "High: " + score3;
+        }
+        gc.fillText(displayScore3, Basis.TEXT_LEVEL_3_X + Basis.TEXT_LEVEL_W / 2, Basis.TEXT_LEVEL_Y - 30);
     }
 
     public static int selectLevel(double mouseX, double mouseY) {

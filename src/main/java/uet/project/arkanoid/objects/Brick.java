@@ -26,9 +26,7 @@ public class Brick extends GameObject {
         NORMAL
     }
 
-
-
-    public Brick(int x, int y, double width, double height, double rotation, int hitPoints, BrickType type, GameSetup stage) {
+    public Brick(double x, double y, double width, double height, double rotation, int hitPoints, BrickType type, GameSetup stage) {
         super(x, y, width, height);
         this.maxHp = hitPoints;
         this.hitPoints = hitPoints;
@@ -58,7 +56,8 @@ public class Brick extends GameObject {
     }
 
     @Override
-    public void update() {
+    public void update(double DeltaTime) {
+        return;
     }
 
 

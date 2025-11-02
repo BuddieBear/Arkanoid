@@ -51,13 +51,13 @@ public class MultiBallPowerUp extends PowerUp {
     }
 
     @Override
-    public void update() {
-        super.update();
+    public void update(double deltaTime) {
+        super.update(deltaTime);
 
         if (isCatchedPowerUp()) {
             // Remove effect early if all spawned balls are gone
             boolean allGone = spawnedBalls.stream().allMatch(Ball::isMarkedForRemoval);
-            if (allGone) {
+            if (allGone || isDead()) {
                 removeEffect();
             }
         }

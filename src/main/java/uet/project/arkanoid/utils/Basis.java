@@ -23,7 +23,7 @@ public class Basis {
     // Fixed width, height
     public static final int ARROW_WIDTH = 45;
     public static final int ARROW_HEIGHT = 90;
-    public static final int BALL_DIAMETER = 30;
+    public static final int BALL_DIAMETER = 35;
     public static final int OBJECTIVE_BOARD_WIDTH = 180;
     public static final int OBJECTIVE_BOARD_HEIGHT = 360;
 
@@ -32,8 +32,8 @@ public class Basis {
     public static final int OBJECTIVE_BOARD_Y = 230;
 
     // Base stats
-    public static final int BALL_SPEED = 5;
-    public static final int PADDLE_SPEED = 8;
+    public static final int BALL_SPEED = 120;
+    public static final int PADDLE_SPEED = 120;
 
     // Menu
     public static final int PLAY_X = SCREEN_WIDTH / 2 - 100 - 35;

@@ -16,6 +16,7 @@ public abstract class PowerUp extends GameObject {
     protected PowerUpType type;
     private boolean catchedPowerUp = false;
     protected GameSetup stage;
+    private double speed = 75;
 
     private Rectangle hitbox;
 
@@ -96,12 +97,12 @@ public abstract class PowerUp extends GameObject {
         this.catchedPowerUp = catchedPowerUp;
     }
 
-    public void update() {
+    public void update(double deltaTime) {
 
     }
-    public void update(List<FloatingText> others) {
+    public void update(List<FloatingText> others, double deltaTime) {
         if (!catchedPowerUp) {
-            setY(getY() + 10); // Move down
+            setY(getY() + speed * deltaTime); // Move down
 
             this.hitbox.setCenter(new Point(
                     getX() + this.width / 2.0,

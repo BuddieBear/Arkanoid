@@ -4,11 +4,8 @@ import javafx.scene.paint.Color;
 import uet.project.arkanoid.objects.*;
 import uet.project.arkanoid.objects.deBuffVariants.HarderBrickPowerDown;
 import uet.project.arkanoid.objects.powerUpVariants.*;
-import uet.project.arkanoid.utils.AudioSet;
-import uet.project.arkanoid.utils.Basis;
+import uet.project.arkanoid.utils.*;
 import uet.project.arkanoid.objects.brickVariants.NormalBrick;
-import uet.project.arkanoid.utils.FileManager;
-import uet.project.arkanoid.utils.MapLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +63,7 @@ public class GameSetup {
         if (lvl == Level.STAGE_1) {
             lives = 5;
             chests.add(new Chest(500, 500, 50, 50, this));
-            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
+            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED, this));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 
             balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
@@ -77,7 +74,7 @@ public class GameSetup {
         } else if (lvl == Level.STAGE_2) {
             lives = 8;
             chests.add(new Chest(500, 500, 50, 50, this));
-            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
+            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED, this));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 
             balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
@@ -89,7 +86,7 @@ public class GameSetup {
         } else if (lvl == Level.STAGE_3) {
             lives = 5;
             chests.add(new Chest(500, 500, 50, 50, this));
-            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 130, 20, Basis.PADDLE_SPEED));  // 33 is padding
+            paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED, this));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 
             balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
@@ -123,13 +120,13 @@ public class GameSetup {
                             brick.getY() + brick.getHeight() / 2,
                             Color.GREEN));
 
-                    //System.out.println("Brick Destroyed: " + brick_streak);
+//                    //System.out.println("Brick Destroyed: " + brick_streak);
                     if (brick_streak >= 1) {
                         brick_streak = 0;
-                        int choice = (int) (Math.random() * 11); // 0 → 10
+                        int choice = (int) (Math.random() * 10); // 0 → 10
 
                         PowerUp newPowerUp = switch (choice) {
-                            case 0 -> new DamageBrickPowerUp(brick, 30, 30, this);
+                            case 0 -> new SuperBallPowerUp(brick, 30, 30, this);
                             case 1 -> new InvincibleBallPowerUp(brick, 30, 30, this);
                             case 2 -> new MultiBallPowerUp(brick, 30, 30, this);
                             case 3 -> new SuperBallPowerUp(brick, 30, 30, this);
@@ -166,8 +163,13 @@ public class GameSetup {
             return false;
         }
         AudioSet.gameOverSound.play();
-        System.out.println("YOU LOST!");
         FileManager.saveScore(this.score);
+
+        int level = getLevelHighScore();
+        if (level > 0) {
+            HighScore newHighScore = new HighScore();
+            newHighScore.saveNewHighScore(level, this.score);
+        }
         return true;
     }
 
@@ -179,17 +181,28 @@ public class GameSetup {
         }
         FileManager.saveScore(this.score);
         System.out.println("YOU WON!");
-        return true;
-    }
 
-    public void updateDeltaTime() {
-        currentTime = System.nanoTime();
-        deltaTime = (currentTime - lastTime) / 1_000_000_000.0;
-        lastTime = currentTime;
+        int level = getLevelHighScore();
+        if (level > 0) {
+            HighScore newHighScore = new HighScore();
+            newHighScore.saveNewHighScore(level, this.score);
+        }
+        return true;
     }
 
     public void resumeGame() {
         this.currentState = GameState.PLAYING;
+    }
+
+    public int getLevelHighScore() {
+        if (currentLevel == Level.STAGE_1) {
+            return 1;
+        } else if (currentLevel == Level.STAGE_2) {
+            return 2;
+        } else if (currentLevel == Level.STAGE_3) {
+            return 3;
+        }
+        return 0;
     }
 
     // Getter - Setter methods

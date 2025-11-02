@@ -11,7 +11,7 @@ public class Paddle extends MovableObject {
     private double speed;
     private PowerUp currentPowerUp = null;
     private double paddleExpansion = 50;
-    private double paddleShrink = 50;
+    private double paddleShrink = 30;
 
     private double originalHeight;
     private double originalWidth;
@@ -93,11 +93,11 @@ public class Paddle extends MovableObject {
         }
         double center = ball.getX() + ball.getWidth() / 2;
         double condition1 = Basis.STAGE_X + getWidth() / 2;
-        double condition2 = Basis.STAGE_WIDTH - Basis.STAGE_X - getWidth() / 2;
+        double condition2 = Basis.STAGE_WIDTH + Basis.STAGE_X - getWidth() / 2;
         if (center < condition1) {
             setX(Basis.STAGE_X);
         } else if (center > condition2) {
-            setX(Basis.STAGE_WIDTH - Basis.STAGE_X - getWidth() / 2);
+            setX(Basis.STAGE_WIDTH + Basis.STAGE_X - getWidth());
         } else {
             setX(center - getWidth() / 2);
         }

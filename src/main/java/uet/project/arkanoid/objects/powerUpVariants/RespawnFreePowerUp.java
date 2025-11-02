@@ -7,8 +7,7 @@ import uet.project.arkanoid.objects.PowerUp;
 public class RespawnFreePowerUp extends PowerUp {
 
     public RespawnFreePowerUp(GameObject object, double width, double height, GameSetup stage) {
-        super(object, width, height, stage);
-        this.type = PowerUpType.RESPAWN_FREE;
+        super(object, width, height, stage, PowerUpType.RESPAWN_FREE);
     }
 
     @Override

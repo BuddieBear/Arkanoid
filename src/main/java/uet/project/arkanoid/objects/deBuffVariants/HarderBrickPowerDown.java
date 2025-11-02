@@ -9,7 +9,7 @@ import uet.project.arkanoid.objects.Brick;
 public class HarderBrickPowerDown extends PowerUp {
 
     public HarderBrickPowerDown(GameObject object, double width, double height, GameSetup stage) {
-        super(object, width, height, stage);
+        super(object, width, height, stage, PowerUpType.HARDER_BRICK);
     }
 
     public void applyEffect() {

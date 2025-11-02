@@ -2,6 +2,7 @@ package uet.project.arkanoid;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -128,6 +129,7 @@ public class GameManager extends Application {
             public void handle(long time) { //TODO: Set up delta time
                 if (currentState == GameState.EXIT) {
                     gameLoop.stop();
+                    Platform.exit();
                 }
                 processInput();
                 update();
@@ -181,6 +183,9 @@ public class GameManager extends Application {
             }
 
             for (Chest chest : stage.getChests()) {
+                if (chest.collision(stage.getBalls())) {
+                    renderChestMenu.openChestMenu(stage);
+                }
                 chest.update();
             }
 
@@ -189,30 +194,51 @@ public class GameManager extends Application {
             stage.getBricks().removeIf(Brick::isDestroy);
             stage.getAmmos().removeIf(Ammo::getIsDestroy);
             stage.getChests().removeIf(Chest::hasOpened);
+            stage.getFloatingBricks().removeIf(FloatingText::isExpired);
 
             currentState = stage.getCurrentState();
-
-            stage.getFloatingBricks().removeIf(FloatingText::isExpired);
         }
     }
 
     public void stop() {
+        if (gameLoop != null) {
+            gameLoop.stop();
+        }
 
+        try {
+            uet.project.arkanoid.utils.AudioSet.stopAllSounds();
+        } catch (Exception e) {
+            System.err.println("Warning: Failed to stop sounds - " + e.getMessage());
+        }
+
+        // Clear stage objects for safety
+        if (stage != null) {
+            stage.clearLevel();
+        }
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        System.out.println("Game stopped and cleaned up successfully.");
     }
 
     public void render() {
-        // gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
         double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;
         double scaleY = canvas.getHeight() / Basis.SCREEN_HEIGHT;
 
+        System.out.println("Score per hp: " + stage.getScorePerHp());
+
         gc.save();
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        if (currentState != GameState.PAUSED
+                && currentState != GameState.CHEST_MENU
+                && currentState != GameState.GAME_OVER) {
+            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        }
+
         gc.scale(scaleX, scaleY);
 
         if (currentState == GameState.MENU) {
             renderMenu.onDraw(gc);
-        } else if (currentState == GameState.SETTING){
+        } else if (currentState == GameState.SETTING) {
             renderSetting.onDraw(gc);
         } else if (currentState == GameState.INSTRUCTION) {
             renderInstruction.onDraw(gc);
@@ -237,7 +263,6 @@ public class GameManager extends Application {
         } else if (currentState == GameState.CHEST_MENU) {
             renderGame.onDraw(gc);
             renderChestMenu.onDraw(gc);
-            renderChestMenu.openChestMenu(stage);
         }
 
         gc.restore();

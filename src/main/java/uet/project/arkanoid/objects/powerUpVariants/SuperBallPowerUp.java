@@ -16,8 +16,7 @@ public class SuperBallPowerUp extends PowerUp {
 
     // remember it will bug if theres another powerUp affect speed
     public SuperBallPowerUp(GameObject object, double width, double height, GameSetup stage) {
-        super(object, width, height, stage);
-        type = PowerUpType.SUPER_BALL;
+        super(object, width, height, stage, PowerUpType.SUPER_BALL);
         ball = stage.getBalls().get(0);
         oldSpeed = (int) ball.getSpeed();
         oldWidth = ball.getWidth();

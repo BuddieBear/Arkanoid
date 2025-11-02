@@ -27,4 +27,17 @@ public class AudioSet {
         }
         return new AudioClip(resource.toExternalForm());
     }
+
+    public static void stopAllSounds() {
+        try {
+            if (wallBounceSound != null) wallBounceSound.stop();
+            if (lossHpSound != null) lossHpSound.stop();
+            if (collisionPaddleSound != null) collisionPaddleSound.stop();
+            if (collisionBrickSound != null) collisionBrickSound.stop();
+            if (gameOverSound != null) gameOverSound.stop();
+            if (powerUpSound != null) powerUpSound.stop();
+        } catch (Exception e) {
+            System.err.println("Error stopping sounds: " + e.getMessage());
+        }
+    }
 }

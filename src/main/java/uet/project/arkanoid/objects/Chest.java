@@ -9,6 +9,7 @@ import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.game.GameState;
 import uet.project.arkanoid.objects.deBuffVariants.HarderBrickPowerDown;
 import uet.project.arkanoid.objects.powerUpVariants.*;
+import uet.project.arkanoid.ui.ChestMenu;
 import uet.project.arkanoid.ui.gameUI;
 import uet.project.arkanoid.utils.Basis;
 
@@ -34,15 +35,17 @@ public class Chest extends GameObject {
 
     @Override
     public void update() {
-        if (!opened) {
-            // Check collision with any ball
-            for (Ball ball : stage.getBalls()) {
-                if (ball.getHitbox().intersect(this.hitbox)) {
-                    openChest();
-                    break;
-                }
+        return;
+    }
+
+    public boolean collision(List<? extends GameObject> others) {
+        for (GameObject obj : others) {
+            if (obj.getHitbox().intersect(this.hitbox)) {
+                openChest();
+                return true;
             }
         }
+        return false;
     }
 
     public void openChest() {

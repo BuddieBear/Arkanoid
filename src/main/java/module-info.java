@@ -11,6 +11,7 @@ module uet.project.arkanoid {
     requires com.almasb.fxgl.all;
     requires java.desktop;
     requires java.naming;
+    requires jdk.jfr;
 
     opens uet.project.arkanoid to javafx.fxml;
     exports uet.project.arkanoid;

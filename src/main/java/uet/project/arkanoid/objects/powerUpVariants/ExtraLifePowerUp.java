@@ -7,8 +7,7 @@ import uet.project.arkanoid.objects.PowerUp;
 public class ExtraLifePowerUp extends PowerUp {
 
     public ExtraLifePowerUp(GameObject object, double width, double height, GameSetup stage) {
-        super(object, width, height, stage);
-        this.type = PowerUpType.EXTRA_LIFE;
+        super(object, width, height, stage, PowerUpType.EXTRA_LIFE);
     }
 
     @Override

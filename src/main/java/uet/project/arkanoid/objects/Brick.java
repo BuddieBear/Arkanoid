@@ -59,9 +59,6 @@ public class Brick extends GameObject {
 
     @Override
     public void update() {
-        if (this.isDestroy()) {
-            stage.addScore(maxHp * 10);
-        }
     }
 
 

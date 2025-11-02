@@ -13,8 +13,7 @@ public class InvincibleBallPowerUp extends PowerUp {
     private static final long EFFECT_DURATION = 5000; // 5 seconds
 
     public InvincibleBallPowerUp(GameObject object, double width, double height, GameSetup stage) {
-        super(object, width, height, stage);
-        type = PowerUpType.INVINCIBLE_BALL;
+        super(object, width, height, stage, PowerUpType.INVINCIBLE_BALL);
     }
 
     @Override

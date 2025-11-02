@@ -14,8 +14,7 @@ public class MultiBallPowerUp extends PowerUp {
     private final List<Ball> spawnedBalls = new ArrayList<>();
 
     public MultiBallPowerUp(GameObject object, double width, double height, GameSetup stage) {
-        super(object, width, height, stage);
-        type = PowerUpType.MULTI_BALL;
+        super(object, width, height, stage, PowerUpType.MULTI_BALL);
     }
 
     @Override

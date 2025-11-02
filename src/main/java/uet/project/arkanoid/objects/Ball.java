@@ -26,8 +26,9 @@ public class Ball extends MovableObject {
 
     private double angle;
 
-    // NEW: A separate variable just for the visual arrow
+    // For Rendering only
     private double visualAngle = 0;
+    private double rotationAngle = 0;
 
     private boolean markedForRemoval = false;
     private boolean mainBall = true;
@@ -252,12 +253,10 @@ public class Ball extends MovableObject {
             gc.drawImage(ballImage, centerX-radius, centerY-radius, radius * 2, radius * 2);
         } else {
             gc.save();
-            long now = System.currentTimeMillis();
-            double rotation = ((now / 1000.0) * speed * 300) % 360;
 
             // spin around its center
             gc.translate(centerX, centerY);
-            gc.rotate(rotation);
+            gc.rotate(rotationAngle);
             gc.drawImage(ballImage, -radius, -radius, radius * 2, radius * 2);
             gc.restore();
         }
@@ -267,6 +266,7 @@ public class Ball extends MovableObject {
         if (!hasLaunch) {
             prepareLaunch();
         } else {
+            rotationAngle = (rotationAngle + speed * 5) % 360;
             move();
             ifDead();
         }

@@ -11,8 +11,10 @@ import uet.project.arkanoid.objects.powerUpVariants.*;
 import uet.project.arkanoid.utils.Basis;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ChestMenu implements View {
     private static boolean chestMenuOpen = false;
@@ -70,7 +72,6 @@ public class ChestMenu implements View {
             double x = startX + i * (w + gap);
 
             if (mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h) {
-                // 🟢 Player clicked this reward box
                 PowerUp.PowerUpType chosenType = chestChoices.get(i);
 
                 Brick randomBrick = new Brick(0,0,0,0,0,0, Brick.BrickType.INDESTRUCTIBLE, stage);
@@ -110,9 +111,10 @@ public class ChestMenu implements View {
         chestMenuOpen = true;
         stage.setCurrentState(GameState.CHEST_MENU);
 
-        List<PowerUp.PowerUpType> all = new ArrayList<>(List.of(PowerUp.PowerUpType.values()));
-        Collections.shuffle(all);
-        chestChoices = all.subList(0, 4);
+        List<PowerUp.PowerUpType> allBuffs = new ArrayList<>(List.of(PowerUp.PowerUpType.values()));
+        Collections.shuffle(allBuffs);
+        chestChoices = allBuffs.subList(0, 4);
+        System.out.println("Chest Menu Open: " +  chestChoices.size());
     }
 
     public void closeChestMenu(GameSetup stage) {

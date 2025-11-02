@@ -10,7 +10,7 @@ import uet.project.arkanoid.game.GameState;
 import uet.project.arkanoid.utils.Basis;
 
 public class Power_Up_View implements View{
-     private int widthImage = 400;
+    private int widthImage = 400;
     private int heightImage = 300;
     private int space = 50;
     private int scrollY = 0;

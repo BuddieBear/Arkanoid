@@ -2,6 +2,7 @@ package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import jdk.jfr.Category;
 import uet.project.arkanoid.base.*;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.Basis;
@@ -23,6 +24,7 @@ public abstract class PowerUp extends GameObject {
     protected long effectDurationMillis = 3000; // 3 seconds
 
     public enum PowerUpType {
+        // Buffs
         EXPAND_PADDLE,
         SHRINK_PADDLE,
         MULTI_BALL,
@@ -31,15 +33,18 @@ public abstract class PowerUp extends GameObject {
         INVINCIBLE_BALL,
         EXTRA_LIFE,
         DOUBLE_SCORE,
-        RESPAWN_FREE
+        RESPAWN_FREE,
+
+        // Debuffs
+        HARDER_BRICK
     }
 
-    public PowerUp(GameObject object, double width, double height, GameSetup stage) {
+    public PowerUp(GameObject object, double width, double height, GameSetup stage, PowerUpType type) {
         super(object.getX() + object.getWidth() / 2 - width / 2,
                 object.getY(), width, height);
         this.stage = stage;
+        this.type = type; // ✅ FIXED — always initialized
 
-        // Initialize the hitbox (0 rotation)
         this.hitbox = new Rectangle(
                 getX() + width / 2.0,
                 getY() + height / 2.0,
@@ -169,10 +174,7 @@ public abstract class PowerUp extends GameObject {
             switch (type) {
                 case HARDER_BRICK -> gc.drawImage(Basis.SKULL_TEXTURE, iconX, iconY, iconSize, iconSize);
                 case EXPAND_PADDLE, SHRINK_PADDLE -> gc.drawImage(Basis.PADDLE_TEXTURE, iconX, iconY, iconSize, iconSize);
-                case SPEED_UP, SLOW_DOWN, SUPER_BALL, INVINCIBLE_BALL, MULTI_BALL ->
-                        gc.drawImage(Basis.BALL_TEXTURE, iconX, iconY, iconSize, iconSize);
-                case DAMAGE_BRICK, SMALL_BRICK ->
-                        gc.drawImage(Basis.BRICK_NORMAL_TEXTURE_3[2], iconX, iconY, iconSize, iconSize);
+                case SUPER_BALL, INVINCIBLE_BALL, MULTI_BALL -> gc.drawImage(Basis.BALL_TEXTURE, iconX, iconY, iconSize, iconSize);
                 default -> gc.drawImage(Basis.POWERUP_TEXTURE, iconX, iconY, iconSize, iconSize);
             }
         }

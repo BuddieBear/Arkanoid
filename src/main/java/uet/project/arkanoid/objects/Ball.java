@@ -41,7 +41,7 @@ public class Ball extends MovableObject {
 
 
     public Ball(double centerX, double centerY, double radius, double speed, GameSetup stage) {
-        super((int)(centerX - radius), (int)(centerY - radius), radius * 2, radius * 2);
+        super((centerX - radius), (centerY - radius), radius * 2, radius * 2);
         this.centerX = centerX;
         this.centerY = centerY;
         this.radius = radius;
@@ -103,7 +103,6 @@ public class Ball extends MovableObject {
         this.Collision(stage.getBricks());
         this.Collision(stage.getPaddles());
 
-        // Use the dx/dy set by updateVelocity()
         setCenter(centerX + getDx(), centerY + getDy());
     }
 

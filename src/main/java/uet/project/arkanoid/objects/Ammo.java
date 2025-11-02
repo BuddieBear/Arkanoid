@@ -2,6 +2,7 @@ package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.project.arkanoid.base.Point;
 import uet.project.arkanoid.base.Rectangle;
 import uet.project.arkanoid.base.Shape;
 import uet.project.arkanoid.game.GameSetup;
@@ -10,9 +11,9 @@ import uet.project.arkanoid.utils.Basis;
 
 import java.util.List;
 
-public class Ammo extends GameObject {
+public class Ammo extends MovableObject {
+    private double speed = 10;
     private boolean isDestroy = false;
-
     private Rectangle hitBox;
 
     @Override
@@ -24,14 +25,6 @@ public class Ammo extends GameObject {
         super(x, y, width, height);
         this.hitBox = new Rectangle(x + width / 2.0, y + height / 2.0, width, height, 0);
 
-    }
-
-    public boolean getIsDestroy() {
-        return isDestroy;
-    }
-
-    public void setDestroy(boolean destroy) {
-        isDestroy = destroy;
     }
 
     public void Collision(List<? extends GameObject> others) {
@@ -47,15 +40,34 @@ public class Ammo extends GameObject {
             }
         }
     }
-    public void update() {
-        setY(getY() - 10);
 
+    public void update() {
+        move();
         if (getY() < 0) {
             isDestroy = true;
         }
+        updateHitbox();
+    }
+
+    @Override
+    public void move() {
+        setY(getY() - speed);
+    }
+
+    public void updateHitbox() {
+        hitBox.setCenter(this.getX() + this.getWidth() / 2.0, this.getY() + this.getHeight() / 2);
     }
 
     public void render(GraphicsContext gc) {
         gc.drawImage(Basis.AMMO_TEXTURE, getX(), getY(), width, height);
     }
+
+    public boolean getIsDestroy() {
+        return isDestroy;
+    }
+
+    public void setDestroy(boolean destroy) {
+        isDestroy = destroy;
+    }
+
 }

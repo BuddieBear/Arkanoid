@@ -150,8 +150,8 @@ public class GameManager extends Application {
             }
 
             for (Ammo ammo : stage.getAmmos()) {
-                ammo.update();
                 ammo.Collision(stage.getBricks());
+                ammo.update();
             }
 
             for (Brick brick : stage.getBricks()) {

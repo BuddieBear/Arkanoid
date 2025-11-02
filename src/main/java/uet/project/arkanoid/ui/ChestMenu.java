@@ -28,6 +28,9 @@ public class ChestMenu implements View {
         gc.setFill(Color.WHITE);
         gc.fillText("Pick one Power Up!", Basis.SCREEN_WIDTH / 2.0 - 180, 150);
 
+        // Back Button
+        gc.drawImage(Basis.BACK_BUTTON, Basis.BACK_X, Basis.BACK_Y, Basis.BACK_W, Basis.BACK_H);
+
         // Layout 4 boxes
         double startX = 200;
         double y = 300;
@@ -57,6 +60,12 @@ public class ChestMenu implements View {
         double h = 100;
         double gap = 80;
         GameState result = GameState.CHEST_MENU;
+
+        if (mouseX >= Basis.BACK_X && mouseX <= Basis.BACK_X + Basis.BACK_W &&
+                mouseY >= Basis.BACK_Y && mouseY <= Basis.BACK_Y + Basis.BACK_H) {
+            return GameState.PLAYING;
+        }
+
         for (int i = 0; i < chestChoices.size(); i++) {
             double x = startX + i * (w + gap);
 
@@ -65,6 +74,7 @@ public class ChestMenu implements View {
                 PowerUp.PowerUpType chosenType = chestChoices.get(i);
 
                 Brick randomBrick = new Brick(0,0,0,0,0,0, Brick.BrickType.INDESTRUCTIBLE, stage);
+
                 // Apply effect directly based on type
                 PowerUp newPowerUp = switch (chosenType) {
                     case DAMAGE_BRICK -> new DamageBrickPowerUp(randomBrick, 30, 30, stage);
@@ -105,15 +115,14 @@ public class ChestMenu implements View {
         chestChoices = all.subList(0, 4);
     }
 
-    public static void closeChestMenu(GameSetup stage) {
+    public void closeChestMenu(GameSetup stage) {
         chestMenuOpen = false;
         chestChoices.clear();
         stage.resumeGame();
+        generatedPowerUps = false;
     }
 
     public static boolean isChestMenuOpen() {
         return chestMenuOpen;
     }
-
-
 }

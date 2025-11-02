@@ -59,4 +59,12 @@ public class Chest extends GameObject {
             gc.drawImage(Basis.CHEST_OPEN, getX(), getY(), getWidth(), getHeight());
         }
     }
+
+    public void setOpened(boolean opened) {
+        this.opened = opened;
+    }
+
+    public boolean hasOpened() {
+        return opened;
+    }
 }

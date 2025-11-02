@@ -40,6 +40,7 @@ public class LoadScreenView implements View {
                 Basis.LEVEL_1_BTN_Y,
                 Basis.LEVEL_BTN_WIDTH,
                 Basis.LEVEL_BTN_HEIGHT);
+
         if (MapLoader.isSaveFile(Saves.SLOT_1) == false) {
             gc.setFill(Color.rgb(0, 0, 0, 0.6));
             gc.fillRect(Basis.LEVEL_1_BTN_X,
@@ -53,6 +54,7 @@ public class LoadScreenView implements View {
                 Basis.LEVEL_2_BTN_Y,
                 Basis.LEVEL_BTN_WIDTH,
                 Basis.LEVEL_BTN_HEIGHT);
+
         if (MapLoader.isSaveFile(Saves.SLOT_2) == false) {
             gc.setFill(Color.rgb(0, 0, 0, 0.6));
             gc.fillRect(Basis.LEVEL_2_BTN_X,
@@ -66,6 +68,7 @@ public class LoadScreenView implements View {
                 Basis.LEVEL_3_BTN_Y,
                 Basis.LEVEL_BTN_WIDTH,
                 Basis.LEVEL_BTN_HEIGHT);
+
         if (MapLoader.isSaveFile(Saves.SLOT_3) == false) {
             gc.setFill(Color.rgb(0, 0, 0, 0.6));
             gc.fillRect(Basis.LEVEL_3_BTN_X,
@@ -92,12 +95,12 @@ public class LoadScreenView implements View {
 
     public GameState handleClick(double mouseX, double mouseY, GameSetup stage) {
         Level clickedLevel = LoadScreenView.getClickLevel(mouseX, mouseY);
-
         if (clickedLevel != null) {
             try {
                 Saves slotToLoad = MapLoader.levelSave(clickedLevel);
                 if (MapLoader.isSaveFile(slotToLoad)) {
                     stage.loadLevel(LoadScreenView.getClickLevel(mouseX, mouseY));
+                    stage.clearLevel();
                     MapLoader.loadGame(slotToLoad, stage);
                     return GameState.PAUSED;
                 }

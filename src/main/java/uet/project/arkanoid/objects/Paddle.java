@@ -18,7 +18,7 @@ public class Paddle extends MovableObject {
 
     private Rectangle hitbox;
 
-    public Paddle(int x, int y, double width, double height, int speed) {
+    public Paddle(double x, double y, double width, double height, double speed) {
         super(x, y, width, height);
         this.speed = speed;
         originalWidth = width;

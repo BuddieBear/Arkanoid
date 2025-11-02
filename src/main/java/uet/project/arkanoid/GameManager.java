@@ -178,6 +178,7 @@ public class GameManager extends Application {
             stage.getPowerUps().removeIf(PowerUp::isDead);
             stage.getBricks().removeIf(Brick::isDestroy);
             stage.getAmmos().removeIf(Ammo::getIsDestroy);
+            stage.getChests().removeIf(Chest::hasOpened);
 
             currentState = stage.getCurrentState();
 

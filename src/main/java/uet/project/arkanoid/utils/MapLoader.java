@@ -5,6 +5,7 @@ import org.w3c.dom.*;
 import java.io.File;
 
 import uet.project.arkanoid.game.*;
+import uet.project.arkanoid.objects.Chest;
 import uet.project.arkanoid.objects.brickVariants.IndestructibleBrick;
 import uet.project.arkanoid.objects.brickVariants.NormalBrick;
 
@@ -73,11 +74,11 @@ public class MapLoader {
     private static String getFileName(Saves slot) {
         switch (slot) {
             case SLOT_1:
-                return "SLOT_1.txt";
+                return "Saves/SLOT_1.txt";
             case SLOT_2:
-                return "SLOT_2.txt";
+                return "Saves/SLOT_2.txt";
             case SLOT_3:
-                return "SLOT_3.txt";
+                return "Saves/SLOT_3.txt";
             default:
                 throw new IllegalArgumentException("Unknown slot: " + slot);
         }
@@ -97,12 +98,10 @@ public class MapLoader {
             writer.println("Paddle," + paddle.getX() + ","
                     + paddle.getY() + "," + paddle.getWidth() + ","
                     + paddle.getHeight() + "," + paddle.getSpeed());
-            for (Ball ball : stage.getBalls()) {
-                writer.println("Ball," + ball.getCenterX() + ","
-                        + ball.getCenterY() + "," + ball.getRadius() + ","
-                        + ball.getSpeed() + ","+ ball.getDx() + ","
-                        + ball.getDy() + "," + ball.getLaunchState() + ","
-                        + ball.isInvincible());
+            for (Ball ball : stage.getBalls()) { writer.println("Ball," + ball.getCenterX() + ","
+                    + ball.getCenterY() + "," + ball.getRadius() + "," + ball.getSpeed() + ","
+                    + ball.getDx() + "," + ball.getDy() + "," + ball.getLaunchState() + ","
+                    + ball.isInvincible() + "," + ball.isMainBall());
             }
             for (Brick brick : stage.getBricks()) {
                 if (brick.isDestroy() == false) {
@@ -120,9 +119,9 @@ public class MapLoader {
 
     public static void loadGame(Saves slot, GameSetup stage) {
         String fileName = getFileName(slot);
+        stage.clearLevel();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-            stage.getBalls().clear();
-            stage.getBricks().clear();
+            Paddle mainPaddle = null;
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] array = line.split(",");
@@ -136,12 +135,27 @@ public class MapLoader {
                         stage.setLives(Integer.parseInt(array[2]));
                         break;
                     case "Paddle":
-                        Paddle paddle = stage.getPaddle();
-                        paddle.setX((int) Double.parseDouble(array[1]));
-                        paddle.setY((int) Double.parseDouble(array[2]));
-                        paddle.setWidth(Double.parseDouble(array[3]));
-                        paddle.setHeight(Double.parseDouble(array[4]));
-                        paddle.setSpeed(Double.parseDouble(array[5]));
+                        double paddleX = Double.parseDouble(array[1]);
+                        double paddleY = Double.parseDouble(array[2]);
+                        double paddleWidth = Double.parseDouble(array[3]);
+                        double paddleHeight = Double.parseDouble(array[4]);
+                        double paddleSpeed = Double.parseDouble(array[5]);
+
+                        // FIX: Create the paddle if the list is empty, then set properties
+                        if (stage.getPaddles().isEmpty()) {
+                            // Assume a default speed and size for creation (required by constructor)
+                            mainPaddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, paddleSpeed);
+                            stage.getPaddles().add(mainPaddle);
+                        } else {
+                            mainPaddle = stage.getPaddle(); // Will now safely get the newly created paddle
+                        }
+
+                        mainPaddle.setX((int) paddleX);
+                        mainPaddle.setY((int) paddleY);
+                        mainPaddle.setWidth(paddleWidth);
+                        mainPaddle.setHeight(paddleHeight);
+                        mainPaddle.setSpeed(paddleSpeed);
+
                         break;
                     case "Ball":
                         double centerX = Double.parseDouble(array[1]);
@@ -152,11 +166,19 @@ public class MapLoader {
                         double dy = Double.parseDouble(array[6]);
                         boolean hasLaunch = Boolean.parseBoolean(array[7]);
                         boolean invincible = Boolean.parseBoolean(array[8]);
+                        boolean mainBall = Boolean.parseBoolean(array[9]);
+
                         Ball newBall = new Ball(centerX, centerY, radius, speed, stage);
-                        newBall.setDx(dx);
-                        newBall.setDy(dy);
+
+                        if (!mainBall) {
+                            newBall.setBallImage(Basis.MULTI_BALL_TEXTURE);
+                        }
+
+                        newBall.setDx(dx); newBall.setDy(dy);
                         newBall.setHasLaunch(hasLaunch);
                         newBall.setInvincible(invincible);
+                        newBall.setMainBall(mainBall);
+
                         stage.getBalls().add(newBall);
                         break;
                     case "Brick":
@@ -176,6 +198,18 @@ public class MapLoader {
                         }
                         newBrick.setHitPoints(hitPoints);
                         stage.getBricks().add(newBrick);
+                        break;
+                    case "Chest": // ADDED: Load Chests
+                        double chestX = Double.parseDouble(array[1]);
+                        double chestY = Double.parseDouble(array[2]);
+                        double chestWidth = Double.parseDouble(array[3]);
+                        double chestHeight = Double.parseDouble(array[4]);
+                        boolean chestOpened = Boolean.parseBoolean(array[5]);
+
+                        Chest chest = new Chest(chestX, chestY, chestWidth, chestHeight, stage);
+                        chest.setOpened(chestOpened);
+
+                        stage.getChests().add(chest);
                         break;
                 }
             }

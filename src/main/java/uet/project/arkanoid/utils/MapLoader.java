@@ -42,9 +42,9 @@ public class MapLoader {
 
                     switch (gid) {
                         case 1 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 1,stage));
-                        //case 3 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 2, stage));
-                        //case 4 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 3, stage));
-                        //case 5 -> stage.getBricks().add(new IndestructibleBrick(x, y, width, height, 0, stage));
+                        case 3 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 2, stage));
+                        case 4 -> stage.getBricks().add(new NormalBrick(x, y, width, height, 0, 3, stage));
+                        case 5 -> stage.getBricks().add(new IndestructibleBrick(x, y, width, height, 0, stage));
                         default -> System.out.println("Unknown gid: " + gid);
                     }
                 }

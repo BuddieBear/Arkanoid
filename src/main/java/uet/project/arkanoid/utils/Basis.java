@@ -23,7 +23,7 @@ public class Basis {
     // Fixed width, height
     public static final int ARROW_WIDTH = 45;
     public static final int ARROW_HEIGHT = 90;
-    public static final int BALL_DIAMETER = 40;
+    public static final int BALL_DIAMETER = 30;
     public static final int OBJECTIVE_BOARD_WIDTH = 180;
     public static final int OBJECTIVE_BOARD_HEIGHT = 360;
 
@@ -153,6 +153,8 @@ public class Basis {
     public static final Image GAME_LOSE_TEXT;
     public static final Image GAME_WIN_TROPHY;
     public static final Image GAME_LOSE_HEART;
+    public static final Image CHEST_OPEN;
+    public static final Image CHEST_CLOSE;
 
     static {
         // Paddle + Ball
@@ -213,5 +215,8 @@ public class Basis {
         GAME_LOSE_TEXT = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Lost.png")).toExternalForm());;
         GAME_WIN_TROPHY = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Trophy.png")).toExternalForm());;
         GAME_LOSE_HEART = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Shattered_heart.png")).toExternalForm());;
+
+        CHEST_CLOSE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Chest_Close.png")).toExternalForm());
+        CHEST_OPEN = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Chest_Open.png")).toExternalForm());
     }
 }

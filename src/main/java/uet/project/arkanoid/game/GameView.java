@@ -39,6 +39,8 @@ public class GameView {
         for (PowerUp powerUp : stage.getPowerUps()) {
             powerUp.render(gc);
         }
-
+        for (Chest chest : stage.getChests()) {
+            chest.render(gc);
+        }
     }
 }

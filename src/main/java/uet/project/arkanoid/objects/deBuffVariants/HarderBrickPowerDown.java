@@ -10,7 +10,6 @@ public class HarderBrickPowerDown extends PowerUp {
 
     public HarderBrickPowerDown(GameObject object, double width, double height, GameSetup stage) {
         super(object, width, height, stage);
-        type = PowerUpType.HARDER_BRICK;
     }
 
     public void applyEffect() {

@@ -123,13 +123,13 @@ public class GameSetup {
                             brick.getY() + brick.getHeight() / 2,
                             Color.GREEN));
 
-                    //System.out.println("Brick Destroyed: " + brick_streak);
+//                    //System.out.println("Brick Destroyed: " + brick_streak);
                     if (brick_streak >= 1) {
                         brick_streak = 0;
-                        int choice = (int) (Math.random() * 11); // 0 → 10
+                        int choice = (int) (Math.random() * 10); // 0 → 10
 
                         PowerUp newPowerUp = switch (choice) {
-                            case 0 -> new DamageBrickPowerUp(brick, 30, 30, this);
+                            case 0 -> new SuperBallPowerUp(brick, 30, 30, this);
                             case 1 -> new InvincibleBallPowerUp(brick, 30, 30, this);
                             case 2 -> new MultiBallPowerUp(brick, 30, 30, this);
                             case 3 -> new SuperBallPowerUp(brick, 30, 30, this);

@@ -99,7 +99,7 @@ public class GameManager extends Application {
         canvas.heightProperty().bind(scene.heightProperty());
 
         // Set up stage
-        stage = new GameSetup(currentLevel);
+        stage = new GameSetup(currentLevel, currentState);
 
         // Set up input
         handleInput(scene);

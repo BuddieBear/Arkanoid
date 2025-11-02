@@ -8,8 +8,7 @@ import uet.project.arkanoid.objects.PowerUp;
 public class ExtendPaddle extends PowerUp{
     private Paddle paddleMain = stage.getPaddle();
     public ExtendPaddle(GameObject object, double width, double height, GameSetup stage) {
-        super(object, width, height, stage);
-        type = PowerUpType.SHRINK_PADDLE;
+        super(object, width, height, stage,PowerUpType.SHRINK_PADDLE);
     }
 
     @Override

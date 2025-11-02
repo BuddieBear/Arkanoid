@@ -13,34 +13,17 @@ public class Paddle extends MovableObject {
     private double paddleExpansion = 50;
     private double paddleShrink = 50;
 
+    private double originalHeight;
+    private double originalWidth;
+
     private Rectangle hitbox;
 
-    public Paddle(int x, int y, double width, double height, int speed) {
+    public Paddle(double x, double y, double width, double height, double speed) {
         super(x, y, width, height);
         this.speed = speed;
-        // Initialize hitbox, assuming 0 rotation for paddle
+        originalWidth = width;
+        originalHeight = height;
         this.hitbox = new Rectangle(x + width / 2.0, y + height / 2.0, width, height, 0);
-    }
-
-    @Override
-    public Shape getHitbox() {
-        return this.hitbox;
-    }
-
-    public double getSpeed() {
-        return this.speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    public PowerUp getCurrentPowerUp() {
-        return this.currentPowerUp;
-    }
-
-    public void setCurrentPowerUp(PowerUp current) {
-        this.currentPowerUp = current;
     }
 
     public void moveLeft() {
@@ -54,6 +37,15 @@ public class Paddle extends MovableObject {
     @Override
     public void move() {
         setX(getX() + getDx());
+    }
+
+    public void updateHitBox() {
+        // Update the hitbox center and size to match the paddle’s current geometry
+        double centerX = getX() + getWidth() / 2.0;
+        double centerY = getY() + getHeight() / 2.0;
+
+        this.hitbox.setCenter(new Point(centerX, centerY));
+        this.hitbox.setSize(new uet.project.arkanoid.base.Vector2D(getWidth(), getHeight()));
     }
 
     public void render(GraphicsContext gc) {
@@ -80,15 +72,18 @@ public class Paddle extends MovableObject {
             setX(getX() - paddleExpansion);
         }
         setWidth(getWidth() + 2 * paddleExpansion);
+        updateHitBox();
     }
 
     public void shrinkPaddle() {
         setX(getX() + paddleShrink);
         setWidth(getWidth() - 2 * paddleShrink);
+        updateHitBox();
     }
 
     public void restorePaddle() {
-        setWidth(210);
+        setWidth(originalWidth);
+        updateHitBox();
     }
 
     public void autoMovePaddle(GameSetup stage) {
@@ -106,5 +101,26 @@ public class Paddle extends MovableObject {
         } else {
             setX(center - getWidth() / 2);
         }
+    }
+
+    @Override
+    public Shape getHitbox() {
+        return this.hitbox;
+    }
+
+    public double getSpeed() {
+        return this.speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public PowerUp getCurrentPowerUp() {
+        return this.currentPowerUp;
+    }
+
+    public void setCurrentPowerUp(PowerUp current) {
+        this.currentPowerUp = current;
     }
 }

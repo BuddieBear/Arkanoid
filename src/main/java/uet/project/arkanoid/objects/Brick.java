@@ -26,18 +26,7 @@ public class Brick extends GameObject {
         NORMAL
     }
 
-    @Override
-    public Shape getHitbox() {
-        return this.hitBox;
-    }
 
-    public double getOriginalWidth() {
-        return originalWidth;
-    }
-
-    public double getOriginalHeight() {
-        return originalHeight;
-    }
 
     public Brick(int x, int y, double width, double height, double rotation, int hitPoints, BrickType type, GameSetup stage) {
         super(x, y, width, height);
@@ -48,6 +37,37 @@ public class Brick extends GameObject {
         this.originalWidth = width;
         this.originalHeight = height;
         this.hitBox = new Rectangle(x + width / 2.0, y + height / 2.0, width, height, rotation);
+    }
+
+
+
+    public void render(GraphicsContext gc) {
+        Point center = hitBox.getCenter();
+        double rotationDegrees = Math.toDegrees(hitBox.getRotation());
+        double w = hitBox.getSize().getX();
+        double h = hitBox.getSize().getY();
+
+        gc.save(); // Save the current graphics state
+        gc.translate(center.getX(), center.getY()); // Move origin to brick's center
+        gc.rotate(rotationDegrees); // Rotate the canvas
+
+        // Draw the image centered at the new (0,0) origin
+        gc.drawImage(brickImage, -w / 2.0, -h / 2.0, w, h);
+
+        gc.restore(); // Restore the original state
+    }
+
+    @Override
+    public void update() {
+    }
+
+
+    public void takeHit() {
+        hitPoints--;
+    }
+
+    public boolean isDestroy() {
+        return hitPoints <= 0;
     }
 
     public BrickType getType() {
@@ -72,36 +92,16 @@ public class Brick extends GameObject {
         }
     }
 
-
-    public void takeHit() {
-        hitPoints--;
+    public Shape getHitbox() {
+        return this.hitBox;
     }
 
-    public boolean isDestroy() {
-        return hitPoints <= 0;
+    public double getOriginalWidth() {
+        return originalWidth;
     }
 
-    public void render(GraphicsContext gc) {
-        Point center = hitBox.getCenter();
-        double rotationDegrees = Math.toDegrees(hitBox.getRotation());
-        double w = hitBox.getSize().getX();
-        double h = hitBox.getSize().getY();
-
-        gc.save(); // Save the current graphics state
-        gc.translate(center.getX(), center.getY()); // Move origin to brick's center
-        gc.rotate(rotationDegrees); // Rotate the canvas
-
-        // Draw the image centered at the new (0,0) origin
-        gc.drawImage(brickImage, -w / 2.0, -h / 2.0, w, h);
-
-        gc.restore(); // Restore the original state
-    }
-
-    @Override
-    public void update() {
-        if (this.isDestroy()) {
-            stage.addScore(maxHp * 10);
-        }
+    public double getOriginalHeight() {
+        return originalHeight;
     }
 }
 

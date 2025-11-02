@@ -2,6 +2,8 @@ package uet.project.arkanoid.objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import uet.project.arkanoid.objects.FloatingText;
 import uet.project.arkanoid.base.Circle;
 import uet.project.arkanoid.base.Point;
 import uet.project.arkanoid.base.Rectangle;
@@ -12,6 +14,7 @@ import uet.project.arkanoid.utils.AudioSet;
 import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.utils.HelperFunction;
 
+import javax.naming.ldap.LdapName;
 import java.util.List;
 
 public class Ball extends MovableObject {
@@ -21,14 +24,16 @@ public class Ball extends MovableObject {
 
     private double speed;
 
-    // 'angle' is now ONLY for the movement vector
-    // 0 = right, 180 = left, 270 = up
     private double angle;
 
-    // NEW: A separate variable just for the visual arrow
+    // For Rendering only
     private double visualAngle = 0;
+    private double rotationAngle = 0;
 
+    private boolean markedForRemoval = false;
+    private boolean mainBall = true;
     private boolean invincible = false;
+
     private boolean hasLaunch = false;
     private boolean back = false;
 
@@ -41,7 +46,7 @@ public class Ball extends MovableObject {
 
 
     public Ball(double centerX, double centerY, double radius, double speed, GameSetup stage) {
-        super((int)(centerX - radius), (int)(centerY - radius), radius * 2, radius * 2);
+        super((centerX - radius), (centerY - radius), radius * 2, radius * 2);
         this.centerX = centerX;
         this.centerY = centerY;
         this.radius = radius;
@@ -51,28 +56,6 @@ public class Ball extends MovableObject {
         this.hitbox = new Circle(new Point(centerX, centerY), radius);
         this.angle = 270; // Default movement angle (up)
         this.visualAngle = 0; // Default visual angle (straight)
-    }
-
-    @Override
-    public Shape getHitbox() {
-        return this.hitbox;
-    }
-
-    public boolean getLaunchState() {
-        return hasLaunch;
-    }
-
-    public void setHasLaunch(boolean hasLaunch) {
-        this.hasLaunch = hasLaunch;
-    }
-
-
-    public void setCenter(double x, double y) {
-        this.centerX = x;
-        this.centerY = y;
-        super.setX((int)(x - radius));
-        super.setY((int)(y - radius));
-        this.hitbox.setCenter(new Point(x, y));
     }
 
     public void updateVelocity() {
@@ -103,7 +86,6 @@ public class Ball extends MovableObject {
         this.Collision(stage.getBricks());
         this.Collision(stage.getPaddles());
 
-        // Use the dx/dy set by updateVelocity()
         setCenter(centerX + getDx(), centerY + getDy());
     }
 
@@ -115,15 +97,13 @@ public class Ball extends MovableObject {
             if (this.hitbox.intersect(obj.getHitbox())) {
                 if (obj instanceof Brick) {
                     if (!invincible) {
+                        AudioSet.collisionBrickSound.play();
                         ((Brick) obj).takeHit();
+                        bounceOff(obj);
                     } else {
                         ((Brick) obj).setHitPoints(0);
                     }
-                    AudioSet.collisionBrickSound.play();
 
-                    if (!invincible) {
-                        bounceOff(obj);
-                    }
                 } else if (obj instanceof Paddle) {
                     bounceOff(obj);
                     AudioSet.collisionPaddleSound.play();
@@ -238,17 +218,23 @@ public class Ball extends MovableObject {
 
     }
 
+
     public void ifDead() {
-        if (centerY > Basis.STAGE_Y + Basis.STAGE_HEIGHT && this == stage.getBalls().get(0)) {
-            hasLaunch = false;
-            setDx(0);
-            setDy(0);
-            visualAngle = 0; // Reset visual sweeping angle
-            angle = 270;     // Reset movement angle to "up"
-            AudioSet.lossHpSound.play();
-            stage.setLives(stage.getLives() - 1);
+        if (getY() > Basis.STAGE_Y + Basis.STAGE_HEIGHT) {
+            if (mainBall) {
+                hasLaunch = false;
+                setDx(0);
+                setDy(0);
+                visualAngle = 0;
+                angle = 270;
+                AudioSet.lossHpSound.play();
+                stage.setLives(stage.getLives() - 1);
+            } else {
+                markedForRemoval = true;
+            }
         }
     }
+
 
     public void render(GraphicsContext gc) {
         if (!hasLaunch) {
@@ -264,14 +250,23 @@ public class Ball extends MovableObject {
                     Basis.ARROW_HEIGHT
             );
             gc.restore();
+            gc.drawImage(ballImage, centerX-radius, centerY-radius, radius * 2, radius * 2);
+        } else {
+            gc.save();
+
+            // spin around its center
+            gc.translate(centerX, centerY);
+            gc.rotate(rotationAngle);
+            gc.drawImage(ballImage, -radius, -radius, radius * 2, radius * 2);
+            gc.restore();
         }
-        gc.drawImage(ballImage, centerX - radius, centerY - radius, radius * 2, radius * 2);
     }
 
     public void update() {
         if (!hasLaunch) {
             prepareLaunch();
         } else {
+            rotationAngle = (rotationAngle + speed * 5) % 360;
             move();
             ifDead();
         }
@@ -298,6 +293,14 @@ public class Ball extends MovableObject {
             return "Down";
         }
         return "";
+    }
+
+    public boolean isMarkedForRemoval() {
+        return markedForRemoval;
+    }
+
+    public void setMarkedForRemoval(boolean markedForRemoval) {
+        this.markedForRemoval = markedForRemoval;
     }
 
     public double getCenterX() {
@@ -348,7 +351,38 @@ public class Ball extends MovableObject {
         return invincible;
     }
 
+    public boolean isMainBall() {
+        return mainBall;
+    }
+
+    public void setMainBall(boolean mainBall) {
+        this.mainBall = mainBall;
+    }
+
     public void setInvincible(boolean invincible) {
         this.invincible = invincible;
     }
+
+    @Override
+    public Shape getHitbox() {
+        return this.hitbox;
+    }
+
+    public boolean getLaunchState() {
+        return hasLaunch;
+    }
+
+    public void setHasLaunch(boolean hasLaunch) {
+        this.hasLaunch = hasLaunch;
+    }
+
+
+    public void setCenter(double x, double y) {
+        this.centerX = x;
+        this.centerY = y;
+        super.setX((int)(x - radius));
+        super.setY((int)(y - radius));
+        this.hitbox.setCenter(new Point(x, y));
+    }
+
 }

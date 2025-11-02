@@ -2,11 +2,37 @@ package uet.project.arkanoid.ui;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import uet.project.arkanoid.base.*;
 import uet.project.arkanoid.game.*;
 import uet.project.arkanoid.utils.Basis;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+import uet.project.arkanoid.utils.MapLoader;
+
 public class PausedMenuView implements View {
+
+    private boolean showMessage = false;
+    private  Timeline messageTimeline;
+
+    public void saveMessage() {
+        showMessage = true;
+        if (messageTimeline != null) {
+            messageTimeline.stop();
+        }
+        messageTimeline = new Timeline(
+                new KeyFrame(
+                        Duration.seconds(4),
+                        event -> {
+                            showMessage = false;
+                        }
+                )
+        );
+        messageTimeline.play();
+    }
+
     private static final Rectangle CONTINUE_BUTTON = new Rectangle(
             new Point(Basis.CONTINUE_BTN_X + Basis.PAUSE_BTN_WIDTH / 2.0, Basis.CONTINUE_BTN_Y + Basis.PAUSE_BTN_HEIGHT / 2.0),
             new Vector2D(Basis.PAUSE_BTN_WIDTH, Basis.PAUSE_BTN_HEIGHT),
@@ -60,6 +86,15 @@ public class PausedMenuView implements View {
                 Basis.SAVEGAME_BTN_Y,
                 Basis.PAUSE_BTN_WIDTH,
                 Basis.PAUSE_BTN_HEIGHT);
+
+
+        if (showMessage) {
+            gc.setFill(Color.LIMEGREEN);
+            gc.setFont(new Font("Arial", 24));
+            double textX = Basis.SAVEGAME_BTN_X + Basis.PAUSE_BTN_WIDTH + 15;
+            double textY = Basis.SAVEGAME_BTN_Y + 35;
+            gc.fillText("Đã Lưu!", textX, textY);
+        }
     }
 
     public GameState handleClick(double mouseX, double mouseY, GameSetup stage) {
@@ -74,12 +109,13 @@ public class PausedMenuView implements View {
         } else if (SAVEGAME_BUTTON.contains(click)) {
             try {
                 Level levelToSave = stage.getCurrentLevel();
-                Saves saveSlot = SaveManager.levelSave(levelToSave);
-                SaveManager.saveGame(saveSlot, stage);
+                Saves saveSlot = MapLoader.levelSave(levelToSave);
+                MapLoader.saveGame(saveSlot, stage);
+                saveMessage();
             } catch (IllegalArgumentException e) {
                 System.err.println("Error while saving: " + e.getMessage());
             }
-            return GameState.PAUSED; // assuming you define this state
+            return GameState.PAUSED;
         }
 
         return GameState.PAUSED;

@@ -46,4 +46,5 @@ mvnw.cmd
 
 # Save files
 HighScore/
-Saves/
+Saves/*
+!Saves/.gitkeep

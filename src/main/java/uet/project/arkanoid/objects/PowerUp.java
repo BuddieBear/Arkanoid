@@ -6,8 +6,6 @@ import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.utils.AudioSet;
 
-import java.util.List;
-
 public abstract class PowerUp extends GameObject {
     protected boolean alive = true;
     protected PowerUpType type;
@@ -17,20 +15,16 @@ public abstract class PowerUp extends GameObject {
     private Rectangle hitbox;
 
     // New timer logic
-    private long startTime = 0; // The time the effect was applied
-    private long effectDurationMillis = 3000; // 3 seconds
+    protected long startTime = 0; // The time the effect was applied
+    protected long effectDurationMillis = 3000; // 3 seconds
 
     public enum PowerUpType {
         EXPAND_PADDLE,
         SHRINK_PADDLE,
         MULTI_BALL,
-        SPEED_UP,
         DAMAGE_BRICK,
-        SMALL_BRICK,
-        HARDER_BRICK,
         SUPER_BALL,
         INVINCIBLE_BALL,
-        SLOW_DOWN,
         EXTRA_LIFE,
         DOUBLE_SCORE,
         RESPAWN_FREE
@@ -63,8 +57,15 @@ public abstract class PowerUp extends GameObject {
         this.hitbox = new Rectangle(other.hitbox);
     }
 
+    public void extendDuration(long extraTime) {
+        if (this.startTime > 0) {
+            this.effectDurationMillis += extraTime; // extends the expiry by extraTime
+        }
+    }
+
+
     @Override
-    public Shape getHitbox() {
+    public Rectangle getHitbox() {
         return this.hitbox;
     }
 
@@ -75,6 +76,15 @@ public abstract class PowerUp extends GameObject {
     public boolean isDead() {
         return !alive|| this.getY() > Basis.STAGE_Y + Basis.STAGE_HEIGHT ||
                 (catchedPowerUp && startTime == 0);
+    }
+
+
+    public boolean isCatchedPowerUp() {
+        return catchedPowerUp;
+    }
+
+    public void setCatchedPowerUp(boolean catchedPowerUp) {
+        this.catchedPowerUp = catchedPowerUp;
     }
 
     public void update() {
@@ -122,12 +132,35 @@ public abstract class PowerUp extends GameObject {
         }
     }
 
+    public void startEffectTimer() {
+        if (type == PowerUpType.EXTRA_LIFE || type == PowerUpType.DOUBLE_SCORE
+                || type == PowerUpType.RESPAWN_FREE) {
+            this.startTime = 0;
+        } else {
+            this.startTime = System.currentTimeMillis();
+        }
+    }
+
     public PowerUpType getType() {
         return type;
     }
 
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    public long getEffectDurationMillis() {
+        return effectDurationMillis;
+    }
+
     public long getDuration() {
-        if (startTime == 0) return 0;
+        if (startTime == 0) {
+            return 0;
+        }
         return Math.max(0, effectDurationMillis - (System.currentTimeMillis() - startTime));
     }
 }

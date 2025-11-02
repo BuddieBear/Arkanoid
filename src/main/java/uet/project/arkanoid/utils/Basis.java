@@ -23,7 +23,7 @@ public class Basis {
     // Fixed width, height
     public static final int ARROW_WIDTH = 45;
     public static final int ARROW_HEIGHT = 90;
-    public static final int BALL_DIAMETER = 40;
+    public static final int BALL_DIAMETER = 30;
     public static final int OBJECTIVE_BOARD_WIDTH = 180;
     public static final int OBJECTIVE_BOARD_HEIGHT = 360;
 
@@ -119,6 +119,7 @@ public class Basis {
     public static final Image MULTI_BALL_TEXTURE;
     public static final Image ARROW_TEXTURE;
     public static final Image POWERUP_TEXTURE;
+    public static final Image AMMO_TEXTURE;
     public static final Image BRICK_NORMAL_TEXTURE_1;
     public static final Image[] BRICK_NORMAL_TEXTURE_2 = new Image[2];
     public static final Image[] BRICK_NORMAL_TEXTURE_3 = new Image[3];
@@ -152,6 +153,8 @@ public class Basis {
     public static final Image GAME_LOSE_TEXT;
     public static final Image GAME_WIN_TROPHY;
     public static final Image GAME_LOSE_HEART;
+    public static final Image CHEST_OPEN;
+    public static final Image CHEST_CLOSE;
 
     static {
         // Paddle + Ball
@@ -160,6 +163,7 @@ public class Basis {
         MULTI_BALL_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Ball_3.png")).toExternalForm());
 
         ARROW_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Arrow.png")).toExternalForm());
+        AMMO_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/ammo.png")).toExternalForm());
 
         // Bricks
         BRICK_NORMAL_TEXTURE_1 = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Brick_1.png")).toExternalForm());
@@ -211,5 +215,8 @@ public class Basis {
         GAME_LOSE_TEXT = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Lost.png")).toExternalForm());;
         GAME_WIN_TROPHY = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Trophy.png")).toExternalForm());;
         GAME_LOSE_HEART = new Image(Objects.requireNonNull(Basis.class.getResource("/UI_Elements/GameOver/Shattered_heart.png")).toExternalForm());;
+
+        CHEST_CLOSE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Chest_Close.png")).toExternalForm());
+        CHEST_OPEN = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Chest_Open.png")).toExternalForm());
     }
 }

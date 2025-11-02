@@ -4,6 +4,7 @@ import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.objects.Ball;
 import uet.project.arkanoid.objects.GameObject;
 import uet.project.arkanoid.objects.PowerUp;
+import uet.project.arkanoid.utils.Basis;
 
 public class SuperBallPowerUp extends PowerUp {
     private Ball ball;
@@ -24,7 +25,7 @@ public class SuperBallPowerUp extends PowerUp {
     }
 
     public void applyEffect() {
-        ball.setSpeed(100);
+        ball.setSpeed(Basis.BALL_SPEED * 1.2);
         ball.setWidth(oldWidth * 1.5);
         ball.setHeight(oldHeight * 1.5);
         // Adjust position so ball stays visually centered

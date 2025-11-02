@@ -51,6 +51,8 @@ public class Rectangle implements Shape {
 
                 return dx <= (halfW + otherHalfW) && dy <= (halfH + otherHalfH);
             }
+        } else if (other instanceof Circle circle) {
+            return circle.intersect(this);
         }
         return false;
     }
@@ -77,5 +79,10 @@ public class Rectangle implements Shape {
 
     public void setCenter(Point center) {
         this.center = center;
+    }
+
+    public void setCenter(double centerX, double centerY) {
+        this.center.setX(centerX);
+        this.center.setY(centerY);
     }
 }

@@ -10,6 +10,7 @@ import uet.project.arkanoid.base.Rectangle;
 import uet.project.arkanoid.base.Shape;
 import uet.project.arkanoid.base.Vector2D;
 import uet.project.arkanoid.game.GameSetup;
+import uet.project.arkanoid.objects.brickVariants.IndestructibleBrick;
 import uet.project.arkanoid.utils.AudioSet;
 import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.utils.HelperFunction;
@@ -25,7 +26,8 @@ public class Ball extends MovableObject {
     private double speed;
 
     private double angle;
-
+    private final double defaultRadius;
+    private final double defaultSpeed;
     // For Rendering only
     private double visualAngle = 0;
     private double rotationAngle = 0;
@@ -56,6 +58,8 @@ public class Ball extends MovableObject {
         this.hitbox = new Circle(new Point(centerX, centerY), radius);
         this.angle = 270; // Default movement angle (up)
         this.visualAngle = 0; // Default visual angle (straight)
+        this.defaultRadius = radius;
+        this.defaultSpeed = speed;
     }
 
     public void updateVelocity() {
@@ -64,6 +68,11 @@ public class Ball extends MovableObject {
         setDy(speed * Math.sin(rad));
     }
 
+    public void restoreDefaultStats() {
+        this.radius = defaultRadius;
+        this.speed = defaultSpeed;
+        updateVelocity();
+    }
 
     public void move() {
         if (hasLaunch) {
@@ -81,6 +90,8 @@ public class Ball extends MovableObject {
                 this.angle = 360 - this.angle;
                 updateVelocity();
             }
+        } else {
+            updateVelocity();
         }
 
         this.Collision(stage.getBricks());
@@ -96,14 +107,15 @@ public class Ball extends MovableObject {
 
             if (this.hitbox.intersect(obj.getHitbox())) {
                 if (obj instanceof Brick) {
-                    if (!invincible) {
-                        AudioSet.collisionBrickSound.play();
-                        ((Brick) obj).takeHit();
-                        bounceOff(obj);
-                    } else {
-                        ((Brick) obj).setHitPoints(0);
-                    }
+                    Brick brick = (Brick) obj;
 
+                    if (!invincible) {
+                        brick.takeHit();
+                    } else if (!(brick instanceof IndestructibleBrick)) {
+                        brick.setHitPoints(0);
+                    }
+                    AudioSet.collisionBrickSound.play();
+                    bounceOff(obj); // always bounce off even indestrucible
                 } else if (obj instanceof Paddle) {
                     bounceOff(obj);
                     AudioSet.collisionPaddleSound.play();

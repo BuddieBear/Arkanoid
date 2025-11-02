@@ -13,6 +13,9 @@ public class DamageBrickPowerUp extends PowerUp {
 
     public void applyEffect() {
         for (Brick brick : stage.getBricks()) {
+            if ( Math.random() * 2 < 0.5) {
+                continue;
+            }
             if (!(brick instanceof IndestructibleBrick)) {
                 brick.takeHit();
             }

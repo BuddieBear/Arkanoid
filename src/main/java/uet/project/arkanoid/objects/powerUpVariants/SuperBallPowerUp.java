@@ -9,38 +9,29 @@ import uet.project.arkanoid.utils.Basis;
 public class SuperBallPowerUp extends PowerUp {
     private Ball ball;
     private final int oldSpeed;
-    private final double oldWidth;
-    private final double oldHeight;
-    private int oldX;
-    private int oldY;
+    private final double oldRadius;
 
     // remember it will bug if theres another powerUp affect speed
     public SuperBallPowerUp(GameObject object, double width, double height, GameSetup stage) {
         super(object, width, height, stage, PowerUpType.SUPER_BALL);
         ball = stage.getBalls().get(0);
         oldSpeed = (int) ball.getSpeed();
-        oldWidth = ball.getWidth();
-        oldHeight = ball.getHeight();
+        oldRadius = ball.getRadius();
     }
 
     public void applyEffect() {
-        ball.setSpeed(Basis.BALL_SPEED * 1.2);
-        ball.setWidth(oldWidth * 1.5);
-        ball.setHeight(oldHeight * 1.5);
-        // Adjust position so ball stays visually centered
-        ball.setX(ball.getX() - (int) (oldWidth / 2));
-        ball.setY(ball.getY() - (int) (oldHeight / 2));
+        if (ball.isMainBall()) {
+            ball.setSpeed(20);
+            ball.setRadius(oldRadius * 2);
+            ball.updateVelocity();
+        }
     }
 
     @Override
     public void removeEffect() {
-        Ball ball = stage.getBalls().get(0);
-        ball.setSpeed(oldSpeed);
-        ball.setWidth(oldWidth);
-        ball.setHeight(oldHeight);
-        // Restore old position
-        ball.setX(ball.getX() + (int) (oldWidth / 2));
-        ball.setY(ball.getY() + (int) (oldHeight / 2));
-        alive = false;
+        if (ball.isMainBall()) {
+            ball.restoreDefaultStats(); // << use the new safe restore
+            alive = false;
+        }
     }
 }

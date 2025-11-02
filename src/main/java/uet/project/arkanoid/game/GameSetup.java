@@ -62,7 +62,6 @@ public class GameSetup {
 
         if (lvl == Level.STAGE_1) {
             lives = 5;
-            chests.add(new Chest(500, 500, 50, 50, this));
             paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED, this));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 
@@ -73,7 +72,6 @@ public class GameSetup {
             MapLoader.loadBricksFromTiled(this, Basis.STAGE_1);
         } else if (lvl == Level.STAGE_2) {
             lives = 8;
-            chests.add(new Chest(500, 500, 50, 50, this));
             paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED, this));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 
@@ -85,7 +83,6 @@ public class GameSetup {
             MapLoader.loadBricksFromTiled(this, Basis.STAGE_2);
         } else if (lvl == Level.STAGE_3) {
             lives = 5;
-            chests.add(new Chest(500, 500, 50, 50, this));
             paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED, this));  // 33 is padding
             Paddle paddleMain = paddles.get(0);
 

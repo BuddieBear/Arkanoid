@@ -64,6 +64,7 @@ public class GameManager extends Application {
     Instruction renderInstruction;
     Help renderHelp;
     Power_Up_View renderPower_Up_View;
+    BrickView renderBrickInstruction;
     LevelPlay renderLevel;
     PausedMenuView renderPausedMenu;
     LoadScreenView renderLoadScreen;
@@ -121,6 +122,7 @@ public class GameManager extends Application {
         renderInstruction = new Instruction();
         renderHelp = new Help();
         renderPower_Up_View = new Power_Up_View();
+        renderBrickInstruction = new BrickView();
         renderLevel = new LevelPlay();
         renderPausedMenu = new PausedMenuView();
         renderLoadScreen = new LoadScreenView();
@@ -255,6 +257,9 @@ public class GameManager extends Application {
         } else if (currentState == GameState.POWER_UP) {
             renderPower_Up_View.onDraw(gc);
             renderPower_Up_View.onDraw(gc, canvas);
+        } else if (currentState == GameState.BRICK_VIEW) {
+            renderBrickInstruction.onDraw(gc);
+            renderBrickInstruction.onDraw(gc, canvas);
         } else if (currentState == GameState.PLAYING) {
             renderGame.onDraw(gc);
         } else if (currentState == GameState.PAUSED) {
@@ -332,6 +337,8 @@ public class GameManager extends Application {
                 currentState = renderHelp.handleClick(mouseX, mouseY, stage);
             } else if (currentState == GameState.POWER_UP) {
                 currentState = renderPower_Up_View.handleClick(mouseX, mouseY, stage);
+            } else if (currentState == GameState.BRICK_VIEW) {
+                currentState = renderBrickInstruction.handleClick(mouseX, mouseY, stage);
             } else if (currentState == GameState.GAME_OVER) {
                 currentState = GameOverView.handleClick(mouseX, mouseY, stage);
             } else if (currentState == GameState.CHEST_MENU) {

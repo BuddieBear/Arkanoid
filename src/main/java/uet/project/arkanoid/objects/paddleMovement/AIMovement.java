@@ -22,7 +22,7 @@ public class AIMovement implements MovementStrategy {
 
         // Calculate the boundaries for the paddle's center
         double minPaddleCenter = Basis.STAGE_X + paddle.getWidth() / 2;
-        double maxPaddleCenter = Basis.STAGE_WIDTH - Basis.STAGE_X - paddle.getWidth() / 2;
+        double maxPaddleCenter = Basis.STAGE_WIDTH + Basis.STAGE_X - paddle.getWidth() / 2;
 
         double newPaddleCenter = ballCenter;
 

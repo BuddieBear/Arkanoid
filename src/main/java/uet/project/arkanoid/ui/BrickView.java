@@ -10,16 +10,17 @@ import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.game.GameState;
 import uet.project.arkanoid.utils.Basis;
 
-public class Power_Up_View implements View{
+public class BrickView implements View{
     private int radius = 50;
     private int widthImage = 400;
     private int heightImage = 300;
     private int space = 50;
     private int scrollY = 0;
-    private int contentHeight = 100 + 4 * heightImage + 3 * space;
+    private int contentHeight = 100 + 4 * heightImage + 3 * space + 100;
     private int viewHeight = Basis.SCREEN_HEIGHT;
     private int x = (Basis.SCREEN_WIDTH - 2 * widthImage) / 3;
 
+    @Override
     public void onDraw(GraphicsContext gc) {
         gc.setFill(Color.BURLYWOOD);
         gc.fillRect(0, 0, Basis.SCREEN_WIDTH, Basis.SCREEN_HEIGHT);
@@ -31,9 +32,9 @@ public class Power_Up_View implements View{
         && mouseY >= Basis.BACK_Y && mouseY <= Basis.BACK_Y + Basis.BACK_H) {
             return GameState.INSTRUCTION;
         }
-        return GameState.POWER_UP;
+        return GameState.BRICK_VIEW;
     }
-
+    
     public void onDraw(GraphicsContext gc, Canvas canvas) {
         canvas.setOnScroll((ScrollEvent e) -> {
             scrollY += e.getDeltaY();
@@ -48,19 +49,18 @@ public class Power_Up_View implements View{
         gc.setFont(new Font("Aria", 30));
 
         gc.drawImage(Basis.BACK_BUTTON, Basis.BACK_X, scrollY, Basis.BACK_W, Basis.BACK_H);
-        //gc.drawImage(Basis.MULTI_BALL_PU, x, scrollY + 100, widthImage, heightImage);
-        drawRoundedImage(gc, Basis.MULTI_BALL_PU, x, scrollY + 100, widthImage, heightImage, radius);
-        gc.fillText("Nhân 3 số bóng hiện tại đang có.", x + 450, scrollY + 100 + heightImage / 2);
-        //gc.drawImage(Basis.SUPER_BALL_PU, x, scrollY + 100 + heightImage + space, widthImage, heightImage);
-        drawRoundedImage(gc, Basis.SUPER_BALL_PU, x, scrollY + 100 + heightImage + space, widthImage, heightImage, radius);
-        gc.fillText("Tăng kích thước bóng 1.5 lần,\n tăng tốc độ bóng.", x + 450, scrollY + 100 
-        + heightImage + space + heightImage / 2);
-        //gc.drawImage(Basis.POWERUP_TEMP, x, scrollY + 100 + 2 * (heightImage + space), widthImage, heightImage);
-        drawRoundedImage(gc, Basis.EXTEND_PADDLE_PU, x, scrollY + 100 + 2 * (heightImage + space), widthImage, heightImage, radius);
-        gc.fillText("Tăng kích thước paddle.", x + 450, scrollY + 100 + 2 * (heightImage + space) + heightImage / 2);
-
-        drawRoundedImage(gc, Basis.SHRINK_PADDLE_PU, x, scrollY + 100 + 3 * (heightImage + space), widthImage, heightImage, radius);
-        gc.fillText("Giảm kích thước paddle.", x + 450, scrollY + 100 + 3 * (heightImage + space) + heightImage / 2);
+        //gc.drawImage(Basis.BRICK_NORMAL_TEXTURE_1, x, scrollY + 100, widthImage, heightImage);
+        drawRoundedImage(gc, Basis.BRICK_NORMAL_TEXTURE_1, x, scrollY + 100, widthImage, heightImage, radius);
+        gc.fillText("Cần 1 va chạm để phá", x + 450, scrollY + 100 + heightImage / 2);
+        drawRoundedImage(gc, Basis.BRICK_NORMAL_TEXTURE_2[1], x, scrollY + 100 + heightImage + space, widthImage, heightImage, radius);
+        //gc.drawImage(Basis.BRICK_NORMAL_TEXTURE_2[1], x, scrollY + 100 + heightImage + space, widthImage, heightImage);
+        gc.fillText("Cần 2 va chạm để phá", x + 450, scrollY + 100 + heightImage + space + heightImage / 2);
+        //gc.drawImage(Basis.BRICK_NORMAL_TEXTURE_3[2], x, scrollY + 100 + 2 * (heightImage + space), widthImage, heightImage);
+        drawRoundedImage(gc, Basis.BRICK_NORMAL_TEXTURE_3[2], x, scrollY + 100 + 2 * (heightImage + space), widthImage, heightImage, radius);
+        gc.fillText("Cần 3 va chạm để phá", x + 450, scrollY + 100 + 2 * (heightImage + space) + heightImage / 2);
+        //gc.drawImage(Basis.BRICK_INDESTRUCTIBLE_TEXTURE, x, scrollY + 100 + 3 * (heightImage + space), widthImage, heightImage);
+        drawRoundedImage(gc, Basis.BRICK_INDESTRUCTIBLE_TEXTURE, x, scrollY + 100 + 3 * (heightImage + space), widthImage, heightImage, radius);
+        gc.fillText("Không thể phá huỷ", x + 450, scrollY + 100 + 3 * (heightImage + space) + heightImage / 2);
     }
 
     private void drawRoundedImage(GraphicsContext gc, Image img,

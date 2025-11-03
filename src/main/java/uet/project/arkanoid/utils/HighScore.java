@@ -3,7 +3,7 @@ package uet.project.arkanoid.utils;
 import java.io.*;
 
 public class HighScore {
-    private static final String FILE_PATH = "highscore.txt";
+    private static final String FILE_PATH = "HighScore/highscore.txt";
 
     public int getHighScore(int level) {
         File file = new File(FILE_PATH);

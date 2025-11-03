@@ -12,7 +12,7 @@ import uet.project.arkanoid.utils.Basis;
 import java.util.List;
 
 public class Ammo extends MovableObject {
-    private double speed = 100;
+    private double speed = 400;
     private boolean isDestroy = false;
     private Rectangle hitBox;
 

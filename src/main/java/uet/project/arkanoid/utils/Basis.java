@@ -32,8 +32,8 @@ public class Basis {
     public static final int OBJECTIVE_BOARD_Y = 230;
 
     // Base stats
-    public static final int BALL_SPEED = 120;
-    public static final int PADDLE_SPEED = 120;
+    public static final int BALL_SPEED = 210;
+    public static final int PADDLE_SPEED = 210;
 
     // Menu
     public static final int PLAY_X = SCREEN_WIDTH / 2 - 100 - 35;

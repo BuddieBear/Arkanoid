@@ -14,8 +14,8 @@
   <object id="294" gid="4" x="294.648" y="490.584" width="85" height="30"/>
   <object id="295" gid="3" x="174.648" y="489.584" width="85" height="30"/>
   <object id="296" gid="5" x="900" y="550" width="228.032" height="30" rotation="110"/>
-  <object id="298" gid="1" x="930.148" y="82.5845" width="120.547" height="53.1046" rotation="50"/>
-  <object id="299" gid="5" x="590.632" y="38.5845" width="228.032" height="30" rotation="100"/>
+  <object id="298" gid="1" x="930.148" y="185" width="120.547" height="53.1046" rotation="50"/>
+  <object id="299" gid="5" x="590.632" y="350" width="228.032" height="30" rotation="100"/>
   <object id="300" gid="5" x="37.3288" y="423.416" width="420.075" height="30"/>
   <object id="301" gid="6" x="306" y="350" width="57" height="63"/>
   <object id="302" gid="1" x="71" y="80" width="85" height="30"/>

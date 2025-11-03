@@ -40,7 +40,6 @@ public class Rectangle implements Shape {
 
     public boolean intersect(Shape other) {
         if (other instanceof Rectangle rect) {
-            if (rect.rotation == 0 && this.rotation == 0) {
                 double halfW = this.size.getX() / 2.0;
                 double halfH = this.size.getY() / 2.0;
                 double otherHalfW = rect.size.getX() / 2.0;
@@ -50,7 +49,6 @@ public class Rectangle implements Shape {
                 double dy = Math.abs(this.center.getY() - rect.center.getY());
 
                 return dx <= (halfW + otherHalfW) && dy <= (halfH + otherHalfH);
-            }
         } else if (other instanceof Circle circle) {
             return circle.intersect(this);
         }

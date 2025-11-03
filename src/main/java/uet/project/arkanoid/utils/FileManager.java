@@ -9,7 +9,7 @@ import java.util.List;
 
 public class FileManager {
     private static final String FOLDER_PATH = "HighScore";
-    private static final String SCORE_FILE = FOLDER_PATH + "/score_level_1.txt";
+    private static final String SCORE_FILE = FOLDER_PATH + "/score.txt";
 
     // Ensure the folder and file exist before any operation
     private static void ensureFileExists() throws IOException {
@@ -38,15 +38,4 @@ public class FileManager {
             System.err.println("Error saving score: " + e.getMessage());
         }
     }
-
-    public static List<String> loadScores() {
-        try {
-            ensureFileExists();
-            return Files.readAllLines(Paths.get(SCORE_FILE));
-        } catch (IOException e) {
-            return List.of("No scores yet!");
-        }
-    }
-
-
 }

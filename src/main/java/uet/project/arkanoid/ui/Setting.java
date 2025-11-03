@@ -12,13 +12,13 @@ public class Setting {
 
         gc.drawImage(Basis.BACK_BUTTON, Basis.BACK_X, Basis.BACK_Y, Basis.BACK_W, Basis.BACK_H);
 
-        gc.setFill(Color.WHITE);              
-        gc.setFont(new Font("Arial", 36));    
-        gc.fillText("HÚ HÚ HÁ HÁ", Basis.SCREEN_WIDTH / 2 - 50, Basis.SCREEN_HEIGHT / 2);     
+        gc.setFill(Color.WHITE);
+        gc.setFont(new Font("Arial", 36));
+        gc.fillText("Nothing for now", Basis.SCREEN_WIDTH / 2 - 50, Basis.SCREEN_HEIGHT / 2);
     }
 
     public static boolean back(double mouseX, double mouseY) {
-        return mouseX >= Basis.BACK_X && mouseX <= Basis.BACK_X + Basis.BACK_W 
+        return mouseX >= Basis.BACK_X && mouseX <= Basis.BACK_X + Basis.BACK_W
         && mouseY >= Basis.BACK_Y && mouseY <= Basis.BACK_Y + Basis.BACK_H;
     }
 }

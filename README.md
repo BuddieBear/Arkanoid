@@ -11,83 +11,121 @@ Arkanoid Group Project (OOP)
 
 Start date: 29/9/2025
 
-1. Giới thiệu chung
+________________________________________
+Đồ án Game: Arkanoid
+________________________________________
+Giới thiệu chung
 Arkanoid là một trò chơi hành động – phản xạ thuộc thể loại Breakout cổ điển, nơi người chơi điều khiển paddle để đánh bóng (ball) phá các viên gạch (bricks).
-Phiên bản Arkanoid này được phát triển bằng Java 17 và JavaFX, bổ sung nhiều tính năng hiện đại và phong phú, bao gồm:
-Nhiều màn chơi (Levels): Có nhiều màn chơi với độ khó tăng dần (ví dụ: STAGE_1, STAGE_2, STAGE_3).
-Các loại gạch: Gồm gạch thường (NormalBrick) và gạch không thể phá (IndestructibleBrick).
-Hệ thống Power-Up & De-Buff: Bao gồm 9 loại vật phẩm đa dạng với thời gian hiệu lực.
-Âm thanh chân thực: Gồm âm thanh va chạm (với tường, gạch, paddle), âm thanh hiệu ứng (mất mạng, nhận power-up).
-Chế độ chơi: Chế độ 1 người chơi.
-Hệ thống điểm, mạng: Lưu điểm (Score), số mạng (Lives) và lưu điểm cao nhất (High Score).
-Tính năng độc đáo: Người chơi có thể bắn đạn (Ammo) bằng cách nhấn chuột.
-2. Giao diện người dùng
-2.1. Màn hình chính
-Game có nhiều màn hình chức năng:
-Menu: Màn hình chính.
-LevelPlay: Giao diện chọn màn chơi.
-LoadScreen: Giao diện tải game (nếu có).
-Setting: Cài đặt game.
-Instruction / Help: Hướng dẫn chơi.
-Power_Up_View: Hiển thị thông tin các vật phẩm.
-2.2. Giao diện trong game
-Hiển thị điểm (Score) và mạng (Lives).
-Khi nhận Power-Up, hiển thị thanh thời gian hiệu lực của vật phẩm đó.
-3. Cấu trúc màn chơi (Level Design)
-Gồm nhiều màn chơi (ví dụ: STAGE_1, STAGE_2, STAGE_3).
-Mỗi màn có bố cục gạch khác nhau, được tải từ các tệp bản đồ (sử dụng MapLoader.loadBricksFromTiled).
-4. Gạch
-4.1. Phân loại
-NormalBrick: Gạch thường, có thể bị phá.
-IndestructibleBrick: Gạch không thể phá.
-4.2. Điểm số
-Mỗi viên gạch bị phá sẽ cho điểm, tính dựa trên maxHp của gạch (ví dụ: brick.getMaxHp() * 10).
-5. Power-Up
-Game có 9 loại vật phẩm, được chia làm 2 nhóm:
-5.1. Buffs
-SuperBallPowerUp: (Không rõ hiệu ứng từ mã nguồn).
-InvincibleBallPowerUp: Bóng bất tử, phá gạch không nảy lại.
-MultiBallPowerUp: Tạo thêm các bóng phụ.
-ExtraLifePowerUp: Cộng thêm 1 mạng.
-DoubleScorePowerUp: Nhân đôi điểm nhận được.
-RespawnFreePowerUp: (Không rõ hiệu ứng từ mã nguồn).
-ExtendPaddle: Mở rộng paddle.
-5.2. De-Buffs
-HarderBrickPowerDown: Gạch trở nên khó phá hơn.
-ShrinkPaddle: Thu nhỏ paddle.
-5.3. Cơ chế
-Power-Up rơi ra khi phá gạch (với một tỷ lệ nhất định).
-Mỗi Power-Up có hiệu lực trong một khoảng thời gian (ví dụ: 3 giây) và có thanh hiển thị thời gian.
-6. Âm thanh
-Game sử dụng lớp AudioSet để quản lý âm thanh:
-Âm va chạm: Phát khi bóng chạm tường (wallBounceSound), chạm gạch (collisionBrickSound), hoặc chạm paddle (collisionPaddleSound).
-Âm hiệu ứng: Phát khi nhận Power-Up (powerUpSound), mất mạng (lossHpSound), hoặc Game Over (gameOverSound).
-7. Cơ chế gameplay
-7.1. Cơ bản
-Người chơi điều khiển paddle bằng phím A (Trái) và D (Phải).
-Nhấn Space để phóng bóng.
-Bóng rơi khỏi màn hình → mất 1 mạng.
-Khi hết tất cả mạng → Game Over.
-Khi phá hết gạch có thể phá → Thắng màn chơi.
-Nhấn Escape để tạm dừng (Pause) game.
-7.2. Cơ chế điểm và mạng
-Người chơi khởi đầu với số mạng tùy theo màn (ví dụ: Màn 1 là 5 mạng, Màn 2 là 8 mạng).
-Game lưu lại Highest Score (điểm cao nhất đạt được).
-7.3. Cơ chế đặc biệt
-Bắn đạn: Người chơi có thể nhấn chuột để bắn đạn (Ammo), mỗi lần bắn tốn 20 điểm.
-Chế độ AI: Người chơi có thể nhấn phím S để bật/tắt chế độ AI tự động điều khiển paddle.
-8. Chế độ chơi
-8.1. Chế độ 1 người
-Màn hình hiển thị: Paddle, bóng, gạch, điểm, số mạng.
-Mục tiêu: Đạt điểm cao nhất và so sánh với Highest Score.
-8.2. Chế độ AI
-Kích hoạt bằng phím S.
-Paddle sẽ tự động di chuyển theo bóng.
-9. Cấu trúc chương trình
-GameManager: Lớp Application chính của JavaFX, quản lý vòng lặp game (AnimationTimer), các trạng thái game (GameState), xử lý input (phím, chuột).
-GameSetup: Khởi tạo và quản lý các đối tượng trong màn chơi (danh sách bricks, balls, paddles), quản lý logic điểm, mạng, và điều kiện thắng/thua.
-Ball: Kế thừa MovableObject. Quản lý logic di chuyển, va chạm với gạch/paddle/tường, và góc bắn.
-Paddle: Kế thừa MovableObject. Quản lý logic di chuyển. Sử dụng MovementStrategy (hoặc PlayerMovement hoặc AIMovement) để quyết định cách di chuyển.
-Brick: Lớp cha cho các loại gạch, quản lý độ cứng (hitPoints).
-PowerUp: Lớp cha cho tất cả vật phẩm, quản lý thời gian hiệu lực (effectDurationMillis) và logic áp dụng/gỡ bỏ hiệu ứng.
+Phiên bản Arkanoid này được phát triển bằng Java 17 và JavaFX, bổ sung nhiều tính năng hiện đại và phong phú.
+Các tính năng chính:
+•	Nhiều màn chơi (Levels): Có độ khó tăng dần (ví dụ: STAGE_1, STAGE_2, STAGE_3).
+•	Các loại gạch:
+o	NormalBrick: Gạch thường, có thể bị phá.
+o	IndestructibleBrick: Gạch không thể phá.
+•	Hệ thống Power-Up & De-Buff: 9 loại vật phẩm đa dạng, có thời gian hiệu lực giới hạn.
+•	Âm thanh chân thực: Bao gồm va chạm tường, gạch, paddle; âm thanh khi mất mạng hoặc nhận vật phẩm.
+•	Chế độ chơi: 1 người chơi. Game có Đa luồng.
+
+•	Hệ thống điểm & mạng: Ghi nhận Score, Lives và lưu High Score.
+•	Tính năng đặc biệt: Người chơi có thể bắn đạn (Ammo) bằng cách nhấn chuột.
+________________________________________
+Giao diện người dùng
+1. Màn hình chính:
+•	Menu: Giao diện chính của trò chơi.
+•	LevelPlay: Chọn màn chơi.
+•	LoadScreen: Màn hình tải game.
+•	Setting: Cài đặt game.
+•	Instruction / Help: Hướng dẫn người chơi.
+•	Power_Up_View: Hiển thị thông tin các vật phẩm.
+2. Giao diện trong game:
+•	Hiển thị điểm (Score) và mạng (Lives).
+•	Khi nhận Power-Up, hiển thị thanh thời gian hiệu lực của vật phẩm đó.
+________________________________________
+Cấu trúc màn chơi (Level Design)
+•	Gồm nhiều màn chơi với bố cục gạch khác nhau.
+•	Dữ liệu màn chơi được tải từ các tệp bản đồ sử dụng:
+•	MapLoader.loadBricksFromTiled();
+________________________________________
+Hệ thống gạch (Bricks)
+Phân loại:
+•	NormalBrick: Gạch thường, có thể bị phá.
+•	IndestructibleBrick: Gạch không thể phá.
+Điểm số:
+•	Mỗi viên gạch bị phá cho điểm theo công thức:
+•	Score += brick.getMaxHp() * 10
+________________________________________
+Hệ thống Power-Up
+Game có 9 loại vật phẩm, chia thành 2 nhóm:
+1. Buffs:
+•	SuperBallPowerUp: bóng buff kích thước, speed.
+•	InvincibleBallPowerUp: Bóng bất tử, phá gạch không nảy lại.
+•	MultiBallPowerUp: Sinh thêm bóng phụ.
+•	ExtraLifePowerUp: Cộng thêm 1 mạng.
+•	DoubleScorePowerUp: Nhân đôi điểm nhận được.
+•	RespawnFreePowerUp: (Thêm 1 lần respawn)
+•	ExtendPaddle: Mở rộng kích thước paddle.
+2. De-Buffs:
+•	HarderBrickPowerDown: Gạch trở nên khó phá hơn.
+•	ShrinkPaddle: Thu nhỏ paddle.
+3. Cơ chế:
+•	Power-Up rơi ra ngẫu nhiên khi gạch bị phá (với một tỉ lệ nhất định).
+•	Mỗi Power-Up có thời gian hiệu lực nhất định (ví dụ: 3 giây).
+•	Khi hiệu ứng đang hoạt động, hiển thị thanh thời gian (progress bar) trên giao diện.
+
+- Qua mỗi khoảng thời gian có Boss và Lightning xuất hiện, khi Boss xuất hiện có các brick di chuyển xuống dưới tấn công Paddle.
+________________________________________
+Hệ thống âm thanh (Audio)
+Game sử dụng lớp AudioSet để quản lý toàn bộ âm thanh:
+•	Âm va chạm:
+o	wallBounceSound: Bóng chạm tường.
+o	collisionBrickSound: Bóng chạm gạch.
+o	collisionPaddleSound: Bóng chạm paddle.
+•	Âm hiệu ứng:
+o	powerUpSound: Nhận Power-Up.
+o	lossHpSound: Mất mạng.
+o	gameOverSound: Khi Game Over.
+________________________________________
+Cơ chế gameplay
+1. Cơ bản:
+•	Điều khiển paddle bằng phím A (Trái) và D (Phải).
+•	Nhấn Space để phóng bóng.
+•	Bóng rơi khỏi màn hình → mất 1 mạng.
+•	Hết tất cả mạng → Game Over.
+•	Phá hết gạch có thể phá → Thắng màn chơi.
+•	Nhấn Escape để tạm dừng game.
+2. Cơ chế điểm & mạng:
+•	Mỗi màn chơi có số mạng khởi đầu khác nhau (ví dụ: Màn 1: 5 mạng, Màn 2: 8 mạng).
+•	Game lưu lại Highest Score đạt được.
+3. Cơ chế đặc biệt:
+•	Bắn đạn (Ammo): Nhấn chuột để bắn, mỗi lần bắn trừ 20 điểm.
+•	Chế độ AI: Nhấn phím S để bật/tắt chế độ AI tự động điều khiển paddle.
+________________________________________
+Chế độ chơi
+1. Chế độ 1 người:
+•	Hiển thị paddle, bóng, gạch, điểm, mạng.
+•	Mục tiêu: đạt điểm cao nhất có thể.
+2. Chế độ AI:
+•	Kích hoạt bằng phím S.
+•	Paddle tự động di chuyển theo vị trí của bóng.
+
+Nếu bị stuck bấm phím R để trở về tuy nhiên mất 1 mạng.
+________________________________________
+Cấu trúc chương trình
+•	GameManager:
+Lớp Application chính của JavaFX, quản lý vòng lặp game (AnimationTimer), trạng thái game (GameState), xử lý input (phím, chuột).
+•	GameSetup:
+Quản lý khởi tạo màn chơi, danh sách bricks, balls, paddles; xử lý logic điểm, mạng, điều kiện thắng/thua.
+•	Ball:
+Kế thừa MovableObject. Quản lý di chuyển, va chạm với gạch/paddle/tường, góc bắn.
+•	Paddle:
+Kế thừa MovableObject. Quản lý di chuyển, có thể dùng MovementStrategy (người chơi hoặc AI).
+Boss: spawn boss để warning rằng có brick rơi xuống, logic của Brick rơi thì ở GameManager, GameSetup.
+Lightning: spawn mây và thunder, mây để warning thunder xuất hiện tại đấy.
+•	Brick:
+Lớp cha cho các loại gạch, quản lý độ cứng (hitPoints).
+•	PowerUp:
+Lớp cha cho tất cả vật phẩm, quản lý thời gian hiệu lực (effectDurationMillis) và hiệu ứng.
+•	GameView (và các View khác):
+Quản lý render hình ảnh, giao diện, thanh điểm và vật phẩm.
+________________________________________
 GameView (và các lớp View khác): Quản lý việc vẽ (render) các đối tượng và giao diện lên GraphicsContext (Canvas). 

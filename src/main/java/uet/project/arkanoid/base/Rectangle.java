@@ -1,140 +1,162 @@
 package uet.project.arkanoid.base;
 
+/**
+ * Represents a rectangular shape with position, size, and rotation capabilities.
+ *
+ * <p>This class implements the Shape interface and provides methods for collision detection
+ * and geometric transformations. The rectangle is defined by its center point, size, and rotation.
+ */
 public class Rectangle implements Shape {
-    private Point center;
-    private Vector2D size;
-    private double rotation; // radian, 0 = no rotation
 
-    public Rectangle(Point center, Vector2D size, double rotation) {
-        this.center = center;
-        this.size = size;
-        this.rotation = rotation;
+  private Point center;
+  private Vector2D size;
+  private double rotation; // radian, 0 = no rotation
+
+  /**
+   * Constructs a new Rectangle with specified center, size, and rotation.
+   *
+   * @param center the center point of the rectangle
+   * @param size the dimensions of the rectangle (width and height)
+   * @param rotation the rotation angle in radians
+   */
+  public Rectangle(Point center, Vector2D size, double rotation) {
+    this.center = center;
+    this.size = size;
+    this.rotation = rotation;
+  }
+
+  /**
+   * Constructs a new Rectangle with specified coordinates, dimensions, and rotation.
+   *
+   * @param centerX the x-coordinate of the center point
+   * @param centerY the y-coordinate of the center point
+   * @param width the width of the rectangle
+   * @param height the height of the rectangle
+   * @param rotation the rotation angle in radians
+   */
+  public Rectangle(double centerX, double centerY, double width, double height, double rotation) {
+    this.center = new Point(centerX, centerY);
+    this.size = new Vector2D(width, height);
+    this.rotation = rotation;
+  }
+
+  /**
+   * Copy constructor that creates a new Rectangle from an existing one.
+   *
+   * @param hitbox the rectangle to copy
+   */
+  public Rectangle(Rectangle hitbox) {
+    this.center = hitbox.center;
+    this.size = hitbox.size;
+    this.rotation = hitbox.rotation;
+  }
+
+  /**
+   * Checks if this rectangle contains the specified point.
+   *
+   * @param p the point to check
+   * @return true if the point is inside the rectangle, false otherwise
+   */
+  public boolean contains(Point p) {
+    double cos = Math.cos(-rotation);
+    double sin = Math.sin(-rotation);
+    double dx = p.getX() - center.getX();
+    double dy = p.getY() - center.getY();
+
+    double localX = dx * cos - dy * sin;
+    double localY = dx * sin + dy * cos;
+
+    double halfW = size.getX() / 2.0;
+    double halfH = size.getY() / 2.0;
+
+    return Math.abs(localX) <= halfW && Math.abs(localY) <= halfH;
+  }
+
+  /**
+   * Checks if this rectangle intersects with another shape.
+   *
+   * @param other the other shape to check for intersection
+   * @return true if the shapes intersect, false otherwise
+   */
+  public boolean intersect(Shape other) {
+    if (other instanceof Rectangle rect) {
+      double halfW = this.size.getX() / 2.0;
+      double halfH = this.size.getY() / 2.0;
+      double otherHalfW = rect.size.getX() / 2.0;
+      double otherHalfH = rect.size.getY() / 2.0;
+
+      double dx = Math.abs(this.center.getX() - rect.center.getX());
+      double dy = Math.abs(this.center.getY() - rect.center.getY());
+
+      return dx <= (halfW + otherHalfW) && dy <= (halfH + otherHalfH);
+    } else if (other instanceof Circle circle) {
+      return circle.intersect(this);
     }
+    return false;
+  }
 
-    public Rectangle(double centerX, double centerY, double width, double height, double rotation) {
-        this.center = new Point(centerX, centerY);
-        this.size = new Vector2D(width, height);
-        this.rotation  = rotation;
-    }
+  /**
+   * Gets the rotation angle of the rectangle.
+   *
+   * @return the rotation angle in radians
+   */
+  public double getRotation() {
+    return rotation;
+  }
 
-    public Rectangle(Rectangle hitbox) {
-        this.center = hitbox.center;
-        this.size = hitbox.size;
-        this.rotation = hitbox.rotation;
-    }
+  /**
+   * Sets the rotation angle of the rectangle.
+   *
+   * @param rotation the new rotation angle in radians
+   */
+  public void setRotation(double rotation) {
+    this.rotation = rotation;
+  }
 
-    public boolean contains(Point p) {
-        double cos = Math.cos(-rotation);
-        double sin = Math.sin(-rotation);
-        double dx = p.getX() - center.getX();
-        double dy = p.getY() - center.getY();
+  /**
+   * Gets the size of the rectangle.
+   *
+   * @return the dimensions of the rectangle as a Vector2D
+   */
+  public Vector2D getSize() {
+    return size;
+  }
 
-        double localX = dx * cos - dy * sin;
-        double localY = dx * sin + dy * cos;
+  /**
+   * Sets the size of the rectangle.
+   *
+   * @param size the new dimensions of the rectangle
+   */
+  public void setSize(Vector2D size) {
+    this.size = size;
+  }
 
-        double halfW = size.getX() / 2.0;
-        double halfH = size.getY() / 2.0;
+  /**
+   * Gets the center point of the rectangle.
+   *
+   * @return the center point
+   */
+  public Point getCenter() {
+    return center;
+  }
 
-        return Math.abs(localX) <= halfW && Math.abs(localY) <= halfH;
-    }
+  /**
+   * Sets the center point of the rectangle.
+   *
+   * @param center the new center point
+   */
+  public void setCenter(Point center) {
+    this.center = center;
+  }
 
-    public boolean intersect(Shape other) {
-        if (other instanceof Rectangle rect) {
-
-            // Fast path: both axis-aligned
-            if (this.rotation == 0 && rect.rotation == 0) {
-                double halfW = this.size.getX() / 2.0;
-                double halfH = this.size.getY() / 2.0;
-                double otherHalfW = rect.size.getX() / 2.0;
-                double otherHalfH = rect.size.getY() / 2.0;
-
-                double dx = Math.abs(this.center.getX() - rect.center.getX());
-                double dy = Math.abs(this.center.getY() - rect.center.getY());
-
-                return dx <= (halfW + otherHalfW) && dy <= (halfH + otherHalfH);
-            }
-
-            // Transform rect B into A’s local coordinate system
-            double cos = Math.cos(-this.rotation);
-            double sin = Math.sin(-this.rotation);
-
-            // Transform B’s center relative to A
-            double dx = rect.center.getX() - this.center.getX();
-            double dy = rect.center.getY() - this.center.getY();
-
-            double localBx = dx * cos - dy * sin;
-            double localBy = dx * sin + dy * cos;
-
-            double relRotation = rect.rotation - this.rotation;
-
-            // A is axis-aligned in this local space
-            double halfAx = this.size.getX() / 2.0;
-            double halfAy = this.size.getY() / 2.0;
-
-            // Compute the projection of B’s half-extents onto A’s axes
-            double halfBx = rect.size.getX() / 2.0;
-            double halfBy = rect.size.getY() / 2.0;
-
-            double cosB = Math.cos(relRotation);
-            double sinB = Math.sin(relRotation);
-
-            // Effective projection of B onto A’s x and y axes
-            double projBxOnA = Math.abs(halfBx * cosB) + Math.abs(halfBy * sinB);
-            double projByOnA = Math.abs(halfBx * sinB) + Math.abs(halfBy * cosB);
-
-            // Check overlap on A's axes
-            if (Math.abs(localBx) > halfAx + projBxOnA) return false;
-            if (Math.abs(localBy) > halfAy + projByOnA) return false;
-
-            // Now project A onto B's axes (transformed)
-            double projAxOnB = Math.abs(halfAx * cosB) + Math.abs(halfAy * sinB);
-            double projAyOnB = Math.abs(halfAx * sinB) + Math.abs(halfAy * cosB);
-
-            // Transform A’s center (0,0) into B’s local space
-            double invCos = Math.cos(-relRotation);
-            double invSin = Math.sin(-relRotation);
-            double localAx = -localBx * invCos - -localBy * invSin;
-            double localAy = -localBx * invSin + -localBy * invCos;
-
-            if (Math.abs(localAx) > halfBx + projAxOnB) return false;
-            if (Math.abs(localAy) > halfBy + projAyOnB) return false;
-
-            return true;
-        }
-
-        else if (other instanceof Circle circle) {
-            return circle.intersect(this);
-        }
-
-        return false;
-    }
-
-    public double getRotation() {
-        return rotation;
-    }
-
-    public void setRotation(double rotation) {
-        this.rotation = rotation;
-    }
-
-    public Vector2D getSize() {
-        return size;
-    }
-
-    public void setSize(Vector2D size) {
-        this.size = size;
-    }
-
-    public Point getCenter() {
-        return center;
-    }
-
-    public void setCenter(Point center) {
-        this.center = center;
-    }
-
-    public void setCenter(double centerX, double centerY) {
-        this.center.setX(centerX);
-        this.center.setY(centerY);
-    }
+  /**
+   * Sets the center point of the rectangle using coordinates.
+   *
+   * @param centerX the x-coordinate of the new center
+   * @param centerY the y-coordinate of the new center
+   */
+  public void setCenter(double centerX, double centerY) {
+    this.center.setX(centerX);
+    this.center.setY(centerY);
+  }
 }

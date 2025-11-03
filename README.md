@@ -1,6 +1,7 @@
 # Arkanoid
-Diagram: https://lucid.app/lucidchart/f2dc1484-6555-4d2a-b377-d712e6e17bef/edit?page=0_0#
+Diagram: https://drive.google.com/file/d/1i6mOp430AFdbZ5EpiFPIy1IMDZiCM1BC/view?usp=sharing
 Link game demo: https://drive.google.com/drive/folders/1k_dAR30PbadPol92esx_7GMEtltul9k0?usp=drive_link
+Danh gia ca nhan: https://docs.google.com/spreadsheets/d/1fsqVL5rvPGrfDf6cypOoQJjGr2_iToTVoZbzhdyqjpE/edit?fbclid=IwY2xjawN1J7xleHRuA2FlbQIxMABicmlkETFNTDlZWlRmb1cwVDhPQ0NRAR54ek2EhcBo0tKVMITFah0DmqSRwOoj5bj265P9Di-zVeBXmJcqpRALLz81cQ_aem_pIYEJK7St2xpQ_3pzlh-Bg&gid=0#gid=0
 
 Arkanoid Group Project (OOP)
 - Hoàng Trung Dũng 24020084

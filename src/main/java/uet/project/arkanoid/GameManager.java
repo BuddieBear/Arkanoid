@@ -395,7 +395,7 @@ public class GameManager extends Application {
         }
 
         if (pressedKeys.contains(KeyCode.R)) {
-            ball.setCenter(Basis.SCREEN_WIDTH + Basis.BALL_DIAMETER/2 + 1, Basis.SCREEN_HEIGHT + Basis.BALL_DIAMETER/2 + 1 );
+            ball.setCenter(Basis.SCREEN_WIDTH + Basis.BALL_DIAMETER/2 + 100, Basis.SCREEN_HEIGHT + Basis.BALL_DIAMETER/2 + 100 );
         }
 
         if (pressedKeys.contains(KeyCode.SPACE)) {

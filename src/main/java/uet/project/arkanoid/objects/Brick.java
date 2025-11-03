@@ -9,9 +9,6 @@ import uet.project.arkanoid.base.Vector2D;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.Basis;
 
-/**
- * Represents a brick that can move during boss sequence.
- */
 public class Brick extends MovableObject {
 
     private int hitPoints;
@@ -141,29 +138,14 @@ public class Brick extends MovableObject {
         this.type = type;
     }
 
-    /**
-     * Gets the maximum hit points of the brick.
-     *
-     * @return the maximum hit points
-     */
     public int getMaxHp() {
         return maxHp;
     }
 
-    /**
-     * Gets the current hit points of the brick.
-     *
-     * @return the current hit points
-     */
     public int getHitPoints() {
         return hitPoints;
     }
 
-    /**
-     * Sets the hit points of the brick. Only affects NORMAL type bricks.
-     *
-     * @param hitPoints the new hit points value
-     */
     public void setHitPoints(int hitPoints) {
         if (type == BrickType.NORMAL) {
             this.hitPoints = hitPoints;

@@ -13,388 +13,334 @@ import java.util.List;
 
 public class GameSetup {
 
-  // Objects in stage
-  protected List<Brick> bricks;
-  protected List<Ball> balls;
-  protected List<Paddle> paddles;
-  protected List<PowerUp> powerUps;
-  protected List<Ammo> ammos;
-  protected List<Chest> chests;
-  protected List<Boss> bosses = new ArrayList<>();
-  protected List<FloatingText> floatingTexts;
-  protected Thunder thunder;
+	// Objects in stage
+	protected List<Brick> bricks;
+	protected List<Ball> balls;
+	protected List<Paddle> paddles;
+	protected List<PowerUp> powerUps;
+	protected List<Ammo> ammos;
+	protected List<Chest> chests;
+	protected List<Boss> bosses = new ArrayList<>();
+	protected List<FloatingText> floatingTexts;
+	protected Thunder thunder;
 
-  private int lives;
-  private int score;
+	private int lives;
+	private int score;
 
-  private int brick_streak = 0;
-  private int scorePerHp = 10;
-  private final int Base_ScorePerHp = 10;
+	private int brick_streak = 0;
+	private int scorePerHp = 10;
+	private final int Base_ScorePerHp = 10;
 
-  private Level currentLevel;
-  private GameState currentState;
+	private Level currentLevel;
+	private GameState currentState;
 
-  private long lastBossSpawnTime;
-  private final long BOSS_SPAWN_TIME = 10_000; // 20 seconds
-  private long lastBossTime;
-  private final long BOSS_SEQUENCE_TIME = 10_000;
+	private long lastBossSpawnTime;
+	private final long BOSS_SPAWN_TIME = 10_000; // 20 seconds
+	private long lastBossTime;
+	private final long BOSS_SEQUENCE_TIME = 10_000;
 
-  //time
-  protected double lastTime;
-  protected double deltaTime;
-  protected double currentTime;
+	//time
+	protected double lastTime;
+	protected double deltaTime;
+	protected double currentTime;
 
-  /**
-   * Khởi tạo đối tượng GameSetup cho một level cụ thể, bao gồm việc tạo danh sách vật thể, thời
-   * gian, boss và gọi hàm loadLevel().
-   *
-   * @param currentStage cấp độ hiện tại (Level.STAGE_1, STAGE_2, STAGE_3)
-   * @param currentState trạng thái ban đầu của game (PLAYING, PAUSED, v.v.)
-   */
-  public GameSetup(Level currentStage, GameState currentState) {
-    lastTime = System.nanoTime();
-    currentTime = lastTime;
-    deltaTime = 0;
-    // Initialize the lists
-    this.bricks = new ArrayList<>();
-    this.balls = new ArrayList<>();
-    this.paddles = new ArrayList<>();
-    this.powerUps = new ArrayList<>();
-    this.chests = new ArrayList<>();
-    this.ammos = new ArrayList<>();
-    this.thunder = new Thunder();
+	public GameSetup(Level currentStage, GameState currentState) {
+		lastTime = System.nanoTime();
+		currentTime = lastTime;
+		deltaTime = 0;
+		// Initialize the lists
+		this.bricks = new ArrayList<>();
+		this.balls = new ArrayList<>();
+		this.paddles = new ArrayList<>();
+		this.powerUps = new ArrayList<>();
+		this.chests = new ArrayList<>();
+		this.ammos = new ArrayList<>();
+		this.thunder = new Thunder();
 
-    floatingTexts = new ArrayList<>();
-    this.currentLevel = currentStage;
-    this.currentState = currentState;
-    this.lastBossSpawnTime = System.currentTimeMillis();
-    this.lastBossTime = 0;
+		floatingTexts = new ArrayList<>();
+		this.currentLevel = currentStage;
+		this.currentState = currentState;
+		this.lastBossSpawnTime = System.currentTimeMillis();
+		this.lastBossTime = 0;
 
-    loadLevel(currentStage);
-  }
+		loadLevel(currentStage);
+	}
 
-  /**
-   * Tải dữ liệu của một level cụ thể (gạch, bóng, paddle, mạng, bản đồ...). Dựa vào tham số
-   * {@code lvl} để chọn level tương ứng và gọi MapLoader.
-   *
-   * @param lvl cấp độ cần tải
-   */
-  public void loadLevel(Level lvl) {
-    this.clearLevel();
+	public void loadLevel(Level lvl) {
+		this.clearLevel();
 
-    //TODO: Switch - Case to create different Stage
+		//TODO: Switch - Case to create different Stage
 
-    if (lvl == Level.STAGE_1) {
-      lives = 5;
-      paddles.add(new Paddle(Basis.STAGE_X, Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED,
-          this));  // 33 is padding
-      Paddle paddleMain = paddles.get(0);
+		if (lvl == Level.STAGE_1) {
+			lives = 5;
+			paddles.add(new Paddle(Basis.STAGE_X, Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED,
+					this));  // 33 is padding
+			Paddle paddleMain = paddles.get(0);
 
-      balls.add(new Ball(paddleMain.getX() + paddleMain.getWidth() / 2,
-          paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 - 10,
-          (double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
+			balls.add(new Ball(paddleMain.getX() + paddleMain.getWidth() / 2,
+					paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 - 10,
+					(double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
 
-      MapLoader.loadBricksFromTiled(this, Basis.STAGE_1);
-    } else if (lvl == Level.STAGE_2) {
-      lives = 8;
-      paddles.add(new Paddle(Basis.STAGE_X, Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED,
-          this));  // 33 is padding
-      Paddle paddleMain = paddles.get(0);
+			MapLoader.loadBricksFromTiled(this, Basis.STAGE_1);
+		} else if (lvl == Level.STAGE_2) {
+			lives = 8;
+			paddles.add(new Paddle(Basis.STAGE_X, Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED,
+					this));  // 33 is padding
+			Paddle paddleMain = paddles.get(0);
 
-      balls.add(new Ball(paddleMain.getX() + paddleMain.getWidth() / 2,
-          paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 - 10,
-          (double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
+			balls.add(new Ball(paddleMain.getX() + paddleMain.getWidth() / 2,
+					paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 - 10,
+					(double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
 
-      MapLoader.loadBricksFromTiled(this, Basis.STAGE_2);
-    } else if (lvl == Level.STAGE_3) {
-      lives = 5;
-      paddles.add(new Paddle(Basis.STAGE_X, Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED,
-          this));  // 33 is padding
-      Paddle paddleMain = paddles.get(0);
+			MapLoader.loadBricksFromTiled(this, Basis.STAGE_2);
+		} else if (lvl == Level.STAGE_3) {
+			lives = 5;
+			paddles.add(new Paddle(Basis.STAGE_X, Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED,
+					this));  // 33 is padding
+			Paddle paddleMain = paddles.get(0);
 
-      balls.add(new Ball(paddleMain.getX() + paddleMain.getWidth() / 2,
-          paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 - 10,
-          (double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
+			balls.add(new Ball(paddleMain.getX() + paddleMain.getWidth() / 2,
+					paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 - 10,
+					(double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
 
-      MapLoader.loadBricksFromTiled(this, Basis.STAGE_3);
-    }
-  }
+			MapLoader.loadBricksFromTiled(this, Basis.STAGE_3);
+		}
+	}
 
-  /**
-   * Xóa toàn bộ đối tượng trong level hiện tại để chuẩn bị tải lại level mới.
-   */
-  public void clearLevel() {
-    bricks.clear();
-    balls.clear();
-    paddles.clear();
-    powerUps.clear();
-    ammos.clear();
-    chests.clear();
-    floatingTexts.clear();
-    bosses.clear();
-  }
+	public void clearLevel() {
+		bricks.clear();
+		balls.clear();
+		paddles.clear();
+		powerUps.clear();
+		ammos.clear();
+		chests.clear();
+		floatingTexts.clear();
+		bosses.clear();
+	}
 
-  /**
-   * Cập nhật trạng thái của boss, bao gồm việc spawn boss định kỳ và gọi update() từng boss.
-   *
-   * @param deltaTime thời gian trôi qua giữa hai khung hình (frame)
-   */
-  public void updateBosses(double deltaTime) {
-    long currentTime = System.currentTimeMillis();
+	public void updateBosses(double deltaTime) {
+		long currentTime = System.currentTimeMillis();
 
-    // Spawn boss every 20 seconds
-    if (currentTime - lastBossSpawnTime >= BOSS_SPAWN_TIME) {
-      spawnBoss();
-      lastBossSpawnTime = currentTime;
-    }
+		// Spawn boss every 20 seconds
+		if (currentTime - lastBossSpawnTime >= BOSS_SPAWN_TIME) {
+			spawnBoss();
+			lastBossSpawnTime = currentTime;
+		}
 
-    for (Boss boss : bosses) {
-      boss.update(deltaTime);
-    }
+		for (Boss boss : bosses) {
+			boss.update(deltaTime);
+		}
 
-    bosses.removeIf(Boss::isDead);
-  }
+		bosses.removeIf(Boss::isDead);
+	}
 
-  /**
-   * Sinh ra một boss mới tại vị trí ngẫu nhiên trên màn hình và hiển thị thông báo "BOSS
-   * SPAWNED!".
-   */
-  private void spawnBoss() {
-    // Spawn boss at random position
-    double x = Basis.STAGE_X + Math.random() * (Basis.STAGE_WIDTH - 80);
-    double y = 50 + Math.random() * 200;
+	private void spawnBoss() {
+		// Spawn boss at random position
+		double x = Basis.STAGE_X + Math.random() * (Basis.STAGE_WIDTH - 80);
+		double y = 50 + Math.random() * 200;
 
-    Boss newBoss = new Boss(x, y, 80, 60);
-    bosses.add(newBoss);
+		Boss newBoss = new Boss(x, y, 80, 60);
+		bosses.add(newBoss);
 
-    floatingTexts.add(new FloatingText("BOSS SPAWNED!",
-        Basis.SCREEN_WIDTH / 2 - 100, Basis.SCREEN_HEIGHT / 2, Color.RED));
-  }
+		floatingTexts.add(new FloatingText("BOSS SPAWNED!",
+				Basis.SCREEN_WIDTH / 2 - 100, Basis.SCREEN_HEIGHT / 2, Color.RED));
+	}
 
-  /**
-   * Tạo và thêm PowerUp khi gạch bị phá hủy. Nếu một loại PowerUp đang hoạt động, thời gian hiệu
-   * lực sẽ được kéo dài thay vì tạo mới.
-   *
-   * @param bricks1 danh sách gạch được kiểm tra để tạo PowerUp
-   */
-  public void addPowerUp(List<? extends Brick> bricks1) {
-    for (Brick brick : bricks1) {
-      if (brick.isDestroy()) {
-        brick_streak++;
+	public void addPowerUp(List<? extends Brick> bricks1) {
+		for (Brick brick : bricks1) {
+			if (brick.isDestroy()) {
+				brick_streak++;
 
-        if (brick_streak >= 3) {
-          // add flying texts
-          floatingTexts.add(new FloatingText("+" + String.valueOf(brick.getMaxHp() * 10),
-              brick.getX() + brick.getWidth(),
-              brick.getY() + brick.getHeight() / 2,
-              Color.GREEN));
+				if (brick_streak >= 3) {
+					// add flying texts
+					floatingTexts.add(new FloatingText("+" + String.valueOf(brick.getMaxHp() * 10),
+							brick.getX() + brick.getWidth(),
+							brick.getY() + brick.getHeight() / 2,
+							Color.GREEN));
 
-          if (brick_streak >= 1) {
-            brick_streak = 0;
-            int choice = (int) (Math.random() * 10); // 0 → 10
+					if (brick_streak >= 1) {
+						brick_streak = 0;
+						int choice = (int) (Math.random() * 10); // 0 → 10
 
-            PowerUp newPowerUp = switch (choice) {
-              case 0 -> new SuperBallPowerUp(brick, 30, 30, this);
-              case 1 -> new InvincibleBallPowerUp(brick, 30, 30, this);
-              case 2 -> new MultiBallPowerUp(brick, 30, 30, this);
-              case 3 -> new SuperBallPowerUp(brick, 30, 30, this);
-              case 4 -> new HarderBrickPowerDown(brick, 30, 30, this);
-              case 5 -> new ExtraLifePowerUp(brick, 30, 30, this);
-              case 6 -> new DoubleScorePowerUp(brick, 30, 30, this);
-              case 7 -> new RespawnFreePowerUp(brick, 30, 30, this);
-              case 8 -> new ExtendPaddle(brick, 30, 30, this);
-              case 9 -> new ShrinkPaddle(brick, 30, 30, this);
-              default -> null;
-            };
+						PowerUp newPowerUp = switch (choice) {
+							case 0 -> new SuperBallPowerUp(brick, 30, 30, this);
+							case 1 -> new InvincibleBallPowerUp(brick, 30, 30, this);
+							case 2 -> new MultiBallPowerUp(brick, 30, 30, this);
+							case 3 -> new SuperBallPowerUp(brick, 30, 30, this);
+							case 4 -> new HarderBrickPowerDown(brick, 30, 30, this);
+							case 5 -> new ExtraLifePowerUp(brick, 30, 30, this);
+							case 6 -> new DoubleScorePowerUp(brick, 30, 30, this);
+							case 7 -> new RespawnFreePowerUp(brick, 30, 30, this);
+							case 8 -> new ExtendPaddle(brick, 30, 30, this);
+							case 9 -> new ShrinkPaddle(brick, 30, 30, this);
+							default -> null;
+						};
 
-            if (newPowerUp != null) {
-              // Check if same type is already active
-              PowerUp existing = powerUps.stream()
-                  .filter(p -> p.getType() == newPowerUp.getType()
-                      && p.isCatchedPowerUp()).findFirst().orElse(null);
+						if (newPowerUp != null) {
+							// Check if same type is already active
+							PowerUp existing = powerUps.stream()
+									.filter(p -> p.getType() == newPowerUp.getType()
+											&& p.isCatchedPowerUp()).findFirst().orElse(null);
 
-              if (existing != null) {
-                // Extend or refresh duration instead of adding a new one
-                existing.extendDuration(existing.getEffectDurationMillis());
-              } else {
-                powerUps.add(newPowerUp);
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+							if (existing != null) {
+								// Extend or refresh duration instead of adding a new one
+								existing.extendDuration(existing.getEffectDurationMillis());
+							} else {
+								powerUps.add(newPowerUp);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
-  /**
-   * Kiểm tra xem có thể bắt đầu chuỗi hành động của boss không (khi có boss tồn tại và đã đủ thời
-   * gian từ lần trước).
-   *
-   * @return true nếu có thể bắt đầu, ngược lại false
-   */
-  public boolean canStartBoss() {
-    long currentTime = System.currentTimeMillis();
-    return !bosses.isEmpty() &&
-        (currentTime - lastBossTime >= BOSS_SEQUENCE_TIME);
-  }
+	public boolean canStartBoss() {
+		long currentTime = System.currentTimeMillis();
+		return !bosses.isEmpty() &&
+				(currentTime - lastBossTime >= BOSS_SEQUENCE_TIME);
+	}
 
-  /**
-   * Cập nhật thời gian lần cuối kích hoạt chuỗi hành động của boss.
-   */
-  public void setLastBossTime() {
-    this.lastBossTime = System.currentTimeMillis();
-  }
+	public void setLastBossTime() {
+		this.lastBossTime = System.currentTimeMillis();
+	}
 
-  /**
-   * Kiểm tra xem người chơi có thua hay không (mất hết mạng), lưu điểm, phát âm thanh "Game Over"
-   * và ghi nhận High Score.
-   *
-   * @return true nếu người chơi thua, ngược lại false
-   */
-  public boolean gameLose() {
-    if (lives > 0) {
-      return false;
-    }
-    AudioSet.gameOverSound.play();
-    FileManager.saveScore(this.score);
+	public boolean gameLose() {
+		if (lives > 0) {
+			return false;
+		}
+		AudioSet.gameOverSound.play();
+		FileManager.saveScore(this.score);
 
-    int level = getLevelHighScore();
-    if (level > 0) {
-      HighScore newHighScore = new HighScore();
-      newHighScore.saveNewHighScore(level, this.score);
-    }
-    return true;
-  }
+		int level = getLevelHighScore();
+		if (level > 0) {
+			HighScore newHighScore = new HighScore();
+			newHighScore.saveNewHighScore(level, this.score);
+		}
+		return true;
+	}
 
-  /**
-   * Kiểm tra điều kiện thắng game: không còn gạch NormalBrick nào. Nếu thắng, lưu điểm và High
-   * Score tương ứng.
-   *
-   * @return true nếu thắng, ngược lại false
-   */
-  public boolean gameWin() {
-    for (Brick brick : this.bricks) {
-      if (brick instanceof NormalBrick) {
-        return false;
-      }
-    }
-    FileManager.saveScore(this.score);
-    System.out.println("YOU WON!");
+	public boolean gameWin() {
+		for (Brick brick : this.bricks) {
+			if (brick instanceof NormalBrick) {
+				return false;
+			}
+		}
+		FileManager.saveScore(this.score);
+		System.out.println("YOU WON!");
 
-    int level = getLevelHighScore();
-    if (level > 0) {
-      HighScore newHighScore = new HighScore();
-      newHighScore.saveNewHighScore(level, this.score);
-    }
-    return true;
-  }
+		int level = getLevelHighScore();
+		if (level > 0) {
+			HighScore newHighScore = new HighScore();
+			newHighScore.saveNewHighScore(level, this.score);
+		}
+		return true;
+	}
 
-  /**
-   * Tiếp tục trò chơi sau khi bị tạm dừng (resume).
-   */
-  public void resumeGame() {
-    this.currentState = GameState.PLAYING;
-  }
+	// Resume Game
+	public void resumeGame() {
+		this.currentState = GameState.PLAYING;
+	}
 
-  public int getLevelHighScore() {
-    if (currentLevel == Level.STAGE_1) {
-      return 1;
-    } else if (currentLevel == Level.STAGE_2) {
-      return 2;
-    } else if (currentLevel == Level.STAGE_3) {
-      return 3;
-    }
-    return 0;
-  }
+	public int getLevelHighScore() {
+		if (currentLevel == Level.STAGE_1) {
+			return 1;
+		} else if (currentLevel == Level.STAGE_2) {
+			return 2;
+		} else if (currentLevel == Level.STAGE_3) {
+			return 3;
+		}
+		return 0;
+	}
 
-  // Getter - Setter methods
-  public Thunder getThunder() {
-    return thunder;
-  }
+	// Getter - Setter methods
+	public Thunder getThunder() {
+		return thunder;
+	}
 
-  public GameState getCurrentState() {
-    return currentState;
-  }
+	public GameState getCurrentState() {
+		return currentState;
+	}
 
-  public void setCurrentState(GameState currentState) {
-    this.currentState = currentState;
-  }
+	public void setCurrentState(GameState currentState) {
+		this.currentState = currentState;
+	}
 
-  public List<Chest> getChests() {
-    return chests;
-  }
+	public List<Chest> getChests() {
+		return chests;
+	}
 
-  public List<Brick> getBricks() {
-    return bricks;
-  }
+	public List<Brick> getBricks() {
+		return bricks;
+	}
 
-  public List<Boss> getBosses() {
-    return bosses;
-  }
+	public List<Boss> getBosses() {
+		return bosses;
+	}
 
-  // XÓA: public List<Trace> getTraces()
+	// XÓA: public List<Trace> getTraces()
 
-  public double getDeltaTime() {
-    return deltaTime;
-  }
+	public double getDeltaTime() {
+		return deltaTime;
+	}
 
-  public List<FloatingText> getFloatingBricks() {
-    return floatingTexts;
-  }
+	public List<FloatingText> getFloatingBricks() {
+		return floatingTexts;
+	}
 
-  public List<Ball> getBalls() {
-    return balls;
-  }
+	public List<Ball> getBalls() {
+		return balls;
+	}
 
-  public List<Paddle> getPaddles() {
-    return paddles;
-  }
+	public List<Paddle> getPaddles() {
+		return paddles;
+	}
 
-  public int getBase_ScorePerHp() {
-    return Base_ScorePerHp;
-  }
+	public int getBase_ScorePerHp() {
+		return Base_ScorePerHp;
+	}
 
-  public int getScorePerHp() {
-    return scorePerHp;
-  }
+	public int getScorePerHp() {
+		return scorePerHp;
+	}
 
-  public void setScorePerHp(int scorePerHp) {
-    this.scorePerHp = scorePerHp;
-  }
+	public void setScorePerHp(int scorePerHp) {
+		this.scorePerHp = scorePerHp;
+	}
 
-  public Paddle getPaddle() {
-    return paddles.get(0);
-  }
+	public Paddle getPaddle() {
+		return paddles.get(0);
+	}
 
-  public List<PowerUp> getPowerUps() {
-    return powerUps;
-  }
+	public List<PowerUp> getPowerUps() {
+		return powerUps;
+	}
 
-  public List<Ammo> getAmmos() {
-    return ammos;
-  }
+	public List<Ammo> getAmmos() {
+		return ammos;
+	}
 
-  public int getLives() {
-    return lives;
-  }
+	public int getLives() {
+		return lives;
+	}
 
-  public int getScore() {
-    return score;
-  }
+	public int getScore() {
+		return score;
+	}
 
-  public void setLives(int lives) {
-    this.lives = lives;
-  }
+	public void setLives(int lives) {
+		this.lives = lives;
+	}
 
-  public void setScore(int score) {
-    this.score = score;
-  }
+	public void setScore(int score) {
+		this.score = score;
+	}
 
-  public void addScore(int extra) {
-    this.score = this.score + extra;
-  }
+	public void addScore(int extra) {
+		this.score = this.score + extra;
+	}
 
-  public Level getCurrentLevel() {
-    return currentLevel;
-  }
+	public Level getCurrentLevel() {
+		return currentLevel;
+	}
 }

@@ -1,8 +1,7 @@
 package uet.project.arkanoid.base;
 
 public interface Shape {
+	boolean intersect(Shape other);
 
-    boolean intersect(Shape other);
-
-    boolean contains(Point p);
+	boolean contains(Point p);
 }

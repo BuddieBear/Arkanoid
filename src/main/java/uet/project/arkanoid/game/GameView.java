@@ -8,51 +8,51 @@ import java.util.List;
 
 public class GameView {
 
-    private GameSetup stage;
+	private GameSetup stage;
 
-    // Reference every object in the game
-    public GameView(GameSetup stage) {
-        this.stage = stage;
-    }
+	// Reference every object in the game
+	public GameView(GameSetup stage) {
+		this.stage = stage;
+	}
 
-    // Load new Stage
-    public void updateStage(GameSetup stage) {
-        this.stage = stage;
-    }
+	// Load new Stage
+	public void updateStage(GameSetup stage) {
+		this.stage = stage;
+	}
 
-    // Render objects and background in the stages
-    public void onDraw(GraphicsContext gc) {
-        //Background
-        gameUI.render(gc, stage);
+	// Render objects and background in the stages
+	public void onDraw(GraphicsContext gc) {
+		//Background
+		gameUI.render(gc, stage);
 
-        //Run render() on every objects in game.
-        for (Brick brick : stage.getBricks()) {
-            brick.render(gc);
-        }
-        for (FloatingText floatingText : stage.getFloatingBricks()) {
-            floatingText.render(gc);
-        }
-        for (Ball ball : stage.getBalls()) {
-            ball.render(gc);
-        }
-        for (Boss boss : stage.getBosses()) {
-            boss.render(gc);
-        }
-        for (Paddle paddle : stage.getPaddles()) {
-            paddle.render(gc);
-        }
-        for (Ammo ammo : stage.getAmmos()) {
-            ammo.render(gc);
-        }
+		//Run render() on every objects in game.
+		for (Brick brick : stage.getBricks()) {
+			brick.render(gc);
+		}
+		for (FloatingText floatingText : stage.getFloatingBricks()) {
+			floatingText.render(gc);
+		}
+		for (Ball ball : stage.getBalls()) {
+			ball.render(gc);
+		}
+		for (Boss boss : stage.getBosses()) {
+			boss.render(gc);
+		}
+		for (Paddle paddle : stage.getPaddles()) {
+			paddle.render(gc);
+		}
+		for (Ammo ammo : stage.getAmmos()) {
+			ammo.render(gc);
+		}
 
-        int index = 0;
+		int index = 0;
 
-        for (PowerUp powerUp : stage.getPowerUps()) {
-            powerUp.render(gc, index++);
-        }
-        for (Chest chest : stage.getChests()) {
-            chest.render(gc);
-        }
-        stage.getThunder().render(gc);
-    }
+		for (PowerUp powerUp : stage.getPowerUps()) {
+			powerUp.render(gc, index++);
+		}
+		for (Chest chest : stage.getChests()) {
+			chest.render(gc);
+		}
+		stage.getThunder().render(gc);
+	}
 }

@@ -127,6 +127,11 @@ public class MapLoader {
                             + brick.getMaxHp());
                 }
             }
+            for (Chest chest : stage.getChests()) {
+                writer.println("Chest," + chest.getX() + ","
+                        + chest.getY() + "," + chest.getWidth() + ","
+                        + chest.getHeight() + "," + chest.hasOpened());
+            }
         } catch (IOException e) {
             System.err.println("Không thể lưu game: " + e.getMessage());
         }

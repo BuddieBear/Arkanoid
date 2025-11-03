@@ -43,32 +43,24 @@ public class Circle implements Shape {
     return false;
   }
 
-  /**
-   * Checks if this circle contains the specified point.
-   *
-   * @param p the point to check
-   * @return true if the point is inside the circle, false otherwise
-   */
-  public boolean contains(Point p) {
-    double distanceToPoint = p.distanceTo(center);
-    return distanceToPoint <= radius;
-  }
+    public boolean contains(Point p) {
+        double distanceToPoint = p.distanceTo(center);
+        return distanceToPoint <= radius;
+    }
 
-  /**
-   * Checks for intersection with a (potentially rotated) rectangle.
-   *
-   * <p>This works by transforming the circle's center into the rectangle's local
-   * (unrotated) coordinate space. In that space, the rectangle is an AABB centered
-   * at (0,0), making the check simple.
-   *
-   * @param rect the rectangle to check for intersection
-   * @return true if the circle intersects the rectangle, false otherwise
-   */
-  private boolean intersectsRectangle(Rectangle rect) {
-    // Get rectangle properties
-    Point rectCenter = rect.getCenter();
-    Vector2D rectSize = rect.getSize();
-    double rectRotation = rect.getRotation();
+    /**
+     * Checks for intersection with a rotated rectangle.
+     * This works by centering the rectangle at (0,0),
+     * and rotate so that the edge of rect is paralel to the axis.
+     * Transform the ball circle to the local rectangle
+     *
+     * @return true if intersection occurs
+     */
+    private boolean intersectsRectangle(Rectangle rect) {
+        // Get rectangle properties
+        Point rectCenter = rect.getCenter();
+        Vector2D rectSize = rect.getSize();
+        double rectRotation = rect.getRotation();
 
     // Vector of Center to Center
     double dx = this.center.getX() - rectCenter.getX();
@@ -93,50 +85,26 @@ public class Circle implements Shape {
     return distance <= this.radius;
   }
 
-  /**
-   * Gets the center point of the circle.
-   *
-   * @return the center point
-   */
-  public Point getCenter() {
-    return center;
-  }
+    // Getter and setter
+    public Point getCenter() {
+        return center;
+    }
 
-  /**
-   * Sets the center point of the circle.
-   *
-   * @param center the new center point
-   */
-  public void setCenter(Point center) {
-    this.center = center;
-  }
+    public void setCenter(Point center) {
+        this.center = center;
+    }
 
-  /**
-   * Gets the radius of the circle.
-   *
-   * @return the radius
-   */
-  public double getRadius() {
-    return radius;
-  }
+    public double getRadius() {
+        return radius;
+    }
 
-  /**
-   * Sets the radius of the circle.
-   *
-   * @param radius the new radius
-   */
-  public void setRadius(double radius) {
-    this.radius = radius;
-  }
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
 
-  /**
-   * Sets both the center and radius of the circle.
-   *
-   * @param center the new center point
-   * @param radius the new radius
-   */
-  public void setCircle(Point center, double radius) {
-    this.center = center;
-    this.radius = radius;
-  }
+    public void setCircle(Point center, double radius) {
+        this.center = center;
+        this.radius = radius;
+    }
+
 }

@@ -8,22 +8,22 @@ import uet.project.arkanoid.objects.Brick;
 
 public class DamageBrickPowerUp extends PowerUp {
 
-  public DamageBrickPowerUp(GameObject object, double width, double height, GameSetup stage) {
-    super(object, width, height, stage, PowerUpType.DAMAGE_BRICK);
-  }
+	public DamageBrickPowerUp(GameObject object, double width, double height, GameSetup stage) {
+		super(object, width, height, stage, PowerUpType.DAMAGE_BRICK);
+	}
 
-  public void applyEffect() {
-    for (Brick brick : stage.getBricks()) {
-      if (Math.random() * 3 < 0.5) {
-        continue;
-      }
-      if (!(brick instanceof IndestructibleBrick)) {
-        brick.takeHit();
-      }
-    }
-  }
+	public void applyEffect() {
+		for (Brick brick : stage.getBricks()) {
+			if (Math.random() * 3 < 0.5) {
+				continue;
+			}
+			if (!(brick instanceof IndestructibleBrick)) {
+				brick.takeHit();
+			}
+		}
+	}
 
-  public void removeEffect() {
-    alive = false;
-  }
+	public void removeEffect() {
+		alive = false;
+	}
 }

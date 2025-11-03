@@ -9,9 +9,6 @@ import uet.project.arkanoid.base.Vector2D;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.utils.Basis;
 
-/**
- * Represents a brick that can move during boss sequence.
- */
 public class Brick extends MovableObject {
 
     private int hitPoints;
@@ -21,11 +18,12 @@ public class Brick extends MovableObject {
     private Rectangle hitBox;
     private GameSetup stage;
 
-    private boolean movementActivated = false;
+    private boolean movementActive = false;
     private double moveSpeed = 0;
     private Point startPos;
     private double originalX, originalY;
 
+    // animation when move
     private double glowRadius = 0;
     private boolean glowIncreasing = true;
     double glowSpeed = 30;
@@ -50,7 +48,7 @@ public class Brick extends MovableObject {
 
     @Override
     public void move(double deltaTime) {
-        if (!movementActivated) {
+        if (!movementActive) {
             return;
         }
 
@@ -68,11 +66,11 @@ public class Brick extends MovableObject {
     }
 
     public void startBossMovement(double targetX, double targetY, double speed) {
-        if (movementActivated) {
+        if (movementActive) {
             return;
         }
 
-        this.movementActivated = true;
+        this.movementActive = true;
         this.moveSpeed = speed;
 
         double dx = targetX - hitBox.getCenter().getX();
@@ -85,7 +83,7 @@ public class Brick extends MovableObject {
     }
 
     public void resetMovement() {
-        movementActivated = false;
+        movementActive = false;
         setDirection(new Vector2D(0, 0));
         setX(startPos.getX() - getWidth() / 2.0);
         setY(startPos.getY() - getHeight() / 2.0);
@@ -94,7 +92,7 @@ public class Brick extends MovableObject {
 
 
     public void update(double deltaTime) {
-        if (movementActivated) {// pixels per second
+        if (movementActive) {// pixels per second
             if (glowIncreasing) {
                 glowRadius += glowSpeed * deltaTime;
                 if (glowRadius > 40) {
@@ -114,7 +112,7 @@ public class Brick extends MovableObject {
     }
 
     public void render(GraphicsContext gc) {
-        if (movementActivated) {
+        if (movementActive) {
             Point center = hitBox.getCenter();
             double alpha = 0.2; // transparency
             gc.save();
@@ -141,29 +139,14 @@ public class Brick extends MovableObject {
         this.type = type;
     }
 
-    /**
-     * Gets the maximum hit points of the brick.
-     *
-     * @return the maximum hit points
-     */
     public int getMaxHp() {
         return maxHp;
     }
 
-    /**
-     * Gets the current hit points of the brick.
-     *
-     * @return the current hit points
-     */
     public int getHitPoints() {
         return hitPoints;
     }
 
-    /**
-     * Sets the hit points of the brick. Only affects NORMAL type bricks.
-     *
-     * @param hitPoints the new hit points value
-     */
     public void setHitPoints(int hitPoints) {
         if (type == BrickType.NORMAL) {
             this.hitPoints = hitPoints;
@@ -190,8 +173,8 @@ public class Brick extends MovableObject {
         return hitBox;
     }
 
-    public boolean isMovementActivated() {
-        return movementActivated;
+    public boolean isMovementActive() {
+        return movementActive;
     }
 
     public void setBrickImage(Image image) {
@@ -209,7 +192,7 @@ public class Brick extends MovableObject {
     public void resetToOriginalPosition() {
         this.setX(originalX - getWidth() / 2.0);
         this.setY(originalY - getHeight() / 2.0);
-        this.movementActivated = false;
+        this.movementActive = false;
         this.moveSpeed = 0;
         setDirection(new Vector2D(0, 0));
 
@@ -219,7 +202,7 @@ public class Brick extends MovableObject {
             - getHeight() / 2.0));
     }
 
-    public void setMovementActivated(boolean movementActivated) {
-        this.movementActivated = movementActivated;
+    public void setMovementActive(boolean movementActive) {
+        this.movementActive = movementActive;
     }
 }

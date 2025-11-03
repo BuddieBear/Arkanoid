@@ -1,7 +1,9 @@
 package uet.project.arkanoid.utils;
 
 import javax.xml.parsers.*;
+
 import org.w3c.dom.*;
+
 import java.io.File;
 
 import uet.project.arkanoid.base.Point;
@@ -26,244 +28,279 @@ import java.util.List;
 
 public class MapLoader {
 
-    public static void loadBricksFromTiled(GameSetup stage, String filePath) {
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(new File(filePath));
-            doc.getDocumentElement().normalize();
+	/**
+	 * Files for SAVE SLOTs.
+	 *
+	 * @param slot the load map slot
+	 * @return The file which is saved in the corresponding slot
+	 */
+	private static String getFileName(Saves slot) {
+		switch (slot) {
+			case SLOT_1:
+				return "Saves/SLOT_1.txt";
+			case SLOT_2:
+				return "Saves/SLOT_2.txt";
+			case SLOT_3:
+				return "Saves/SLOT_3.txt";
+			default:
+				throw new IllegalArgumentException("Unknown slot: " + slot);
+		}
+	}
 
-            NodeList objectGroups = doc.getElementsByTagName("objectgroup");
+	/**
+	 * Create new stage from the premade stages.
+	 *
+	 * @param stage    placeholder for stage's objects
+	 * @param filePath the map file
+	 */
+	public static void loadBricksFromTiled(GameSetup stage, String filePath) {
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document doc = builder.parse(new File(filePath));
+			doc.getDocumentElement().normalize();
 
-            for (int i = 0; i < objectGroups.getLength(); i++) {
-                Element group = (Element) objectGroups.item(i);
-                if (!"Bricks".equals(group.getAttribute("name"))) {
-                    continue;
-                }
+			NodeList objectGroups = doc.getElementsByTagName("objectgroup");
 
-                NodeList objects = group.getElementsByTagName("object");
+			for (int i = 0; i < objectGroups.getLength(); i++) {
+				Element group = (Element) objectGroups.item(i);
+				if (!"Bricks".equals(group.getAttribute("name"))) {
+					continue;
+				}
 
-                for (int j = 0; j < objects.getLength(); j++) {
-                    Element obj = (Element) objects.item(j);
+				NodeList objects = group.getElementsByTagName("object");
 
-                    int gid = Integer.parseInt(obj.getAttribute("gid"));
-                    double x = Double.parseDouble(obj.getAttribute("x"));
-                    double y = Double.parseDouble(obj.getAttribute("y"));
-                    double width = Double.parseDouble(obj.getAttribute("width"));
-                    double height = Double.parseDouble(obj.getAttribute("height"));
-                    String rotationAttr = obj.getAttribute("rotation");
+				for (int j = 0; j < objects.getLength(); j++) {
+					Element obj = (Element) objects.item(j);
 
-                    double rotation =
-                        rotationAttr.isEmpty() ? 0.0 : Double.parseDouble(rotationAttr);
-                    double rad = Math.toRadians(rotation);
+					int gid = Integer.parseInt(obj.getAttribute("gid"));
+					double x = Double.parseDouble(obj.getAttribute("x"));
+					double y = Double.parseDouble(obj.getAttribute("y"));
+					double width = Double.parseDouble(obj.getAttribute("width"));
+					double height = Double.parseDouble(obj.getAttribute("height"));
+					String rotationAttr = obj.getAttribute("rotation");
 
-                    double rotationRad = Math.toRadians(-rotation);
+					double rotation =
+							rotationAttr.isEmpty() ? 0.0 : Double.parseDouble(rotationAttr);
+					double rad = Math.toRadians(rotation);
 
-                    Vector2D localCenter = new Vector2D(width / 2.0, -height / 2.0);
-                    Vector2D rotatedOffset = localCenter.rotate(rotationRad);
+					double rotationRad = Math.toRadians(-rotation);
 
-                    // Final center in world coordinates
-                    double centerX = x + rotatedOffset.getX();
-                    double centerY = y + rotatedOffset.getY();
+					Vector2D localCenter = new Vector2D(width / 2.0, -height / 2.0);
+					Vector2D rotatedOffset = localCenter.rotate(rotationRad);
 
-                    y = y - height;
+					// Final center in world coordinates
+					double centerX = x + rotatedOffset.getX();
+					double centerY = y + rotatedOffset.getY();
 
-                    switch (gid) {
-                        case 1 -> stage.getBricks()
-                            .add(new NormalBrick(centerX, centerY, width, height, rad, 1, stage));
-                        case 3 -> stage.getBricks()
-                            .add(new NormalBrick(centerX, centerY, width, height, rad, 2, stage));
-                        case 4 -> stage.getBricks()
-                            .add(new NormalBrick(centerX, centerY, width, height, rad, 3, stage));
-                        case 5 -> stage.getBricks().add(
-                            new IndestructibleBrick(centerX, centerY, width, height, rad, stage));
-                        case 6 -> stage.getChests().add(new Chest(x, y, width, height, stage));
-                        default -> System.out.println(
-                            "Unknown gid: " + gid + " at (" + x + ", " + y + ")");
-                    }
-                }
-            }
+					y = y - height;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+					switch (gid) {
+						case 1 -> stage.getBricks()
+								.add(new NormalBrick(centerX, centerY, width, height, rad, 1, stage));
+						case 3 -> stage.getBricks()
+								.add(new NormalBrick(centerX, centerY, width, height, rad, 2, stage));
+						case 4 -> stage.getBricks()
+								.add(new NormalBrick(centerX, centerY, width, height, rad, 3, stage));
+						case 5 -> stage.getBricks().add(
+								new IndestructibleBrick(centerX, centerY, width, height, rad, stage));
+						case 6 -> stage.getChests().add(new Chest(x, y, width, height, stage));
+						default -> System.out.println(
+								"Unknown gid: " + gid + " at (" + x + ", " + y + ")");
+					}
+				}
+			}
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    private static String getFileName(Saves slot) {
-        switch (slot) {
-            case SLOT_1:
-                return "Saves/SLOT_1.txt";
-            case SLOT_2:
-                return "Saves/SLOT_2.txt";
-            case SLOT_3:
-                return "Saves/SLOT_3.txt";
-            default:
-                throw new IllegalArgumentException("Unknown slot: " + slot);
-        }
-    }
+	/**
+	 * Save the current game into a file
+	 *
+	 * @param slot  the slot that the file can be loaded in
+	 * @param stage the stage of the current game
+	 */
+	public static void saveGame(Saves slot, GameSetup stage) {
+		String fileName = getFileName(slot);
+		try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+			writer.println("GameState," + stage.getScore() + "," + stage.getLives());
+			Paddle paddle = stage.getPaddle();
+			writer.println("Paddle," + paddle.getX() + ","
+					+ paddle.getY() + "," + paddle.getWidth() + ","
+					+ paddle.getHeight() + "," + paddle.getSpeed());
+			for (Ball ball : stage.getBalls()) {
+				writer.println("Ball," + ball.getCenterX() + ","
+						+ ball.getCenterY() + "," + ball.getRadius() + "," + ball.getSpeed() + ","
+						+ ball.getDx() + "," + ball.getDy() + "," + ball.getLaunchState() + ","
+						+ ball.isInvincible() + "," + ball.isMainBall());
+			}
+			for (Brick brick : stage.getBricks()) {
+				if (brick.isDestroy() == false) {
+					writer.println("Brick," + brick.getX() + ","
+							+ brick.getY() + "," + brick.getWidth() + ","
+							+ brick.getHeight() + "," + ((Rectangle) brick.getHitbox()).getRotation()
+							+ ","
+							+ brick.getHitPoints() + "," + brick.getType().name() + ","
+							+ brick.getMaxHp());
+				}
+			}
+			for (Chest chest : stage.getChests()) {
+				writer.println("Chest," + chest.getX() + ","
+						+ chest.getY() + "," + chest.getWidth() + ","
+						+ chest.getHeight() + "," + chest.hasOpened());
+			}
+		} catch (IOException e) {
+			System.err.println("Không thể lưu game: " + e.getMessage());
+		}
+	}
 
-    public static boolean isSaveFile(Saves slot) {
-        String fileName = getFileName(slot);
-        File saveFile = new File(fileName);
-        return saveFile.exists() && saveFile.length() > 0;
-    }
+	/**
+	 * Load game from a previous save.
+	 *
+	 * @param slot  the save slot
+	 * @param stage the map from that save slot
+	 */
+	public static void loadGame(Saves slot, GameSetup stage) {
+		String fileName = getFileName(slot);
+		stage.clearLevel();
+		try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+			Paddle mainPaddle = null;
+			String line;
+			while ((line = reader.readLine()) != null) {
+				String[] array = line.split(",");
+				if (array.length == 0) {
+					continue;
+				}
+				String type = array[0];
+				switch (type) {
+					case "GameState":
+						stage.setScore(Integer.parseInt(array[1]));
+						stage.setLives(Integer.parseInt(array[2]));
+						break;
+					case "Paddle":
+						double paddleX = Double.parseDouble(array[1]);
+						double paddleY = Double.parseDouble(array[2]);
+						double paddleWidth = Double.parseDouble(array[3]);
+						double paddleHeight = Double.parseDouble(array[4]);
+						double paddleSpeed = Double.parseDouble(array[5]);
 
-    public static void saveGame(Saves slot, GameSetup stage) {
-        String fileName = getFileName(slot);
-        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-            writer.println("GameState," + stage.getScore() + "," + stage.getLives());
-            Paddle paddle = stage.getPaddle();
-            writer.println("Paddle," + paddle.getX() + ","
-                + paddle.getY() + "," + paddle.getWidth() + ","
-                + paddle.getHeight() + "," + paddle.getSpeed());
-            for (Ball ball : stage.getBalls()) {
-                writer.println("Ball," + ball.getCenterX() + ","
-                    + ball.getCenterY() + "," + ball.getRadius() + "," + ball.getSpeed() + ","
-                    + ball.getDx() + "," + ball.getDy() + "," + ball.getLaunchState() + ","
-                    + ball.isInvincible() + "," + ball.isMainBall());
-            }
-            for (Brick brick : stage.getBricks()) {
-                if (brick.isDestroy() == false) {
-                    writer.println("Brick," + brick.getX() + ","
-                        + brick.getY() + "," + brick.getWidth() + ","
-                        + brick.getHeight() + "," + ((Rectangle) brick.getHitbox()).getRotation()
-                        + ","
-                        + brick.getHitPoints() + "," + brick.getType().name() + ","
-                        + brick.getMaxHp());
-                }
-            }
-            for (Chest chest : stage.getChests()) {
-                writer.println("Chest," + chest.getX() + ","
-                    + chest.getY() + "," + chest.getWidth() + ","
-                    + chest.getHeight() + "," + chest.hasOpened());
-            }
-        } catch (IOException e) {
-            System.err.println("Không thể lưu game: " + e.getMessage());
-        }
-    }
+						// FIX: Create the paddle if the list is empty, then set properties
+						if (stage.getPaddles().isEmpty()) {
+							// Assume a default speed and size for creation (required by constructor)
+							mainPaddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight,
+									paddleSpeed, stage);
+							stage.getPaddles().add(mainPaddle);
+						} else {
+							mainPaddle = stage.getPaddle(); // Will now safely get the newly created paddle
+						}
 
-    public static void loadGame(Saves slot, GameSetup stage) {
-        String fileName = getFileName(slot);
-        stage.clearLevel();
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-            Paddle mainPaddle = null;
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] array = line.split(",");
-                if (array.length == 0) {
-                    continue;
-                }
-                String type = array[0];
-                switch (type) {
-                    case "GameState":
-                        stage.setScore(Integer.parseInt(array[1]));
-                        stage.setLives(Integer.parseInt(array[2]));
-                        break;
-                    case "Paddle":
-                        double paddleX = Double.parseDouble(array[1]);
-                        double paddleY = Double.parseDouble(array[2]);
-                        double paddleWidth = Double.parseDouble(array[3]);
-                        double paddleHeight = Double.parseDouble(array[4]);
-                        double paddleSpeed = Double.parseDouble(array[5]);
+						mainPaddle.setX((int) paddleX);
+						mainPaddle.setY((int) paddleY);
+						mainPaddle.setWidth(paddleWidth);
+						mainPaddle.setHeight(paddleHeight);
+						mainPaddle.setSpeed(paddleSpeed);
 
-                        // FIX: Create the paddle if the list is empty, then set properties
-                        if (stage.getPaddles().isEmpty()) {
-                            // Assume a default speed and size for creation (required by constructor)
-                            mainPaddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight,
-                                paddleSpeed, stage);
-                            stage.getPaddles().add(mainPaddle);
-                        } else {
-                            mainPaddle = stage.getPaddle(); // Will now safely get the newly created paddle
-                        }
+						break;
+					case "Ball":
+						double centerX = Double.parseDouble(array[1]);
+						double centerY = Double.parseDouble(array[2]);
+						double radius = Double.parseDouble(array[3]);
+						double speed = Double.parseDouble(array[4]);
+						double dx = Double.parseDouble(array[5]);
+						double dy = Double.parseDouble(array[6]);
+						boolean hasLaunch = Boolean.parseBoolean(array[7]);
+						boolean invincible = Boolean.parseBoolean(array[8]);
+						boolean mainBall = Boolean.parseBoolean(array[9]);
 
-                        mainPaddle.setX((int) paddleX);
-                        mainPaddle.setY((int) paddleY);
-                        mainPaddle.setWidth(paddleWidth);
-                        mainPaddle.setHeight(paddleHeight);
-                        mainPaddle.setSpeed(paddleSpeed);
+						Ball newBall = new Ball(centerX, centerY, radius, speed, stage);
 
-                        break;
-                    case "Ball":
-                        double centerX = Double.parseDouble(array[1]);
-                        double centerY = Double.parseDouble(array[2]);
-                        double radius = Double.parseDouble(array[3]);
-                        double speed = Double.parseDouble(array[4]);
-                        double dx = Double.parseDouble(array[5]);
-                        double dy = Double.parseDouble(array[6]);
-                        boolean hasLaunch = Boolean.parseBoolean(array[7]);
-                        boolean invincible = Boolean.parseBoolean(array[8]);
-                        boolean mainBall = Boolean.parseBoolean(array[9]);
+						if (!mainBall) {
+							newBall.setBallImage(Basis.MULTI_BALL_TEXTURE);
+						}
 
-                        Ball newBall = new Ball(centerX, centerY, radius, speed, stage);
+						newBall.setDx(dx);
+						newBall.setDy(dy);
+						newBall.setHasLaunch(hasLaunch);
+						newBall.setInvincible(invincible);
+						newBall.setMainBall(mainBall);
 
-                        if (!mainBall) {
-                            newBall.setBallImage(Basis.MULTI_BALL_TEXTURE);
-                        }
+						stage.getBalls().add(newBall);
+						break;
+					case "Brick":
+						int brickX = (int) Double.parseDouble(array[1]);
+						int brickY = (int) Double.parseDouble(array[2]);
+						double brickWidth = Double.parseDouble(array[3]);
+						double brickHeight = Double.parseDouble(array[4]);
+						double rotation = Double.parseDouble(array[5]);
+						int hitPoints = Integer.parseInt(array[6]);
+						BrickType brickType = BrickType.valueOf(array[7]);
+						int maxHp = Integer.parseInt(array[8]);
+						Brick newBrick;
+						if (brickType == BrickType.NORMAL) {
+							newBrick = new NormalBrick(brickX, brickY, brickWidth, brickHeight,
+									rotation, maxHp, stage);
+						} else {
+							newBrick = new IndestructibleBrick(brickX, brickY, brickWidth,
+									brickHeight, rotation, stage);
+						}
+						newBrick.setHitPoints(hitPoints);
+						stage.getBricks().add(newBrick);
+						break;
+					case "Chest": // ADDED: Load Chests
+						double chestX = Double.parseDouble(array[1]);
+						double chestY = Double.parseDouble(array[2]);
+						double chestWidth = Double.parseDouble(array[3]);
+						double chestHeight = Double.parseDouble(array[4]);
+						boolean chestOpened = Boolean.parseBoolean(array[5]);
 
-                        newBall.setDx(dx);
-                        newBall.setDy(dy);
-                        newBall.setHasLaunch(hasLaunch);
-                        newBall.setInvincible(invincible);
-                        newBall.setMainBall(mainBall);
+						Chest chest = new Chest(chestX, chestY, chestWidth, chestHeight, stage);
+						chest.setOpened(chestOpened);
 
-                        stage.getBalls().add(newBall);
-                        break;
-                    case "Brick":
-                        int brickX = (int) Double.parseDouble(array[1]);
-                        int brickY = (int) Double.parseDouble(array[2]);
-                        double brickWidth = Double.parseDouble(array[3]);
-                        double brickHeight = Double.parseDouble(array[4]);
-                        double rotation = Double.parseDouble(array[5]);
-                        int hitPoints = Integer.parseInt(array[6]);
-                        BrickType brickType = BrickType.valueOf(array[7]);
-                        int maxHp = Integer.parseInt(array[8]);
-                        Brick newBrick;
-                        if (brickType == BrickType.NORMAL) {
-                            newBrick = new NormalBrick(brickX, brickY, brickWidth, brickHeight,
-                                rotation, maxHp, stage);
-                        } else {
-                            newBrick = new IndestructibleBrick(brickX, brickY, brickWidth,
-                                brickHeight, rotation, stage);
-                        }
-                        newBrick.setHitPoints(hitPoints);
-                        stage.getBricks().add(newBrick);
-                        break;
-                    case "Chest": // ADDED: Load Chests
-                        double chestX = Double.parseDouble(array[1]);
-                        double chestY = Double.parseDouble(array[2]);
-                        double chestWidth = Double.parseDouble(array[3]);
-                        double chestHeight = Double.parseDouble(array[4]);
-                        boolean chestOpened = Boolean.parseBoolean(array[5]);
+						stage.getChests().add(chest);
+						break;
+				}
+			}
+		} catch (FileNotFoundException e) {
+			System.err.println("Không tìm thấy file: " + fileName);
+		} catch (IOException e) {
+			System.err.println("Không thể đọc file: " + e.getMessage());
+		} catch (NumberFormatException e) {
+			System.err.println("Lỗi định dạng số trong file save: " + e.getMessage());
+		} catch (Exception e) {
+			System.err.println("File bị lỗi" + e.getMessage());
+		}
+	}
 
-                        Chest chest = new Chest(chestX, chestY, chestWidth, chestHeight, stage);
-                        chest.setOpened(chestOpened);
+	/**
+	 * Each level has 1 save slot.
+	 *
+	 * @param level the corresponding level of the slot.
+	 * @return the save slot of that level
+	 */
+	public static Saves levelSave(Level level) {
+		switch (level) {
+			case STAGE_1:
+				return Saves.SLOT_1;
+			case STAGE_2:
+				return Saves.SLOT_2;
+			case STAGE_3:
+				return Saves.SLOT_3;
+			default:
+				throw new IllegalArgumentException("Màn chơi không xác định");
+		}
+	}
 
-                        stage.getChests().add(chest);
-                        break;
-                }
-            }
-        } catch (FileNotFoundException e) {
-            System.err.println("Không tìm thấy file: " + fileName);
-        } catch (IOException e) {
-            System.err.println("Không thể đọc file: " + e.getMessage());
-        } catch (NumberFormatException e) {
-            System.err.println("Lỗi định dạng số trong file save: " + e.getMessage());
-        } catch (Exception e) {
-            System.err.println("File bị lỗi" + e.getMessage());
-        }
-    }
-
-    public static Saves levelSave(Level level) {
-        switch (level) {
-            case STAGE_1:
-                return Saves.SLOT_1;
-            case STAGE_2:
-                return Saves.SLOT_2;
-            case STAGE_3:
-                return Saves.SLOT_3;
-            default:
-                throw new IllegalArgumentException("Màn chơi không xác định");
-        }
-    }
+	/**
+	 * Save file confirmation.
+	 *
+	 * @param slot places to save game
+	 * @return true if stage is saved
+	 */
+	public static boolean isSaveFile(Saves slot) {
+		String fileName = getFileName(slot);
+		File saveFile = new File(fileName);
+		return saveFile.exists() && saveFile.length() > 0;
+	}
 }

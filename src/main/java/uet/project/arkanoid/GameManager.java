@@ -46,8 +46,11 @@ public class GameManager extends Application {
     private final Set<KeyCode> pressedKeys = new HashSet<>();
 
     private boolean autoMovePaddle = false;
-
-    // --- Strategy Instances (NEW) ---
+  private boolean bossSequenceActive = false;   // true while we're spawning boss bricks
+  private boolean bossSpawned = false;          // true after we finished spawning once
+  private int currentBrickIndex = 0;            // next brick index to spawn
+  private long lastBrickSpawnTime = 0L;
+  // --- Strategy Instances (NEW) ---
     private final MovementStrategy playerStrategy = new PlayerMovement();
     private final MovementStrategy aiStrategy = new AIMovement();
 
@@ -231,6 +234,25 @@ public class GameManager extends Application {
         System.out.println("Game stopped and cleaned up successfully.");
     }
 
+  private void spawnNextBrick() {
+    if (currentBrickIndex >= stage.getBricks().size()) return;
+
+    Brick brick = stage.getBricks().get(currentBrickIndex);
+    if (!brick.isDestroy() && !brick.isMovementActivated()) {
+      Paddle paddle = stage.getPaddles().get(0);
+      brick.startBossMovement(
+          paddle.getX() + paddle.getWidth() / 2.0,
+          paddle.getY() + paddle.getHeight() / 2.0,
+          600.0 // tốc độ di chuyển
+      );
+    }
+  }
+
+  private void startBossSequence() {
+    bossSequenceActive = true;
+    currentBrickIndex = 0;
+    lastBrickSpawnTime = System.currentTimeMillis();
+  }
     public void render() {
         double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;
         double scaleY = canvas.getHeight() / Basis.SCREEN_HEIGHT;

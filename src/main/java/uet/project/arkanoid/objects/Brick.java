@@ -70,14 +70,13 @@ public class Brick extends GameObject {
     double w = hitBox.getSize().getX();
     double h = hitBox.getSize().getY();
 
-    gc.save(); // Save the current graphics state
-    gc.translate(center.getX(), center.getY()); // Move origin to brick's center
-    gc.rotate(rotationDegrees); // Rotate the canvas
+    gc.save();
+    gc.translate(center.getX(), center.getY());
+    gc.rotate(rotationDegrees);
 
-    // Draw the image centered at the new (0,0) origin
     gc.drawImage(brickImage, -w / 2.0, -h / 2.0, w, h);
 
-    gc.restore(); // Restore the original state
+    gc.restore();
   }
 
   /**

@@ -11,7 +11,6 @@ public class FileManager {
     private static final String FOLDER_PATH = "HighScore";
     private static final String SCORE_FILE = FOLDER_PATH + "/score.txt";
 
-    // Ensure the folder and file exist before any operation
     private static void ensureFileExists() throws IOException {
         Path folderPath = Paths.get(FOLDER_PATH);
         Path filePath = Paths.get(SCORE_FILE);
@@ -21,7 +20,7 @@ public class FileManager {
             Files.createDirectories(folderPath);
         }
 
-        // Create file if missing
+        // create file if missing
         if (!Files.exists(filePath)) {
             Files.createFile(filePath);
         }

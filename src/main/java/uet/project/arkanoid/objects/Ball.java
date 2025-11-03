@@ -175,7 +175,6 @@ public class Ball extends MovableObject {
       Rectangle rect = (Rectangle) other.getHitbox();
       Circle circle = this.hitbox;
 
-      // 1. Transform Circle Center to Rect's Local Space
       Point rectCenter = rect.getCenter();
       Vector2D rectSize = rect.getSize();
 
@@ -195,17 +194,14 @@ public class Ball extends MovableObject {
       double closestY = HelperFunction.clamp(localCircleY, -rectSize.getY() / 2.0,
           rectSize.getY() / 2.0);
 
-      // 3. Get Collision Normal (Local Space)
       double localNormalX = localCircleX - closestX;
       double localNormalY = localCircleY - closestY;
 
-      // 4. Rotate Normal back to World Space
       double cos_pos = Math.cos(rectRotation);
       double sin_pos = Math.sin(rectRotation);
       double worldNormalX = localNormalX * cos_pos - localNormalY * sin_pos;
       double worldNormalY = localNormalX * sin_pos + localNormalY * cos_pos;
 
-      // 5. Reflect Velocity Vector
       Vector2D normal = new Vector2D(worldNormalX, worldNormalY).normalize();
       Vector2D v_in = new Vector2D(getDx(), getDy());
       double dotProduct = v_in.dot(normal);
@@ -214,14 +210,12 @@ public class Ball extends MovableObject {
       this.angle = Math.toDegrees(Math.atan2(v_out.getY(), v_out.getX()));
       updateVelocity();
 
-      // 6. FIX FOR STICKY COLLISIONS
       double distDx = localCircleX - closestX;
       double distDy = localCircleY - closestY;
       double distance = Math.sqrt((distDx * distDx) + (distDy * distDy));
       double penetration = radius - distance;
 
       if (penetration > 0) {
-        // Push the ball out along the collision normal
         double pushX = normal.getX() * (penetration + 0.1);
         double pushY = normal.getY() * (penetration + 0.1);
         setCenter(getCenterX() + pushX, getCenterY() + pushY);
@@ -241,13 +235,10 @@ public class Ball extends MovableObject {
 
     double maxBounce = 60.0;
 
-    // Use 270 degrees as "up"
     double newAngle = 270.0 + hitPos * maxBounce;
 
-    // Clamp angles to be between 195 (up-left) and 345 (up-right)
     newAngle = HelperFunction.clamp(newAngle, 195, 345);
 
-    // CHANGED: Set the *movement* angle
     this.angle = newAngle;
     updateVelocity();
   }
@@ -258,7 +249,6 @@ public class Ball extends MovableObject {
   public void prepareLaunch() {
     setCenter(paddleMain.getX() + paddleMain.getWidth() / 2.0, paddleMain.getY() - radius - 10);
 
-    // CHANGED: This now updates the visualAngle
     if (!back) {
       if (++visualAngle >= 75) {
         back = true;

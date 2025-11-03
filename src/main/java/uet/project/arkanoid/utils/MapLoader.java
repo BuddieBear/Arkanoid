@@ -55,11 +55,7 @@ public class MapLoader {
 
                     double rotationRad = Math.toRadians(-rotation);
 
-                    // 🧩 Compute rotated center correctly
-                    // Start with center relative to bottom-left
                     Vector2D localCenter = new Vector2D(width / 2.0, -height / 2.0);
-
-                    // Rotate this offset around origin (bottom-left)
                     Vector2D rotatedOffset = localCenter.rotate(rotationRad);
 
                     // Final center in world coordinates
@@ -79,7 +75,6 @@ public class MapLoader {
                 }
             }
 
-            System.out.println("✅ Loaded bricks from " + filePath);
         } catch (Exception e) {
             e.printStackTrace();
         }

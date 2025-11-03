@@ -27,8 +27,8 @@ public abstract class PowerUp extends GameObject {
 
   private Rectangle hitbox;
 
-  // New timer logic
-  protected long startTime = 0; // The time the effect was applied
+  // timer logic
+  protected long startTime = 0;
   protected long effectDurationMillis = 3000; // 3 seconds
 
   /**
@@ -194,10 +194,8 @@ public abstract class PowerUp extends GameObject {
         // Check if this is an instant-effect powerup
         if (type == PowerUpType.EXTRA_LIFE || type == PowerUpType.DOUBLE_SCORE
             || type == PowerUpType.RESPAWN_FREE) {
-          // Apply effect and die immediately
-          startTime = 0; // This will cause isDead() to return true
+          startTime = 0;
         } else {
-          // Start the 3-second timer
           startTime = System.currentTimeMillis();
         }
       }
@@ -206,7 +204,7 @@ public abstract class PowerUp extends GameObject {
       if (startTime > 0) {
         long elapsed = System.currentTimeMillis() - startTime;
         if (elapsed >= effectDurationMillis) {
-          startTime = 0; // Signal for removal
+          startTime = 0;
           removeEffect();
         }
       }

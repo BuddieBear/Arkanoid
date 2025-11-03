@@ -17,23 +17,21 @@ public class AIMovement implements MovementStrategy {
             return;
         }
 
-        // Logic to track the ball's center
         double ballCenter = ball.getCenterX();
 
-        // Calculate the boundaries for the paddle's center
+        // calculate the boundaries for the paddle's center
         double minPaddleCenter = Basis.STAGE_X + paddle.getWidth() / 2;
         double maxPaddleCenter = Basis.STAGE_WIDTH + Basis.STAGE_X - paddle.getWidth() / 2;
 
         double newPaddleCenter = ballCenter;
 
-        // Clamp the new center position to keep the paddle within bounds
         if (newPaddleCenter < minPaddleCenter) {
             newPaddleCenter = minPaddleCenter;
         } else if (newPaddleCenter > maxPaddleCenter) {
             newPaddleCenter = maxPaddleCenter;
         }
 
-        // Convert the center back to the top-left X position
+        // convert the center back to the top-left X position
         double newX = newPaddleCenter - paddle.getWidth() / 2;
 
         paddle.setX(newX);

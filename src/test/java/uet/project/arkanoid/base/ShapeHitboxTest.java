@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ShapeHitboxTest {
 
-    /* ---------- POINT ---------- */
     @Test
     void testPointCoordinates() {
         Point p = new Point(3.5, 4.5);
@@ -14,7 +13,6 @@ class ShapeHitboxTest {
         assertEquals(4.5, p.getY());
     }
 
-    /* ---------- VECTOR2D ---------- */
     @Test
     void testVectorLengthAndNormalize() {
         Vector2D v = new Vector2D(3, 4);
@@ -53,7 +51,6 @@ class ShapeHitboxTest {
         assertFalse(c1.intersect(c2), "Circles too far apart (distance 30, radii sum 20)");
     }
 
-    /* ---------- RECTANGLE ---------- */
     @Test
     void testRectangleIntersection() {
         Rectangle r1 = new Rectangle(new Point(0, 0), new Vector2D(20, 10), 0);
@@ -70,7 +67,6 @@ class ShapeHitboxTest {
         assertFalse(r1.intersect(r2), "Separated rectangles should not intersect");
     }
 
-    /* ---------- CIRCLE vs RECTANGLE ---------- */
     @Test
     void testCircleIntersectsRectangleEdge() {
         Circle circle = new Circle(new Point(5, 0), 5);

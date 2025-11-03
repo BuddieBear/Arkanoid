@@ -28,39 +28,4 @@ public class InvincibleBallPowerUp extends PowerUp {
         ball.setInvincible(false);
         alive = false;
     }
-
-    public void update(double deltaTime) {
-        if (!this.isCatchedPowerUp()) {
-            // Falling animation
-            setY(getY() + 10 * deltaTime);
-            this.getHitbox().setCenter(new Point(getX() + this.width / 2.0, getY() + this.height / 2.0));
-
-            // Check if caught by paddle
-            if (this.getHitbox().intersect(stage.getPaddles().get(0).getHitbox())) {
-                this.setCatchedPowerUp(true);
-                applyEffect();
-                AudioSet.powerUpSound.play();
-                startTime = System.currentTimeMillis();
-            }
-
-        } else {
-            // Already active → check duration
-            if (startTime > 0) {
-                long elapsed = System.currentTimeMillis() - startTime;
-                if (elapsed >= EFFECT_DURATION) {
-                    Ball ball = stage.getBalls().get(0);
-
-                    // Check if ball is still intersecting an unbreakable brick
-                    boolean touchingUnbreakable = stage.getBricks().stream()
-                            .filter(b -> b instanceof IndestructibleBrick)
-                            .anyMatch(b -> b.getHitbox().intersect(ball.getHitbox()));
-
-                    // Only remove if NOT touching unbreakable
-                    if (!touchingUnbreakable) {
-                        removeEffect();
-                    }
-                }
-            }
-        }
-    }
 }

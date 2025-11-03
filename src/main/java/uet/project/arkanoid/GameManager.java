@@ -319,7 +319,7 @@ public class GameManager extends Application {
                 renderGame = new GameView(stage);
                 currentState = GameState.PLAYING;
             } else if (currentState == GameState.PLAYING) {
-                // Add this block here
+                // add ammo by clicking
                 if(stage.getScore() >= 20) {
                     stage.getAmmos().add(new Ammo(stage.getPaddles().get(0).getX()
                             + stage.getPaddles().get(0).getWidth() /2 - 10,
@@ -373,11 +373,9 @@ public class GameManager extends Application {
         }
 
         if (autoMovePaddle) {
-            // Set AI strategy if it's not already set
             if (paddle.getMovementStrategy() != aiStrategy) {
                 paddle.setMovementStrategy(aiStrategy);
             }
-            // (We assume the aiStrategy's update method is called elsewhere)
 
         } else {
             // Set Player strategy if it's not already set

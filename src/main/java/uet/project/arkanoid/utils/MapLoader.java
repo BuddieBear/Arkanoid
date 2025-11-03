@@ -4,6 +4,8 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import java.io.File;
 
+import uet.project.arkanoid.base.Point;
+import uet.project.arkanoid.base.Vector2D;
 import uet.project.arkanoid.game.*;
 import uet.project.arkanoid.objects.Chest;
 import uet.project.arkanoid.objects.brickVariants.IndestructibleBrick;
@@ -42,47 +44,35 @@ public class MapLoader {
                     Element obj = (Element) objects.item(j);
 
                     int gid = Integer.parseInt(obj.getAttribute("gid"));
-                    double x_t = Double.parseDouble(obj.getAttribute("x"));
-                    double y_t = Double.parseDouble(obj.getAttribute("y"));
-                    double w = Double.parseDouble(obj.getAttribute("width"));
-                    double h = Double.parseDouble(obj.getAttribute("height"));
-
+                    double x = Double.parseDouble(obj.getAttribute("x"));
+                    double y = Double.parseDouble(obj.getAttribute("y"));
+                    double width = Double.parseDouble(obj.getAttribute("width"));
+                    double height = Double.parseDouble(obj.getAttribute("height"));
                     String rotationAttr = obj.getAttribute("rotation");
+
                     double rotation = rotationAttr.isEmpty() ? 0.0 : Double.parseDouble(rotationAttr);
+                    double rad = Math.toRadians(rotation);
 
-                    // Invert rotation direction (Tiled = clockwise)
-                    rotation = -rotation;
+                    double rotationRad = Math.toRadians(-rotation);
 
-                    // Convert bottom-left → top-left
-                    double x0 = x_t;
-                    double y0 = y_t - h;
+                    // 🧩 Compute rotated center correctly
+                    // Start with center relative to bottom-left
+                    Vector2D localCenter = new Vector2D(width / 2.0, -height / 2.0);
 
-                    if (rotation != 0) {
-                        double rad = Math.toRadians(rotation);
+                    // Rotate this offset around origin (bottom-left)
+                    Vector2D rotatedOffset = localCenter.rotate(rotationRad);
 
-                        // vector from bottom-left to center
-                        double dx = w / 2.0;
-                        double dy = -h / 2.0;
+                    // Final center in world coordinates
+                    double centerX = x + rotatedOffset.getX();
+                    double centerY = y + rotatedOffset.getY();
 
-                        // rotate around bottom-left
-                        double rx = dx * Math.cos(rad) - dy * Math.sin(rad);
-                        double ry = dx * Math.sin(rad) + dy * Math.cos(rad);
-
-                        // adjust so your center pivot aligns
-                        x0 = x_t + rx - w / 2.0;
-                        y0 = (y_t - h) - ry + h / 2.0; // <-- fixed (was -h/2 before)
-                    }
-
-                    int x = (int) Math.round(x0);
-                    int y = (int) Math.round(y0);
-                    int width = (int) Math.round(w);
-                    int height = (int) Math.round(h);
+                    y = y - height;
 
                     switch (gid) {
-                        case 1 -> stage.getBricks().add(new NormalBrick(x, y, width, height, rotation, 1, stage));
-                        case 3 -> stage.getBricks().add(new NormalBrick(x, y, width, height, rotation, 2, stage));
-                        case 4 -> stage.getBricks().add(new NormalBrick(x, y, width, height, rotation, 3, stage));
-                        case 5 -> stage.getBricks().add(new IndestructibleBrick(x, y, width, height, rotation, stage));
+                        case 1 -> stage.getBricks().add(new NormalBrick(centerX, centerY, width, height, rad, 1, stage));
+                        case 3 -> stage.getBricks().add(new NormalBrick(centerX, centerY, width, height, rad, 2, stage));
+                        case 4 -> stage.getBricks().add(new NormalBrick(centerX, centerY, width, height, rad, 3, stage));
+                        case 5 -> stage.getBricks().add(new IndestructibleBrick(centerX, centerY, width, height, rad, stage));
                         case 6 -> stage.getChests().add(new Chest(x, y, width, height, stage));
                         default -> System.out.println("Unknown gid: " + gid + " at (" + x + ", " + y + ")");
                     }

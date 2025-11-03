@@ -26,18 +26,17 @@ public class Brick extends GameObject {
         NORMAL
     }
 
-    public Brick(double x, double y, double width, double height, double rotation, int hitPoints, BrickType type, GameSetup stage) {
-        super(x, y, width, height);
+    // Store radians
+    public Brick(double centerX, double centerY, double width, double height, double rotation, int hitPoints, BrickType type, GameSetup stage) {
+        super(centerX, centerY, width, height);
         this.maxHp = hitPoints;
         this.hitPoints = hitPoints;
         this.type = type;
         this.stage = stage;
         this.originalWidth = width;
         this.originalHeight = height;
-        this.hitBox = new Rectangle(x + width / 2.0, y + height / 2.0, width, height, rotation);
+        this.hitBox = new Rectangle(centerX, centerY, width, height, rotation);
     }
-
-
 
     public void render(GraphicsContext gc) {
         Point center = hitBox.getCenter();

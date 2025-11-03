@@ -3,6 +3,7 @@ package uet.project.arkanoid.game;
 import javafx.scene.paint.Color;
 import uet.project.arkanoid.objects.*;
 import uet.project.arkanoid.objects.deBuffVariants.HarderBrickPowerDown;
+import uet.project.arkanoid.objects.deBuffVariants.ShrinkPaddle;
 import uet.project.arkanoid.objects.powerUpVariants.*;
 import uet.project.arkanoid.utils.*;
 import uet.project.arkanoid.objects.brickVariants.NormalBrick;

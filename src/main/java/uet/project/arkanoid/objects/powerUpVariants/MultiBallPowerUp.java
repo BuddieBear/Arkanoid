@@ -17,7 +17,6 @@ public class MultiBallPowerUp extends PowerUp {
         super(object, width, height, stage, PowerUpType.MULTI_BALL);
     }
 
-    @Override
     public void applyEffect() {
         Ball mainBall = stage.getBalls().get(0);
         double baseSpeed = mainBall.getSpeed();
@@ -63,7 +62,6 @@ public class MultiBallPowerUp extends PowerUp {
         }
     }
 
-    @Override
     public void removeEffect() {
         stage.getBalls().removeAll(spawnedBalls);
         spawnedBalls.clear();

@@ -7,14 +7,13 @@ import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.game.GameState;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.PowerUp;
+import uet.project.arkanoid.objects.deBuffVariants.ShrinkPaddle;
 import uet.project.arkanoid.objects.powerUpVariants.*;
 import uet.project.arkanoid.utils.Basis;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ChestMenu implements View {
     private static boolean chestMenuOpen = false;

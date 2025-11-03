@@ -1,4 +1,4 @@
-package uet.project.arkanoid.objects.powerUpVariants;
+package uet.project.arkanoid.objects.deBuffVariants;
 
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.objects.GameObject;
@@ -11,12 +11,10 @@ public class ShrinkPaddle extends PowerUp{
         super(object, width, height, stage, PowerUpType.SHRINK_PADDLE);
     }
 
-    @Override
     public void applyEffect() {
         paddleMain.shrinkPaddle();
     }
 
-    @Override
     public void removeEffect() {
         paddleMain.restorePaddle();
         alive = false;

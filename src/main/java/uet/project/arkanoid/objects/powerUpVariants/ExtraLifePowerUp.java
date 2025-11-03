@@ -10,12 +10,10 @@ public class ExtraLifePowerUp extends PowerUp {
         super(object, width, height, stage, PowerUpType.EXTRA_LIFE);
     }
 
-    @Override
     public void applyEffect() {
         stage.setLives(stage.getLives() + 1);
     }
 
-    @Override
     public void removeEffect() {
         alive = false;
     }

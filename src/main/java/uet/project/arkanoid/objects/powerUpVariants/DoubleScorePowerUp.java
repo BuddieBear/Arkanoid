@@ -10,12 +10,10 @@ public class DoubleScorePowerUp extends PowerUp {
         super(object, width, height, stage, PowerUpType.DOUBLE_SCORE);
     }
 
-    @Override
     public void applyEffect() {
         stage.setScorePerHp(stage.getBase_ScorePerHp()*2);
     }
 
-    @Override
     public void removeEffect() {
         stage.setScorePerHp(stage.getBase_ScorePerHp());
         alive = false;

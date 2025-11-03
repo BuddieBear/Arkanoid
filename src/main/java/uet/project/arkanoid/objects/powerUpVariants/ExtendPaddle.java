@@ -11,12 +11,10 @@ public class ExtendPaddle extends PowerUp{
         super(object, width, height, stage,PowerUpType.SHRINK_PADDLE);
     }
 
-    @Override
     public void applyEffect() {
         paddleMain.extendPaddle();
     }
 
-    @Override
     public void removeEffect() {
         paddleMain.restorePaddle();
         alive = false;

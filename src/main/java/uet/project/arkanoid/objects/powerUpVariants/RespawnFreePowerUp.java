@@ -10,14 +10,12 @@ public class RespawnFreePowerUp extends PowerUp {
         super(object, width, height, stage, PowerUpType.RESPAWN_FREE);
     }
 
-    @Override
     public void applyEffect() {
         if (stage.getLives() <= 0) {
             stage.setLives(1);
         }
     }
 
-    @Override
     public void removeEffect() {
         alive = false;
     }

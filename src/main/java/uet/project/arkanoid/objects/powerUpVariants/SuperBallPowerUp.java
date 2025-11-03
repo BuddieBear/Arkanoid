@@ -27,7 +27,6 @@ public class SuperBallPowerUp extends PowerUp {
         }
     }
 
-    @Override
     public void removeEffect() {
         if (ball.isMainBall()) {
             ball.restoreDefaultStats(); // << use the new safe restore

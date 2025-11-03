@@ -1,4 +1,5 @@
 package uet.project.arkanoid.utils;
+
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -6,6 +7,7 @@ import javafx.scene.media.MediaPlayer;
 import java.net.URL;
 
 public class AudioSet {
+
     public static final AudioClip wallBounceSound;
     public static final AudioClip lossHpSound;
     public static final AudioClip collisionPaddleSound;
@@ -17,7 +19,7 @@ public class AudioSet {
 
     private static double musicVolume = 0.5;
     private static double soundVolume = 0.5;
-  public static final AudioClip bossSound;
+    public static final AudioClip bossSound;
 
     static {
         wallBounceSound = load("/Sound/wall_bounce.wav");
@@ -86,8 +88,12 @@ public class AudioSet {
 
     public static void stopAllSounds() {
         try {
-            if (wallBounceSound != null) wallBounceSound.stop();
-            if (lossHpSound != null) lossHpSound.stop();
+            if (wallBounceSound != null) {
+                wallBounceSound.stop();
+            }
+            if (lossHpSound != null) {
+                lossHpSound.stop();
+            }
             if (lossHpSound != null) {
                 lossHpSound.stop();
             }
@@ -103,15 +109,26 @@ public class AudioSet {
             if (powerUpSound != null) {
                 powerUpSound.stop();
             }
-            if (collisionPaddleSound != null) collisionPaddleSound.stop();
-            if (collisionBrickSound != null) collisionBrickSound.stop();
-            if (gameOverSound != null) gameOverSound.stop();
-            if (powerUpSound != null) powerUpSound.stop();
-          if (powerUpSound != null) bossSound.stop();
+            if (collisionPaddleSound != null) {
+                collisionPaddleSound.stop();
+            }
+            if (collisionBrickSound != null) {
+                collisionBrickSound.stop();
+            }
+            if (gameOverSound != null) {
+                gameOverSound.stop();
+            }
+            if (powerUpSound != null) {
+                powerUpSound.stop();
+            }
+            if (powerUpSound != null) {
+                bossSound.stop();
+            }
         } catch (Exception e) {
             System.err.println("Error stopping sounds: " + e.getMessage());
         }
     }
+
     public static void setSoundVolume(double volume) {
         soundVolume = Math.max(0, Math.min(1, volume));
         if (wallBounceSound != null) {

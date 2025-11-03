@@ -8,30 +8,30 @@ import uet.project.arkanoid.utils.Basis;
 
 public class SuperBallPowerUp extends PowerUp {
 
-  private Ball ball;
-  private final int oldSpeed;
-  private final double oldRadius;
+    private Ball ball;
+    private final int oldSpeed;
+    private final double oldRadius;
 
-  // remember it will bug if theres another powerUp affect speed
-  public SuperBallPowerUp(GameObject object, double width, double height, GameSetup stage) {
-    super(object, width, height, stage, PowerUpType.SUPER_BALL);
-    ball = stage.getBalls().get(0);
-    oldSpeed = (int) ball.getSpeed();
-    oldRadius = ball.getRadius();
-  }
-
-  public void applyEffect() {
-    if (ball.isMainBall()) {
-      ball.setSpeed(oldSpeed * 1.5);
-      ball.setRadius(oldRadius * 1.5);
-      ball.updateVelocity();
+    // remember it will bug if theres another powerUp affect speed
+    public SuperBallPowerUp(GameObject object, double width, double height, GameSetup stage) {
+        super(object, width, height, stage, PowerUpType.SUPER_BALL);
+        ball = stage.getBalls().get(0);
+        oldSpeed = (int) ball.getSpeed();
+        oldRadius = ball.getRadius();
     }
-  }
 
-  public void removeEffect() {
-    if (ball.isMainBall()) {
-      ball.restoreDefaultStats(); // << use the new safe restore
-      alive = false;
+    public void applyEffect() {
+        if (ball.isMainBall()) {
+            ball.setSpeed(oldSpeed * 1.5);
+            ball.setRadius(oldRadius * 1.5);
+            ball.updateVelocity();
+        }
     }
-  }
+
+    public void removeEffect() {
+        if (ball.isMainBall()) {
+            ball.restoreDefaultStats(); // << use the new safe restore
+            alive = false;
+        }
+    }
 }

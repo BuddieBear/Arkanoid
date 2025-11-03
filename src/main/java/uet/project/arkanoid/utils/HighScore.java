@@ -3,6 +3,7 @@ package uet.project.arkanoid.utils;
 import java.io.*;
 
 public class HighScore {
+
     private static final String FILE_PATH = "HighScore/highscore.txt";
 
     public int getHighScore(int level) {
@@ -21,18 +22,24 @@ public class HighScore {
                 int score = Integer.parseInt(array[1]);
                 switch (array[0]) {
                     case "level1":
-                        if (level == 1) return score;
+                        if (level == 1) {
+                            return score;
+                        }
                         break;
                     case "level2":
-                        if (level == 2) return score;
+                        if (level == 2) {
+                            return score;
+                        }
                         break;
                     case "level3":
-                        if (level == 3) return score;
+                        if (level == 3) {
+                            return score;
+                        }
                         break;
                 }
             }
         } catch (IOException e) {
-                System.err.println("Không thể đọc file: " + e.getMessage());
+            System.err.println("Không thể đọc file: " + e.getMessage());
         }
         return 0;
     }

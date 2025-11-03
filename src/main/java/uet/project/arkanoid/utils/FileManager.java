@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class FileManager {
+
     private static final String FOLDER_PATH = "HighScore";
     private static final String SCORE_FILE = FOLDER_PATH + "/score.txt";
 

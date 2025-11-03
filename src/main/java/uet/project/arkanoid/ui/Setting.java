@@ -79,7 +79,7 @@ public class Setting implements View {
         double toggleX = SLIDER_X + SLIDER_WIDTH + 60;
         double toggleY = musicY - 10;
         if (mouseX >= toggleX && mouseX <= toggleX + 100 &&
-                mouseY >= toggleY && mouseY <= toggleY + 40) {
+            mouseY >= toggleY && mouseY <= toggleY + 40) {
             toggleMusic();
         }
 
@@ -106,7 +106,7 @@ public class Setting implements View {
 
     private boolean isOnSlider(double mouseX, double mouseY, double x, double y) {
         return mouseX >= x && mouseX <= x + SLIDER_WIDTH
-                && mouseY >= y - 10 && mouseY <= y + SLIDER_HEIGHT + 10;
+            && mouseY >= y - 10 && mouseY <= y + SLIDER_HEIGHT + 10;
     }
 
     private void updateMusicVolume(double mouseX) {
@@ -123,7 +123,7 @@ public class Setting implements View {
 
     public static boolean back(double mouseX, double mouseY) {
         return mouseX >= Basis.BACK_X && mouseX <= Basis.BACK_X + Basis.BACK_W
-                && mouseY >= Basis.BACK_Y && mouseY <= Basis.BACK_Y + Basis.BACK_H;
+            && mouseY >= Basis.BACK_Y && mouseY <= Basis.BACK_Y + Basis.BACK_H;
     }
 
     public void handleMouseDrag(double mouseX, double mouseY) {

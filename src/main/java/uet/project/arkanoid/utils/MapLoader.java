@@ -25,6 +25,7 @@ import java.io.*;
 import java.util.List;
 
 public class MapLoader {
+
     public static void loadBricksFromTiled(GameSetup stage, String filePath) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -36,7 +37,9 @@ public class MapLoader {
 
             for (int i = 0; i < objectGroups.getLength(); i++) {
                 Element group = (Element) objectGroups.item(i);
-                if (!"Bricks".equals(group.getAttribute("name"))) continue;
+                if (!"Bricks".equals(group.getAttribute("name"))) {
+                    continue;
+                }
 
                 NodeList objects = group.getElementsByTagName("object");
 
@@ -50,7 +53,8 @@ public class MapLoader {
                     double height = Double.parseDouble(obj.getAttribute("height"));
                     String rotationAttr = obj.getAttribute("rotation");
 
-                    double rotation = rotationAttr.isEmpty() ? 0.0 : Double.parseDouble(rotationAttr);
+                    double rotation =
+                        rotationAttr.isEmpty() ? 0.0 : Double.parseDouble(rotationAttr);
                     double rad = Math.toRadians(rotation);
 
                     double rotationRad = Math.toRadians(-rotation);
@@ -65,12 +69,17 @@ public class MapLoader {
                     y = y - height;
 
                     switch (gid) {
-                        case 1 -> stage.getBricks().add(new NormalBrick(centerX, centerY, width, height, rad, 1, stage));
-                        case 3 -> stage.getBricks().add(new NormalBrick(centerX, centerY, width, height, rad, 2, stage));
-                        case 4 -> stage.getBricks().add(new NormalBrick(centerX, centerY, width, height, rad, 3, stage));
-                        case 5 -> stage.getBricks().add(new IndestructibleBrick(centerX, centerY, width, height, rad, stage));
+                        case 1 -> stage.getBricks()
+                            .add(new NormalBrick(centerX, centerY, width, height, rad, 1, stage));
+                        case 3 -> stage.getBricks()
+                            .add(new NormalBrick(centerX, centerY, width, height, rad, 2, stage));
+                        case 4 -> stage.getBricks()
+                            .add(new NormalBrick(centerX, centerY, width, height, rad, 3, stage));
+                        case 5 -> stage.getBricks().add(
+                            new IndestructibleBrick(centerX, centerY, width, height, rad, stage));
                         case 6 -> stage.getChests().add(new Chest(x, y, width, height, stage));
-                        default -> System.out.println("Unknown gid: " + gid + " at (" + x + ", " + y + ")");
+                        default -> System.out.println(
+                            "Unknown gid: " + gid + " at (" + x + ", " + y + ")");
                     }
                 }
             }
@@ -106,9 +115,10 @@ public class MapLoader {
             writer.println("GameState," + stage.getScore() + "," + stage.getLives());
             Paddle paddle = stage.getPaddle();
             writer.println("Paddle," + paddle.getX() + ","
-                    + paddle.getY() + "," + paddle.getWidth() + ","
-                    + paddle.getHeight() + "," + paddle.getSpeed());
-            for (Ball ball : stage.getBalls()) { writer.println("Ball," + ball.getCenterX() + ","
+                + paddle.getY() + "," + paddle.getWidth() + ","
+                + paddle.getHeight() + "," + paddle.getSpeed());
+            for (Ball ball : stage.getBalls()) {
+                writer.println("Ball," + ball.getCenterX() + ","
                     + ball.getCenterY() + "," + ball.getRadius() + "," + ball.getSpeed() + ","
                     + ball.getDx() + "," + ball.getDy() + "," + ball.getLaunchState() + ","
                     + ball.isInvincible() + "," + ball.isMainBall());
@@ -116,16 +126,17 @@ public class MapLoader {
             for (Brick brick : stage.getBricks()) {
                 if (brick.isDestroy() == false) {
                     writer.println("Brick," + brick.getX() + ","
-                            + brick.getY() + "," + brick.getWidth() + ","
-                            + brick.getHeight() + "," + ((Rectangle) brick.getHitbox()).getRotation() + ","
-                            + brick.getHitPoints() + "," + brick.getType().name() + ","
-                            + brick.getMaxHp());
+                        + brick.getY() + "," + brick.getWidth() + ","
+                        + brick.getHeight() + "," + ((Rectangle) brick.getHitbox()).getRotation()
+                        + ","
+                        + brick.getHitPoints() + "," + brick.getType().name() + ","
+                        + brick.getMaxHp());
                 }
             }
             for (Chest chest : stage.getChests()) {
                 writer.println("Chest," + chest.getX() + ","
-                        + chest.getY() + "," + chest.getWidth() + ","
-                        + chest.getHeight() + "," + chest.hasOpened());
+                    + chest.getY() + "," + chest.getWidth() + ","
+                    + chest.getHeight() + "," + chest.hasOpened());
             }
         } catch (IOException e) {
             System.err.println("Không thể lưu game: " + e.getMessage());
@@ -159,7 +170,8 @@ public class MapLoader {
                         // FIX: Create the paddle if the list is empty, then set properties
                         if (stage.getPaddles().isEmpty()) {
                             // Assume a default speed and size for creation (required by constructor)
-                            mainPaddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, paddleSpeed, stage);
+                            mainPaddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight,
+                                paddleSpeed, stage);
                             stage.getPaddles().add(mainPaddle);
                         } else {
                             mainPaddle = stage.getPaddle(); // Will now safely get the newly created paddle
@@ -189,7 +201,8 @@ public class MapLoader {
                             newBall.setBallImage(Basis.MULTI_BALL_TEXTURE);
                         }
 
-                        newBall.setDx(dx); newBall.setDy(dy);
+                        newBall.setDx(dx);
+                        newBall.setDy(dy);
                         newBall.setHasLaunch(hasLaunch);
                         newBall.setInvincible(invincible);
                         newBall.setMainBall(mainBall);
@@ -207,9 +220,11 @@ public class MapLoader {
                         int maxHp = Integer.parseInt(array[8]);
                         Brick newBrick;
                         if (brickType == BrickType.NORMAL) {
-                            newBrick = new NormalBrick(brickX, brickY, brickWidth, brickHeight, rotation, maxHp, stage);
+                            newBrick = new NormalBrick(brickX, brickY, brickWidth, brickHeight,
+                                rotation, maxHp, stage);
                         } else {
-                            newBrick = new IndestructibleBrick(brickX, brickY, brickWidth, brickHeight, rotation, stage);
+                            newBrick = new IndestructibleBrick(brickX, brickY, brickWidth,
+                                brickHeight, rotation, stage);
                         }
                         newBrick.setHitPoints(hitPoints);
                         stage.getBricks().add(newBrick);

@@ -14,9 +14,6 @@ public class HarderBrickPowerDown extends PowerUp {
 
   public void applyEffect() {
     for (Brick brick : stage.getBricks()) {
-      if (Math.random() * 2 < 0.5) {
-        continue;
-      }
       if (!(brick instanceof IndestructibleBrick)) {
         brick.setHitPoints(brick.getHitPoints() + 1);
       }
@@ -24,5 +21,11 @@ public class HarderBrickPowerDown extends PowerUp {
   }
 
   public void removeEffect() {
+      for (Brick brick : stage.getBricks()) {
+          if (!(brick instanceof IndestructibleBrick)) {
+              brick.setHitPoints(brick.getHitPoints() + 1);
+          }
+      }
+      alive = false;
   }
 }

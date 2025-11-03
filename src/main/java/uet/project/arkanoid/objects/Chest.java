@@ -25,103 +25,103 @@ import java.util.List;
  */
 public class Chest extends GameObject {
 
-  private final GameSetup stage;
-  private final Rectangle hitbox;
-  private boolean opened = false;
+    private final GameSetup stage;
+    private final Rectangle hitbox;
+    private boolean opened = false;
 
-  /**
-   * Constructs a new Chest with specified parameters.
-   *
-   * @param x      the x-coordinate of the chest's top-left corner
-   * @param y      the y-coordinate of the chest's top-left corner
-   * @param width  the width of the chest
-   * @param height the height of the chest
-   * @param stage  the game stage this chest belongs to
-   */
-  public Chest(double x, double y, double width, double height, GameSetup stage) {
-    super(x, y, width, height);
-    this.stage = stage;
-    this.hitbox = new Rectangle(x + width / 2, y + height / 2, width, height, 0);
-  }
-
-  /**
-   * Gets the hitbox of the chest.
-   *
-   * @return the rectangular hitbox of the chest
-   */
-  @Override
-  public Rectangle getHitbox() {
-    return hitbox;
-  }
-
-  /**
-   * Updates the chest's state.
-   *
-   * <p>This method is empty as chests don't require per-frame updates.
-   *
-   * @param DeltaTime the time elapsed since the last update
-   */
-  @Override
-  public void update(double DeltaTime) {
-    return;
-  }
-
-  /**
-   * Checks for collisions with other game objects and opens the chest if collision occurs.
-   *
-   * @param others the list of game objects to check collisions with
-   * @return true if a collision occurred and chest was opened, false otherwise
-   */
-  public boolean collision(List<? extends GameObject> others) {
-    for (GameObject obj : others) {
-      if (obj.getHitbox().intersect(this.hitbox)) {
-        openChest();
-        return true;
-      }
+    /**
+     * Constructs a new Chest with specified parameters.
+     *
+     * @param x      the x-coordinate of the chest's top-left corner
+     * @param y      the y-coordinate of the chest's top-left corner
+     * @param width  the width of the chest
+     * @param height the height of the chest
+     * @param stage  the game stage this chest belongs to
+     */
+    public Chest(double x, double y, double width, double height, GameSetup stage) {
+        super(x, y, width, height);
+        this.stage = stage;
+        this.hitbox = new Rectangle(x + width / 2, y + height / 2, width, height, 0);
     }
-    return false;
-  }
 
-  /**
-   * Opens the chest and transitions the game to the chest menu state.
-   */
-  public void openChest() {
-    opened = true;
-    System.out.println("Chest opened");
-    stage.setCurrentState(GameState.CHEST_MENU);
-  }
-
-  /**
-   * Renders the chest on the graphics context.
-   *
-   * <p>Displays different images based on whether the chest is open or closed.
-   *
-   * @param gc the graphics context to render on
-   */
-  @Override
-  public void render(GraphicsContext gc) {
-    if (!opened) {
-      gc.drawImage(Basis.CHEST_CLOSE, getX(), getY(), getWidth(), getHeight());
-    } else {
-      gc.drawImage(Basis.CHEST_OPEN, getX(), getY(), getWidth(), getHeight());
+    /**
+     * Gets the hitbox of the chest.
+     *
+     * @return the rectangular hitbox of the chest
+     */
+    @Override
+    public Rectangle getHitbox() {
+        return hitbox;
     }
-  }
 
-  /**
-   * Sets the opened state of the chest.
-   *
-   * @param opened true to mark the chest as opened, false as closed
-   */
-  public void setOpened(boolean opened) {
-    this.opened = opened;
-  }
+    /**
+     * Updates the chest's state.
+     *
+     * <p>This method is empty as chests don't require per-frame updates.
+     *
+     * @param DeltaTime the time elapsed since the last update
+     */
+    @Override
+    public void update(double DeltaTime) {
+        return;
+    }
 
-  /**
-   * Checks if the chest has been opened.
-   *
-   * @return true if the chest is opened, false otherwise
-   */
-  public boolean hasOpened() {
-    return opened;
-  }
+    /**
+     * Checks for collisions with other game objects and opens the chest if collision occurs.
+     *
+     * @param others the list of game objects to check collisions with
+     * @return true if a collision occurred and chest was opened, false otherwise
+     */
+    public boolean collision(List<? extends GameObject> others) {
+        for (GameObject obj : others) {
+            if (obj.getHitbox().intersect(this.hitbox)) {
+                openChest();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Opens the chest and transitions the game to the chest menu state.
+     */
+    public void openChest() {
+        opened = true;
+        System.out.println("Chest opened");
+        stage.setCurrentState(GameState.CHEST_MENU);
+    }
+
+    /**
+     * Renders the chest on the graphics context.
+     *
+     * <p>Displays different images based on whether the chest is open or closed.
+     *
+     * @param gc the graphics context to render on
+     */
+    @Override
+    public void render(GraphicsContext gc) {
+        if (!opened) {
+            gc.drawImage(Basis.CHEST_CLOSE, getX(), getY(), getWidth(), getHeight());
+        } else {
+            gc.drawImage(Basis.CHEST_OPEN, getX(), getY(), getWidth(), getHeight());
+        }
+    }
+
+    /**
+     * Sets the opened state of the chest.
+     *
+     * @param opened true to mark the chest as opened, false as closed
+     */
+    public void setOpened(boolean opened) {
+        this.opened = opened;
+    }
+
+    /**
+     * Checks if the chest has been opened.
+     *
+     * @return true if the chest is opened, false otherwise
+     */
+    public boolean hasOpened() {
+        return opened;
+    }
 }

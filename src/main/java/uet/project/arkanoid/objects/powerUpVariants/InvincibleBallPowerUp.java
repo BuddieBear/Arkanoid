@@ -11,22 +11,22 @@ import uet.project.arkanoid.utils.AudioSet;
 
 public class InvincibleBallPowerUp extends PowerUp {
 
-  private static final long EFFECT_DURATION = 5000; // 5 seconds
+    private static final long EFFECT_DURATION = 5000; // 5 seconds
 
-  public InvincibleBallPowerUp(GameObject object, double width, double height, GameSetup stage) {
-    super(object, width, height, stage, PowerUpType.INVINCIBLE_BALL);
-  }
+    public InvincibleBallPowerUp(GameObject object, double width, double height, GameSetup stage) {
+        super(object, width, height, stage, PowerUpType.INVINCIBLE_BALL);
+    }
 
-  @Override
-  public void applyEffect() {
-    Ball ball = stage.getBalls().get(0);
-    ball.setInvincible(true);
-  }
+    @Override
+    public void applyEffect() {
+        Ball ball = stage.getBalls().get(0);
+        ball.setInvincible(true);
+    }
 
-  @Override
-  public void removeEffect() {
-    Ball ball = stage.getBalls().get(0);
-    ball.setInvincible(false);
-    alive = false;
-  }
+    @Override
+    public void removeEffect() {
+        Ball ball = stage.getBalls().get(0);
+        ball.setInvincible(false);
+        alive = false;
+    }
 }

@@ -30,7 +30,7 @@ public class Point {
      * Compares 2 points to see if they are the same.
      *
      * @param obj   the reference object with which to compare.
-     * @return
+     * @return true if so, else false
      */
     @Override
     public boolean equals(Object obj) {
@@ -43,7 +43,7 @@ public class Point {
         }
         Point other = (Point) obj;
         return Double.compare(this.x, other.x) == 0 &&
-                Double.compare(this.y, other.y) == 0;
+            Double.compare(this.y, other.y) == 0;
     }
 
     // Print out, help debugging
@@ -51,6 +51,9 @@ public class Point {
         return "(" + x + ", " + y + ")";
     }
 
+    public Vector2D toVector() {
+        return new Vector2D(this.x, this.y);
+    }
 
     public void set(double x, double y) {
         this.x = x;

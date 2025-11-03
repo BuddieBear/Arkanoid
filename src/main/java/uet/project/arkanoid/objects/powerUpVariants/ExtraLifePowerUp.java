@@ -6,15 +6,15 @@ import uet.project.arkanoid.objects.PowerUp;
 
 public class ExtraLifePowerUp extends PowerUp {
 
-  public ExtraLifePowerUp(GameObject object, double width, double height, GameSetup stage) {
-    super(object, width, height, stage, PowerUpType.EXTRA_LIFE);
-  }
+    public ExtraLifePowerUp(GameObject object, double width, double height, GameSetup stage) {
+        super(object, width, height, stage, PowerUpType.EXTRA_LIFE);
+    }
 
-  public void applyEffect() {
-    stage.setLives(stage.getLives() + 1);
-  }
+    public void applyEffect() {
+        stage.setLives(stage.getLives() + 1);
+    }
 
-  public void removeEffect() {
-    alive = false;
-  }
+    public void removeEffect() {
+        alive = false;
+    }
 }

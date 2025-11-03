@@ -1,6 +1,7 @@
 package uet.project.arkanoid.base;
 
 public class Rectangle implements Shape {
+
     private Point center;
     private Vector2D size;
     private double rotation; // radian, 0 = no rotation
@@ -14,7 +15,7 @@ public class Rectangle implements Shape {
     public Rectangle(double centerX, double centerY, double width, double height, double rotation) {
         this.center = new Point(centerX, centerY);
         this.size = new Vector2D(width, height);
-        this.rotation  = rotation;
+        this.rotation = rotation;
     }
 
     public Rectangle(Rectangle hitbox) {
@@ -39,9 +40,7 @@ public class Rectangle implements Shape {
     }
 
     /**
-     * Checks if 2 hitboxes are overlapping.
-     * Deals with Circle x Rect
-     * Basic case of AABB Rect x Rect
+     * Checks if 2 hitboxes are overlapping. Deals with Circle x Rect Basic case of AABB Rect x Rect
      * Special case of rotated Rect x rotated Rect
      *
      * @param other the shape we are comparing to
@@ -91,8 +90,12 @@ public class Rectangle implements Shape {
             double projByOnA = Math.abs(halfBx * sinB) + Math.abs(halfBy * cosB);
 
             // Check overlap on A's axes
-            if (Math.abs(localBx) > halfAx + projBxOnA) return false;
-            if (Math.abs(localBy) > halfAy + projByOnA) return false;
+            if (Math.abs(localBx) > halfAx + projBxOnA) {
+                return false;
+            }
+            if (Math.abs(localBy) > halfAy + projByOnA) {
+                return false;
+            }
 
             // Now project A onto B's axes (transformed)
             double projAxOnB = Math.abs(halfAx * cosB) + Math.abs(halfAy * sinB);
@@ -104,13 +107,15 @@ public class Rectangle implements Shape {
             double localAx = -localBx * invCos - -localBy * invSin;
             double localAy = -localBx * invSin + -localBy * invCos;
 
-            if (Math.abs(localAx) > halfBx + projAxOnB) return false;
-            if (Math.abs(localAy) > halfBy + projAyOnB) return false;
+            if (Math.abs(localAx) > halfBx + projAxOnB) {
+                return false;
+            }
+            if (Math.abs(localAy) > halfBy + projAyOnB) {
+                return false;
+            }
 
             return true;
-        }
-
-        else if (other instanceof Circle circle) {
+        } else if (other instanceof Circle circle) {
             return circle.intersect(this);
         }
 

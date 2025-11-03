@@ -31,10 +31,12 @@ public class Circle implements Shape {
     }
 
     /**
-     * Checks for intersection with a (potentially rotated) rectangle.
-     * This works by transforming the circle's center into the rectangle's
-     * local (unrotated) coordinate space. In that space, the rectangle
-     * is an AABB centered at (0,0), making the check simple.
+     * Checks for intersection with a rotated rectangle.
+     * This works by centering the rectangle at (0,0),
+     * and rotate so that the edge of rect is paralel to the axis.
+     * Transform the ball circle to the local rectangle
+     *
+     * @return true if intersection occurs
      */
     private boolean intersectsRectangle(Rectangle rect) {
         // Get rectangle properties
@@ -65,8 +67,7 @@ public class Circle implements Shape {
         return distance <= this.radius;
     }
 
-
-
+    // Getter and setter
     public Point getCenter() {
         return center;
     }

@@ -14,17 +14,24 @@ public class Point {
         this.y = other.y;
     }
 
+    // Distance between 2 points
     public double distanceTo(Point other) {
         double dx = this.x - other.x;
         double dy = this.y - other.y;
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-
+    // Create a vector with this as the root
     public Vector2D vectorTo(Point endPoint) {
         return new Vector2D(endPoint.x - this.x, endPoint.y - this.y);
     }
 
+    /**
+     * Compares 2 points to see if they are the same.
+     *
+     * @param obj   the reference object with which to compare.
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -39,7 +46,7 @@ public class Point {
                 Double.compare(this.y, other.y) == 0;
     }
 
-
+    // Print out, help debugging
     public String toString() {
         return "(" + x + ", " + y + ")";
     }

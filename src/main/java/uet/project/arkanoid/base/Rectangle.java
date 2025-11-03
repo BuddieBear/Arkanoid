@@ -38,6 +38,15 @@ public class Rectangle implements Shape {
         return Math.abs(localX) <= halfW && Math.abs(localY) <= halfH;
     }
 
+    /**
+     * Checks if 2 hitboxes are overlapping.
+     * Deals with Circle x Rect
+     * Basic case of AABB Rect x Rect
+     * Special case of rotated Rect x rotated Rect
+     *
+     * @param other the shape we are comparing to
+     * @return true if there exists intersection
+     */
     public boolean intersect(Shape other) {
         if (other instanceof Rectangle rect) {
 
@@ -53,7 +62,6 @@ public class Rectangle implements Shape {
 
                 return dx <= (halfW + otherHalfW) && dy <= (halfH + otherHalfH);
             }
-
             // Transform rect B into A’s local coordinate system
             double cos = Math.cos(-this.rotation);
             double sin = Math.sin(-this.rotation);

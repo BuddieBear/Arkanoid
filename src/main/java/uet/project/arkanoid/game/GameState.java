@@ -14,6 +14,7 @@ public enum GameState {
     INSTRUCTION,
     HELP,
     POWER_UP,
+    BRICK_VIEW,
     LEVEL;
 }
 

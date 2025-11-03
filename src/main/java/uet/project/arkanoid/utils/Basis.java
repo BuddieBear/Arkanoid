@@ -66,6 +66,11 @@ public class Basis {
     public static final int POWER_UP_W = HELP_W;
     public static final int POWER_UP_H = HELP_H;
 
+    public static final int BRICK_VIEW_X = POWER_UP_X;
+    public static final int BRICK_VIEW_Y = POWER_UP_Y + POWER_UP_H + 60;
+    public static final int BRICK_VIEW_W = POWER_UP_W;
+    public static final int BRICK_VIEW_H = POWER_UP_H;
+
     public static final int BACK_X = 5;
     public static final int BACK_Y = 5;
     public static final int BACK_W = 200;
@@ -153,8 +158,11 @@ public class Basis {
     public static final Image BACK_BUTTON;
     public static final Image HELP;
     public static final Image POWER_UP;
+    public static final Image BRICK_VIEW;
     public static final Image MULTI_BALL_PU;
     public static final Image SUPER_BALL_PU;
+    public static final Image EXTEND_PADDLE_PU;
+    public static final Image SHRINK_PADDLE_PU;
     public static final Image PAUSE_CONTINUE_BUTTON;
     public static final Image PAUSE_MENU_BUTTON;
     public static final Image PAUSE_OPTIONS_BUTTON;
@@ -215,11 +223,14 @@ public class Basis {
         TEXT_LEVEL_3 = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/textLevel_3.png")).toExternalForm());
         HELP = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/help.png")).toExternalForm());  // change
         POWER_UP = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/power_up.png")).toExternalForm());    // change
+        BRICK_VIEW = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/brick.png")).toExternalForm());
         BACK_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/back.png")).toExternalForm());
         LOAD_GAME_BUTTON = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/LoadGame.png")).toExternalForm());
 
         MULTI_BALL_PU = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/multiBall.png")).toExternalForm());
         SUPER_BALL_PU = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/superBall.png")).toExternalForm());
+        EXTEND_PADDLE_PU = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/extendPaddle.png")).toExternalForm());
+        SHRINK_PADDLE_PU = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/shrinkPaddle.png")).toExternalForm());
         POWERUP_TEMP = new Image(Objects.requireNonNull(Basis.class.getResource("/Menu/image.jpg")).toExternalForm());
 
         // PausedMenu

@@ -46,10 +46,10 @@ public class GameManager extends Application {
     private final Set<KeyCode> pressedKeys = new HashSet<>();
 
     private boolean autoMovePaddle = false;
-  private boolean bossSequenceActive = false;   // true while we're spawning boss bricks
-  private boolean bossSpawned = false;          // true after we finished spawning once
-  private int currentBrickIndex = 0;            // next brick index to spawn
-  private long lastBrickSpawnTime = 0L;
+  private boolean bossSpawned = false;
+  private boolean bossSequenceActive = false;
+  private int currentBrickIndex = 0;
+  private long lastBrickSpawnTime;
   // --- Strategy Instances (NEW) ---
     private final MovementStrategy playerStrategy = new PlayerMovement();
     private final MovementStrategy aiStrategy = new AIMovement();
@@ -189,7 +189,27 @@ public class GameManager extends Application {
                 ammo.update(deltaTime);
             }
 
-            for (Brick brick : stage.getBricks()) {
+          if (stage.getScore() >= 20 && !bossSequenceActive) {
+            startBossSequence();
+          }
+
+          // Spawn từng brick với interval
+          if (bossSequenceActive && currentBrickIndex < stage.getBricks().size()) {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastBrickSpawnTime >= 100) { // 2 GIÂY giữa mỗi brick
+              spawnNextBrick();
+              lastBrickSpawnTime = currentTime;
+              currentBrickIndex++;
+            }
+          }
+
+          // Reset boss sequence khi đã spawn hết brick
+          if (bossSequenceActive && currentBrickIndex >= stage.getBricks().size()) {
+            bossSequenceActive = false;
+            bossSpawned = true;
+          }
+
+          for (Brick brick : stage.getBricks()) {
                 brick.update(deltaTime);
                 if (brick.isDestroy()) {
                     stage.addScore(brick.getMaxHp()*10);
@@ -234,6 +254,12 @@ public class GameManager extends Application {
         System.out.println("Game stopped and cleaned up successfully.");
     }
 
+  private void startBossSequence() {
+    bossSequenceActive = true;
+    currentBrickIndex = 0;
+    lastBrickSpawnTime = System.currentTimeMillis();
+  }
+
   private void spawnNextBrick() {
     if (currentBrickIndex >= stage.getBricks().size()) return;
 
@@ -241,17 +267,10 @@ public class GameManager extends Application {
     if (!brick.isDestroy() && !brick.isMovementActivated()) {
       Paddle paddle = stage.getPaddles().get(0);
       brick.startBossMovement(
-          paddle.getX() + paddle.getWidth() / 2.0,
-          paddle.getY() + paddle.getHeight() / 2.0,
-          600.0 // tốc độ di chuyển
-      );
+          paddle.getX() + paddle.getWidth()/2,
+          paddle.getY() + paddle.getHeight()/2
+      ,1000); // TĂNG TỐC ĐỘ LÊN 6.0 (rất nhanh)
     }
-  }
-
-  private void startBossSequence() {
-    bossSequenceActive = true;
-    currentBrickIndex = 0;
-    lastBrickSpawnTime = System.currentTimeMillis();
   }
     public void render() {
         double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;

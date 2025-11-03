@@ -16,8 +16,8 @@ public class Brick extends MovableObject {
 
   private int hitPoints;
   private int maxHp;
-  private BrickType type;
-  private Image brickImage;
+  protected BrickType type;
+  protected Image brickImage;
   private Rectangle hitBox;
   private GameSetup stage;
 
@@ -30,14 +30,14 @@ public class Brick extends MovableObject {
     INDESTRUCTIBLE
   }
 
-  public Brick(double centerX, double centerY, double width, double height,
+  public Brick(double centerX, double centerY, double width, double height, double rotation,
       int hitPoints, BrickType type, GameSetup stage) {
     super(centerX, centerY, width, height);
     this.maxHp = hitPoints;
     this.hitPoints = hitPoints;
     this.type = type;
     this.stage = stage;
-    this.hitBox = new Rectangle(centerX, centerY, width, height, 0);
+    this.hitBox = new Rectangle(centerX, centerY, width, height, rotation);
     this.startPos = new Point(centerX, centerY);
   }
 
@@ -103,8 +103,39 @@ public class Brick extends MovableObject {
     gc.restore();
   }
 
-  //==================== Brick Logic ====================//
+  public void setType(BrickType type) {
+    this.type = type;
+  }
 
+  /**
+   * Gets the maximum hit points of the brick.
+   *
+   * @return the maximum hit points
+   */
+  public int getMaxHp() {
+    return maxHp;
+  }
+
+  /**
+   * Gets the current hit points of the brick.
+   *
+   * @return the current hit points
+   */
+  public int getHitPoints() {
+    return hitPoints;
+  }
+
+  /**
+   * Sets the hit points of the brick.
+   * Only affects NORMAL type bricks.
+   *
+   * @param hitPoints the new hit points value
+   */
+  public void setHitPoints(int hitPoints) {
+    if (type == BrickType.NORMAL) {
+      this.hitPoints = hitPoints;
+    }
+  }
   public void takeHit() {
     if (type != BrickType.INDESTRUCTIBLE) hitPoints--;
   }
@@ -117,17 +148,6 @@ public class Brick extends MovableObject {
     return type;
   }
 
-  public void setType(BrickType type) {
-    this.type = type;
-  }
-
-  public int getMaxHp() {
-    return maxHp;
-  }
-
-  public int getHitPoints() {
-    return hitPoints;
-  }
 
   @Override
   public Shape getHitbox() {

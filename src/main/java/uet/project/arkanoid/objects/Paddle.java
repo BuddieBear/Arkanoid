@@ -1,5 +1,6 @@
 package uet.project.arkanoid.objects;
 
+import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import uet.project.arkanoid.base.Point;
 import uet.project.arkanoid.base.Rectangle;
@@ -8,6 +9,7 @@ import uet.project.arkanoid.base.Vector2D;
 import uet.project.arkanoid.game.GameSetup;
 import uet.project.arkanoid.objects.paddleMovement.MovementStrategy;
 import uet.project.arkanoid.objects.paddleMovement.PlayerMovement;
+import uet.project.arkanoid.utils.AudioSet;
 import uet.project.arkanoid.utils.Basis;
 
 /**
@@ -106,6 +108,26 @@ public class Paddle extends MovableObject {
 
     if (movementStrategy instanceof PlayerMovement) {
       setDx(0);
+    }
+  }
+
+  public void Collision(List<? extends GameObject> others) {
+    for (GameObject obj : others) {
+      if (this.hitbox.intersect(obj.getHitbox())) {
+        if (obj instanceof Brick) {
+          Brick brick = (Brick) obj;
+
+          // CHỈ reset khi brick đang di chuyển
+          if (brick.isMovementActivated()) {
+            stage.setLives(stage.getLives() - 1);
+            brick.resetToOriginalPosition();
+            brick.setMovementActivated(false);
+            AudioSet.collisionBrickSound.play();
+
+            System.out.println("Paddle hit moving brick - life lost");
+          }
+        }
+      }
     }
   }
 

@@ -24,6 +24,8 @@ public class Brick extends MovableObject {
   private boolean movementActivated = false;
   private double moveSpeed = 0;
   private Point startPos;
+  private double originalX, originalY;
+
 
   public enum BrickType {
     NORMAL,
@@ -39,9 +41,9 @@ public class Brick extends MovableObject {
     this.stage = stage;
     this.hitBox = new Rectangle(centerX, centerY, width, height, rotation);
     this.startPos = new Point(centerX, centerY);
+    this.originalX = centerX;
+    this.originalY = centerY;
   }
-
-  //==================== Movement Logic ====================//
 
   @Override
   public void move(double deltaTime) {
@@ -83,7 +85,6 @@ public class Brick extends MovableObject {
     hitBox.setCenter(startPos);
   }
 
-  //==================== Update & Render ====================//
 
   public void update(double deltaTime) {
     if (isDestroy()) return;
@@ -160,5 +161,24 @@ public class Brick extends MovableObject {
 
   public void setBrickImage(Image image) {
     this.brickImage = image;
+  }
+
+  public double getOriginalX() { return originalX; }
+  public double getOriginalY() { return originalY; }
+
+  public void resetToOriginalPosition() {
+    this.setX(originalX - getWidth() / 2.0);
+    this.setY(originalY - getHeight() / 2.0);
+    this.movementActivated = false;
+    this.moveSpeed = 0;
+    setDirection(new Vector2D(0, 0));
+
+    this.hitBox.setCenter(new Point(originalX, originalY));
+
+    System.out.println("RESET BRICK to: " + (originalX - getWidth() / 2.0) + ", " + (originalY - getHeight() / 2.0));
+  }
+
+  public void setMovementActivated(boolean movementActivated) {
+    this.movementActivated = movementActivated;
   }
 }

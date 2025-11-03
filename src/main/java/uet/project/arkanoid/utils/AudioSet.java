@@ -9,6 +9,7 @@ public class AudioSet {
     public static final AudioClip collisionBrickSound;
     public static final AudioClip gameOverSound;
     public static final AudioClip powerUpSound;
+  public static final AudioClip bossSound;
 
     static {
         wallBounceSound = load("/Sound/wall_bounce.wav");
@@ -17,6 +18,8 @@ public class AudioSet {
         collisionBrickSound = load("/Sound/brick_sound.wav");
         gameOverSound = load("/Sound/game_over.wav");
         powerUpSound = load("/Sound/power_up.wav");
+        bossSound = load("/Sound/devil.wav");
+
     }
 
     private static AudioClip load(String filename) {
@@ -36,6 +39,7 @@ public class AudioSet {
             if (collisionBrickSound != null) collisionBrickSound.stop();
             if (gameOverSound != null) gameOverSound.stop();
             if (powerUpSound != null) powerUpSound.stop();
+          if (powerUpSound != null) bossSound.stop();
         } catch (Exception e) {
             System.err.println("Error stopping sounds: " + e.getMessage());
         }

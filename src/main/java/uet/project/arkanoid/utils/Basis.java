@@ -146,6 +146,7 @@ public class Basis {
     public static final Image PADDLE_TEXTURE;
     public static final Image BALL_TEXTURE;
     public static final Image MULTI_BALL_TEXTURE;
+  public static final Image BOSS_TEXTURE;
     public static final Image ARROW_TEXTURE;
     public static final Image SKULL_TEXTURE;
     public static final Image POWERUP_TEXTURE;
@@ -201,7 +202,8 @@ public class Basis {
         BALL_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Ball_1.png")).toExternalForm());
         MULTI_BALL_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Ball_3.png")).toExternalForm());
 
-        ARROW_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Arrow.png")).toExternalForm());
+      BOSS_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/bower.png")).toExternalForm());
+      ARROW_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Arrow.png")).toExternalForm());
         AMMO_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/ammo.png")).toExternalForm());
         SKULL_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Skull.png")).toExternalForm());
 

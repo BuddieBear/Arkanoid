@@ -33,6 +33,9 @@ public class GameView {
         for (Ball ball : stage.getBalls()) {
             ball.render(gc);
         }
+        for (Boss boss : stage.getBosses()) {
+        boss.render(gc);
+       }
         for (Paddle paddle : stage.getPaddles()) {
             paddle.render(gc);
         }

@@ -40,6 +40,9 @@ public class Rectangle implements Shape {
 
     public boolean intersect(Shape other) {
         if (other instanceof Rectangle rect) {
+
+            // Fast path: both axis-aligned
+            if (this.rotation == 0 && rect.rotation == 0) {
                 double halfW = this.size.getX() / 2.0;
                 double halfH = this.size.getY() / 2.0;
                 double otherHalfW = rect.size.getX() / 2.0;
@@ -49,9 +52,60 @@ public class Rectangle implements Shape {
                 double dy = Math.abs(this.center.getY() - rect.center.getY());
 
                 return dx <= (halfW + otherHalfW) && dy <= (halfH + otherHalfH);
-        } else if (other instanceof Circle circle) {
+            }
+
+            // Transform rect B into A’s local coordinate system
+            double cos = Math.cos(-this.rotation);
+            double sin = Math.sin(-this.rotation);
+
+            // Transform B’s center relative to A
+            double dx = rect.center.getX() - this.center.getX();
+            double dy = rect.center.getY() - this.center.getY();
+
+            double localBx = dx * cos - dy * sin;
+            double localBy = dx * sin + dy * cos;
+
+            double relRotation = rect.rotation - this.rotation;
+
+            // A is axis-aligned in this local space
+            double halfAx = this.size.getX() / 2.0;
+            double halfAy = this.size.getY() / 2.0;
+
+            // Compute the projection of B’s half-extents onto A’s axes
+            double halfBx = rect.size.getX() / 2.0;
+            double halfBy = rect.size.getY() / 2.0;
+
+            double cosB = Math.cos(relRotation);
+            double sinB = Math.sin(relRotation);
+
+            // Effective projection of B onto A’s x and y axes
+            double projBxOnA = Math.abs(halfBx * cosB) + Math.abs(halfBy * sinB);
+            double projByOnA = Math.abs(halfBx * sinB) + Math.abs(halfBy * cosB);
+
+            // Check overlap on A's axes
+            if (Math.abs(localBx) > halfAx + projBxOnA) return false;
+            if (Math.abs(localBy) > halfAy + projByOnA) return false;
+
+            // Now project A onto B's axes (transformed)
+            double projAxOnB = Math.abs(halfAx * cosB) + Math.abs(halfAy * sinB);
+            double projAyOnB = Math.abs(halfAx * sinB) + Math.abs(halfAy * cosB);
+
+            // Transform A’s center (0,0) into B’s local space
+            double invCos = Math.cos(-relRotation);
+            double invSin = Math.sin(-relRotation);
+            double localAx = -localBx * invCos - -localBy * invSin;
+            double localAy = -localBx * invSin + -localBy * invCos;
+
+            if (Math.abs(localAx) > halfBx + projAxOnB) return false;
+            if (Math.abs(localAy) > halfBy + projAyOnB) return false;
+
+            return true;
+        }
+
+        else if (other instanceof Circle circle) {
             return circle.intersect(this);
         }
+
         return false;
     }
 

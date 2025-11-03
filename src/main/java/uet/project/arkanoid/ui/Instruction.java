@@ -13,6 +13,7 @@ public class Instruction implements View{
         gc.drawImage(Basis.BACK_BUTTON, Basis.BACK_X, Basis.BACK_Y, Basis.BACK_W, Basis.BACK_H);
         gc.drawImage(Basis.HELP, Basis.HELP_X, Basis.HELP_Y, Basis.HELP_W, Basis.HELP_H);
         gc.drawImage(Basis.POWER_UP, Basis.POWER_UP_X, Basis.POWER_UP_Y, Basis.POWER_UP_W, Basis.POWER_UP_H);
+        gc.drawImage(Basis.BRICK_VIEW, Basis.BRICK_VIEW_X, Basis.BRICK_VIEW_Y, Basis.BRICK_VIEW_W, Basis.BRICK_VIEW_H);
     }
 
     @Override
@@ -26,6 +27,9 @@ public class Instruction implements View{
         } else if (mouseX >= Basis.BACK_X && mouseX <= Basis.BACK_X + Basis.BACK_W 
         && mouseY >= Basis.BACK_Y && mouseY <= Basis.BACK_Y + Basis.BACK_H) {
             return GameState.MENU;
+        } else if (mouseX >= Basis.BRICK_VIEW_X && mouseX <= Basis.BRICK_VIEW_X + Basis.BRICK_VIEW_W
+        && mouseY >= Basis.BRICK_VIEW_Y && mouseY <= Basis.BRICK_VIEW_H + Basis.BRICK_VIEW_Y) {
+            return GameState.BRICK_VIEW;
         }
         return GameState.INSTRUCTION;
     }

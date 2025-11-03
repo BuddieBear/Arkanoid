@@ -37,7 +37,6 @@ public abstract class PowerUp extends GameObject {
     public enum PowerUpType {
         // Buffs
         EXPAND_PADDLE,
-        SHRINK_PADDLE,
         MULTI_BALL,
         DAMAGE_BRICK,
         SUPER_BALL,
@@ -47,6 +46,7 @@ public abstract class PowerUp extends GameObject {
         RESPAWN_FREE,
 
         // Debuffs
+        SHRINK_PADDLE,
         HARDER_BRICK
     }
 
@@ -180,7 +180,7 @@ public abstract class PowerUp extends GameObject {
                 catchedPowerUp = true;
                 applyEffect();
                 AudioSet.powerUpSound.play();
-                if (type == PowerUpType.HARDER_BRICK) {
+                if (type == PowerUpType.HARDER_BRICK || type == PowerUpType.SHRINK_PADDLE) {
                     others.add(new FloatingText(String.valueOf(type),
                         getX(),
                         getY(),

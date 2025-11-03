@@ -143,6 +143,10 @@ public class Basis {
     public static final int LEVEL_3_BTN_Y = 410;
 
     // Textures
+    public static final Image THUNDER_IMAGE;
+    public static final Image CLOUD_IMAGE;
+    public static final Image AIM_POINT_IMAGE;
+
     public static final Image PADDLE_TEXTURE;
     public static final Image BALL_TEXTURE;
     public static final Image MULTI_BALL_TEXTURE;
@@ -215,6 +219,11 @@ public class Basis {
         BRICK_NORMAL_TEXTURE_3[1] = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Brick_3_2.png")).toExternalForm());
         BRICK_NORMAL_TEXTURE_3[0] = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Brick_3_1.png")).toExternalForm());
         BRICK_INDESTRUCTIBLE_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/Brick_Indestructible.png")).toExternalForm());
+
+        // Thunder
+        THUNDER_IMAGE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/thunder.png")).toExternalForm());
+        AIM_POINT_IMAGE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/aimPoint.png")).toExternalForm());
+        CLOUD_IMAGE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/cloud.png")).toExternalForm());
 
         // Power up
         POWERUP_TEXTURE = new Image(Objects.requireNonNull(Basis.class.getResource("/objects/powerUpImage.png")).toExternalForm());

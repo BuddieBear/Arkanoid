@@ -8,21 +8,21 @@ import uet.project.arkanoid.objects.Brick;
 
 public class HarderBrickPowerDown extends PowerUp {
 
-    public HarderBrickPowerDown(GameObject object, double width, double height, GameSetup stage) {
-        super(object, width, height, stage, PowerUpType.HARDER_BRICK);
-    }
+  public HarderBrickPowerDown(GameObject object, double width, double height, GameSetup stage) {
+    super(object, width, height, stage, PowerUpType.HARDER_BRICK);
+  }
 
-    public void applyEffect() {
-        for (Brick brick : stage.getBricks()) {
-            if ( Math.random() * 2 < 0.5) {
-                continue;
-            }
-            if (!(brick instanceof IndestructibleBrick)) {
-                brick.setHitPoints(brick.getHitPoints() + 1);
-            }
-        }
+  public void applyEffect() {
+    for (Brick brick : stage.getBricks()) {
+      if (Math.random() * 2 < 0.5) {
+        continue;
+      }
+      if (!(brick instanceof IndestructibleBrick)) {
+        brick.setHitPoints(brick.getHitPoints() + 1);
+      }
     }
+  }
 
-    public void removeEffect() {
-    }
+  public void removeEffect() {
+  }
 }

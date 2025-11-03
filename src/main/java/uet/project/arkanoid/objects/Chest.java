@@ -20,7 +20,8 @@ import java.util.List;
 /**
  * Represents a chest in the Arkanoid game that can be opened to reveal rewards.
  *
- * <p>Chests can be collided with by balls and when opened, transition the game to a chest menu state.
+ * <p>Chests can be collided with by balls and when opened, transition the game to a chest menu
+ * state.
  */
 public class Chest extends GameObject {
 
@@ -31,11 +32,11 @@ public class Chest extends GameObject {
   /**
    * Constructs a new Chest with specified parameters.
    *
-   * @param x the x-coordinate of the chest's top-left corner
-   * @param y the y-coordinate of the chest's top-left corner
-   * @param width the width of the chest
+   * @param x      the x-coordinate of the chest's top-left corner
+   * @param y      the y-coordinate of the chest's top-left corner
+   * @param width  the width of the chest
    * @param height the height of the chest
-   * @param stage the game stage this chest belongs to
+   * @param stage  the game stage this chest belongs to
    */
   public Chest(double x, double y, double width, double height, GameSetup stage) {
     super(x, y, width, height);

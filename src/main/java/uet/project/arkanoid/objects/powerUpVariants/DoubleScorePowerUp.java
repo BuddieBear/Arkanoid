@@ -6,16 +6,16 @@ import uet.project.arkanoid.objects.PowerUp;
 
 public class DoubleScorePowerUp extends PowerUp {
 
-    public DoubleScorePowerUp(GameObject object, double width, double height, GameSetup stage) {
-        super(object, width, height, stage, PowerUpType.DOUBLE_SCORE);
-    }
+  public DoubleScorePowerUp(GameObject object, double width, double height, GameSetup stage) {
+    super(object, width, height, stage, PowerUpType.DOUBLE_SCORE);
+  }
 
-    public void applyEffect() {
-        stage.setScorePerHp(stage.getBase_ScorePerHp()*2);
-    }
+  public void applyEffect() {
+    stage.setScorePerHp(stage.getBase_ScorePerHp() * 2);
+  }
 
-    public void removeEffect() {
-        stage.setScorePerHp(stage.getBase_ScorePerHp());
-        alive = false;
-    }
+  public void removeEffect() {
+    stage.setScorePerHp(stage.getBase_ScorePerHp());
+    alive = false;
+  }
 }

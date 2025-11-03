@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameSetup {
+
   // Objects in stage
   protected List<Brick> bricks;
   protected List<Ball> balls;
@@ -21,6 +22,7 @@ public class GameSetup {
   protected List<Chest> chests;
   protected List<Boss> bosses = new ArrayList<>();
   protected List<FloatingText> floatingTexts;
+  protected Thunder thunder;
 
   private int lives;
   private int score;
@@ -33,15 +35,22 @@ public class GameSetup {
   private GameState currentState;
 
   private long lastBossSpawnTime;
-  private final long BOSS_SPAWN_INTERVAL = 10_000; // 20 seconds
-  private long lastBossSequenceTime;
-  private final long BOSS_SEQUENCE_COOLDOWN = 10_000;
+  private final long BOSS_SPAWN_TIME = 10_000; // 20 seconds
+  private long lastBossTime;
+  private final long BOSS_SEQUENCE_TIME = 10_000;
 
   //time
   protected double lastTime;
   protected double deltaTime;
   protected double currentTime;
 
+  /**
+   * Khởi tạo đối tượng GameSetup cho một level cụ thể, bao gồm việc tạo danh sách vật thể, thời
+   * gian, boss và gọi hàm loadLevel().
+   *
+   * @param currentStage cấp độ hiện tại (Level.STAGE_1, STAGE_2, STAGE_3)
+   * @param currentState trạng thái ban đầu của game (PLAYING, PAUSED, v.v.)
+   */
   public GameSetup(Level currentStage, GameState currentState) {
     lastTime = System.nanoTime();
     currentTime = lastTime;
@@ -53,16 +62,23 @@ public class GameSetup {
     this.powerUps = new ArrayList<>();
     this.chests = new ArrayList<>();
     this.ammos = new ArrayList<>();
+    this.thunder = new Thunder();
 
     floatingTexts = new ArrayList<>();
     this.currentLevel = currentStage;
     this.currentState = currentState;
     this.lastBossSpawnTime = System.currentTimeMillis();
-    this.lastBossSequenceTime = 0;
+    this.lastBossTime = 0;
 
     loadLevel(currentStage);
   }
 
+  /**
+   * Tải dữ liệu của một level cụ thể (gạch, bóng, paddle, mạng, bản đồ...). Dựa vào tham số
+   * {@code lvl} để chọn level tương ứng và gọi MapLoader.
+   *
+   * @param lvl cấp độ cần tải
+   */
   public void loadLevel(Level lvl) {
     this.clearLevel();
 
@@ -70,37 +86,43 @@ public class GameSetup {
 
     if (lvl == Level.STAGE_1) {
       lives = 5;
-      paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED, this));  // 33 is padding
+      paddles.add(new Paddle(Basis.STAGE_X, Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED,
+          this));  // 33 is padding
       Paddle paddleMain = paddles.get(0);
 
-      balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
-          paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 -  10,
+      balls.add(new Ball(paddleMain.getX() + paddleMain.getWidth() / 2,
+          paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 - 10,
           (double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
 
       MapLoader.loadBricksFromTiled(this, Basis.STAGE_1);
     } else if (lvl == Level.STAGE_2) {
       lives = 8;
-      paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED, this));  // 33 is padding
+      paddles.add(new Paddle(Basis.STAGE_X, Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED,
+          this));  // 33 is padding
       Paddle paddleMain = paddles.get(0);
 
-      balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
+      balls.add(new Ball(paddleMain.getX() + paddleMain.getWidth() / 2,
           paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 - 10,
           (double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
 
       MapLoader.loadBricksFromTiled(this, Basis.STAGE_2);
     } else if (lvl == Level.STAGE_3) {
       lives = 5;
-      paddles.add(new Paddle(Basis.STAGE_X , Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED, this));  // 33 is padding
+      paddles.add(new Paddle(Basis.STAGE_X, Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED,
+          this));  // 33 is padding
       Paddle paddleMain = paddles.get(0);
 
-      balls.add(new Ball( paddleMain.getX() + paddleMain.getWidth() / 2,
-          paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 -  10,
+      balls.add(new Ball(paddleMain.getX() + paddleMain.getWidth() / 2,
+          paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 - 10,
           (double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
 
       MapLoader.loadBricksFromTiled(this, Basis.STAGE_3);
     }
   }
 
+  /**
+   * Xóa toàn bộ đối tượng trong level hiện tại để chuẩn bị tải lại level mới.
+   */
   public void clearLevel() {
     bricks.clear();
     balls.clear();
@@ -112,11 +134,16 @@ public class GameSetup {
     bosses.clear();
   }
 
+  /**
+   * Cập nhật trạng thái của boss, bao gồm việc spawn boss định kỳ và gọi update() từng boss.
+   *
+   * @param deltaTime thời gian trôi qua giữa hai khung hình (frame)
+   */
   public void updateBosses(double deltaTime) {
     long currentTime = System.currentTimeMillis();
 
     // Spawn boss every 20 seconds
-    if (currentTime - lastBossSpawnTime >= BOSS_SPAWN_INTERVAL) {
+    if (currentTime - lastBossSpawnTime >= BOSS_SPAWN_TIME) {
       spawnBoss();
       lastBossSpawnTime = currentTime;
     }
@@ -128,6 +155,10 @@ public class GameSetup {
     bosses.removeIf(Boss::isDead);
   }
 
+  /**
+   * Sinh ra một boss mới tại vị trí ngẫu nhiên trên màn hình và hiển thị thông báo "BOSS
+   * SPAWNED!".
+   */
   private void spawnBoss() {
     // Spawn boss at random position
     double x = Basis.STAGE_X + Math.random() * (Basis.STAGE_WIDTH - 80);
@@ -140,6 +171,12 @@ public class GameSetup {
         Basis.SCREEN_WIDTH / 2 - 100, Basis.SCREEN_HEIGHT / 2, Color.RED));
   }
 
+  /**
+   * Tạo và thêm PowerUp khi gạch bị phá hủy. Nếu một loại PowerUp đang hoạt động, thời gian hiệu
+   * lực sẽ được kéo dài thay vì tạo mới.
+   *
+   * @param bricks1 danh sách gạch được kiểm tra để tạo PowerUp
+   */
   public void addPowerUp(List<? extends Brick> bricks1) {
     for (Brick brick : bricks1) {
       if (brick.isDestroy()) {
@@ -189,16 +226,31 @@ public class GameSetup {
     }
   }
 
-  public boolean canStartBossSequence() {
+  /**
+   * Kiểm tra xem có thể bắt đầu chuỗi hành động của boss không (khi có boss tồn tại và đã đủ thời
+   * gian từ lần trước).
+   *
+   * @return true nếu có thể bắt đầu, ngược lại false
+   */
+  public boolean canStartBoss() {
     long currentTime = System.currentTimeMillis();
     return !bosses.isEmpty() &&
-        (currentTime - lastBossSequenceTime >= BOSS_SEQUENCE_COOLDOWN);
+        (currentTime - lastBossTime >= BOSS_SEQUENCE_TIME);
   }
 
-  public void setLastBossSequenceTime() {
-    this.lastBossSequenceTime = System.currentTimeMillis();
+  /**
+   * Cập nhật thời gian lần cuối kích hoạt chuỗi hành động của boss.
+   */
+  public void setLastBossTime() {
+    this.lastBossTime = System.currentTimeMillis();
   }
 
+  /**
+   * Kiểm tra xem người chơi có thua hay không (mất hết mạng), lưu điểm, phát âm thanh "Game Over"
+   * và ghi nhận High Score.
+   *
+   * @return true nếu người chơi thua, ngược lại false
+   */
   public boolean gameLose() {
     if (lives > 0) {
       return false;
@@ -214,8 +266,14 @@ public class GameSetup {
     return true;
   }
 
+  /**
+   * Kiểm tra điều kiện thắng game: không còn gạch NormalBrick nào. Nếu thắng, lưu điểm và High
+   * Score tương ứng.
+   *
+   * @return true nếu thắng, ngược lại false
+   */
   public boolean gameWin() {
-    for (Brick brick: this.bricks) {
+    for (Brick brick : this.bricks) {
       if (brick instanceof NormalBrick) {
         return false;
       }
@@ -231,6 +289,9 @@ public class GameSetup {
     return true;
   }
 
+  /**
+   * Tiếp tục trò chơi sau khi bị tạm dừng (resume).
+   */
   public void resumeGame() {
     this.currentState = GameState.PLAYING;
   }
@@ -247,6 +308,10 @@ public class GameSetup {
   }
 
   // Getter - Setter methods
+  public Thunder getThunder() {
+    return thunder;
+  }
+
   public GameState getCurrentState() {
     return currentState;
   }

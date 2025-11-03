@@ -47,7 +47,9 @@ public class Brick extends MovableObject {
 
   @Override
   public void move(double deltaTime) {
-    if (!movementActivated) return;
+    if (!movementActivated) {
+      return;
+    }
 
     double dx = getDx() * moveSpeed * deltaTime;
     double dy = getDy() * moveSpeed * deltaTime;
@@ -63,7 +65,9 @@ public class Brick extends MovableObject {
   }
 
   public void startBossMovement(double targetX, double targetY, double speed) {
-    if (movementActivated) return;
+    if (movementActivated) {
+      return;
+    }
 
     this.movementActivated = true;
     this.moveSpeed = speed;
@@ -87,7 +91,9 @@ public class Brick extends MovableObject {
 
 
   public void update(double deltaTime) {
-    if (isDestroy()) return;
+    if (isDestroy()) {
+      return;
+    }
     move(deltaTime);
   }
 
@@ -127,8 +133,7 @@ public class Brick extends MovableObject {
   }
 
   /**
-   * Sets the hit points of the brick.
-   * Only affects NORMAL type bricks.
+   * Sets the hit points of the brick. Only affects NORMAL type bricks.
    *
    * @param hitPoints the new hit points value
    */
@@ -137,8 +142,11 @@ public class Brick extends MovableObject {
       this.hitPoints = hitPoints;
     }
   }
+
   public void takeHit() {
-    if (type != BrickType.INDESTRUCTIBLE) hitPoints--;
+    if (type != BrickType.INDESTRUCTIBLE) {
+      hitPoints--;
+    }
   }
 
   public boolean isDestroy() {
@@ -163,8 +171,13 @@ public class Brick extends MovableObject {
     this.brickImage = image;
   }
 
-  public double getOriginalX() { return originalX; }
-  public double getOriginalY() { return originalY; }
+  public double getOriginalX() {
+    return originalX;
+  }
+
+  public double getOriginalY() {
+    return originalY;
+  }
 
   public void resetToOriginalPosition() {
     this.setX(originalX - getWidth() / 2.0);
@@ -175,7 +188,8 @@ public class Brick extends MovableObject {
 
     this.hitBox.setCenter(new Point(originalX, originalY));
 
-    System.out.println("RESET BRICK to: " + (originalX - getWidth() / 2.0) + ", " + (originalY - getHeight() / 2.0));
+    System.out.println("RESET BRICK to: " + (originalX - getWidth() / 2.0) + ", " + (originalY
+        - getHeight() / 2.0));
   }
 
   public void setMovementActivated(boolean movementActivated) {

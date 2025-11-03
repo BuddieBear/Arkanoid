@@ -54,10 +54,10 @@ public abstract class PowerUp extends GameObject {
    * Constructs a new PowerUp with specified parameters.
    *
    * @param object the game object that this power-up originates from (e.g., brick)
-   * @param width the width of the power-up
+   * @param width  the width of the power-up
    * @param height the height of the power-up
-   * @param stage the game stage this power-up belongs to
-   * @param type the type of power-up
+   * @param stage  the game stage this power-up belongs to
+   * @param type   the type of power-up
    */
   public PowerUp(GameObject object, double width, double height, GameSetup stage,
       PowerUpType type) {
@@ -163,7 +163,7 @@ public abstract class PowerUp extends GameObject {
   /**
    * Updates the power-up's state including movement and collision detection.
    *
-   * @param others the list of floating text objects to add notifications to
+   * @param others    the list of floating text objects to add notifications to
    * @param deltaTime the time elapsed since the last update
    */
   public void update(List<FloatingText> others, double deltaTime) {
@@ -223,7 +223,7 @@ public abstract class PowerUp extends GameObject {
   /**
    * Renders the power-up with a duration bar when active.
    *
-   * @param gc the graphics context to render on
+   * @param gc    the graphics context to render on
    * @param index the index position for stacking multiple active power-ups
    */
   public void render(GraphicsContext gc, int index) {

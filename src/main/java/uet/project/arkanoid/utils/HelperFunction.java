@@ -9,8 +9,4 @@ public class HelperFunction {
         }
         return value;
     }
-
-    public static boolean inBounds(double x, double y, double bx, double by, double bw, double bh) {
-        return (x >= bx && x <= bx + bw && y >= by && y <= by + bh);
-    }
 }

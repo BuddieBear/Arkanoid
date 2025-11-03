@@ -1,5 +1,6 @@
 package uet.project.arkanoid;
 
+import com.almasb.fxgl.audio.Audio;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -28,6 +29,7 @@ import uet.project.arkanoid.objects.Ammo;
 import uet.project.arkanoid.objects.Brick;
 import uet.project.arkanoid.objects.Paddle;
 import uet.project.arkanoid.objects.PowerUp;
+import uet.project.arkanoid.utils.AudioSet;
 import uet.project.arkanoid.utils.Basis;
 import uet.project.arkanoid.utils.MapLoader;
 
@@ -35,6 +37,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class GameManager extends Application {
+
   // Places to render objects
   private final Group root = new Group();
   private final Canvas canvas = new Canvas(Basis.SCREEN_WIDTH, Basis.SCREEN_HEIGHT);
@@ -46,7 +49,7 @@ public class GameManager extends Application {
 
   private boolean autoMovePaddle = false;
   private boolean bossSpawned = false;
-  private boolean bossSequenceActive = false;
+  private boolean BossActive = false;
   private int currentBrickIndex = 0;
   private long lastBrickSpawnTime;
   private final MovementStrategy playerStrategy = new PlayerMovement();
@@ -54,6 +57,7 @@ public class GameManager extends Application {
 
   // Game and Stage setup
   public GameState currentState = GameState.MENU;
+  public GameState previousState = GameState.MENU;
   public Level currentLevel = Level.STAGE_1;
 
   GameSetup stage;
@@ -78,9 +82,9 @@ public class GameManager extends Application {
   /**
    * Initializes and starts the main game window.
    * <p>
-   * This method is automatically called when the JavaFX application launches.
-   * It sets up the {@link Scene} and {@link Canvas} for drawing,
-   * and runs the {@link AnimationTimer} game loop.
+   * This method is automatically called when the JavaFX application launches. It sets up the
+   * {@link Scene} and {@link Canvas} for drawing, registers input handlers, initializes game state
+   * and renderers, and starts the {@link AnimationTimer} game loop.
    * </p>
    *
    * @param primaryStage the primary window (stage) for the application
@@ -129,6 +133,7 @@ public class GameManager extends Application {
     renderLoadScreen = new LoadScreenView();
     renderChestMenu = new ChestMenu();
 
+    AudioSet.playBackgroundMusic();
     // Game loop
     gameLoop = new AnimationTimer() {
       private long lastTime = System.nanoTime();
@@ -154,6 +159,21 @@ public class GameManager extends Application {
     primaryStage.show();
   }
 
+  /**
+   * Update game logic for the PLAYING state.
+   * <p>
+   * This method runs per frame from the game loop. It:
+   * <ul>
+   *   <li>Checks win/lose conditions</li>
+   *   <li>Updates paddles, balls, power-ups, bosses, ammo, floating texts, chests, and bricks</li>
+   *   <li>Handles boss spawn / boss sequences</li>
+   *   <li>Removes marked-for-removal objects from collections</li>
+   *   <li>Syncs the {@code currentState} with the {@link GameSetup}</li>
+   * </ul>
+   * </p>
+   *
+   * @param deltaTime time elapsed since last frame in seconds
+   */
   public void update(double deltaTime) {
     if (currentState == GameState.PLAYING) {
       if (stage.gameWin() || stage.gameLose()) {
@@ -168,7 +188,9 @@ public class GameManager extends Application {
         paddle.Collision(stage.getBricks());
       }
       for (Ball ball : stage.getBalls()) {
-        if(ball.getLaunchState()) ball.Collision(stage.getBricks());
+        if (ball.getLaunchState()) {
+          ball.Collision(stage.getBricks());
+        }
         ball.Collision(stage.getPaddles());
         ball.update(deltaTime);
       }
@@ -182,7 +204,6 @@ public class GameManager extends Application {
         boss.update(deltaTime);
       }
 
-
       for (FloatingText floatingText : stage.getFloatingBricks()) {
         floatingText.update(deltaTime);
       }
@@ -194,12 +215,12 @@ public class GameManager extends Application {
 
       stage.updateBosses(deltaTime);
 
-      if (stage.canStartBossSequence() && !bossSequenceActive) {
-        startBossSequence();
-        stage.setLastBossSequenceTime(); // Reset cooldown
+      if (stage.canStartBoss() && !BossActive) {
+        startBoss();
+        stage.setLastBossTime(); // Reset cooldown
       }
 
-      if (bossSequenceActive && currentBrickIndex < stage.getBricks().size()) {
+      if (BossActive && currentBrickIndex < stage.getBricks().size()) {
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastBrickSpawnTime >= 50) { // 50ms giữa mỗi brick
           spawnNextBrick();
@@ -209,15 +230,15 @@ public class GameManager extends Application {
       }
 
       // Reset boss sequence khi đã spawn hết brick
-      if (bossSequenceActive && currentBrickIndex >= stage.getBricks().size()) {
-        bossSequenceActive = false;
+      if (BossActive && currentBrickIndex >= stage.getBricks().size()) {
+        BossActive = false;
         bossSpawned = true;
       }
 
       for (Brick brick : stage.getBricks()) {
         brick.update(deltaTime);
         if (brick.isDestroy()) {
-          stage.addScore(brick.getMaxHp()*10);
+          stage.addScore(brick.getMaxHp() * 10);
         }
       }
 
@@ -228,6 +249,7 @@ public class GameManager extends Application {
         chest.update(deltaTime);
       }
 
+      stage.getThunder().update();
 
       stage.getBosses().removeIf(Boss::isDead);
       stage.getBalls().removeIf(Ball::isMarkedForRemoval);
@@ -241,6 +263,12 @@ public class GameManager extends Application {
     }
   }
 
+  /**
+   * Stop the game loop, halt audio, clear stage objects and canvas.
+   * <p>
+   * This should be called when the application is closing or the game needs a full cleanup.
+   * </p>
+   */
   public void stop() {
     if (gameLoop != null) {
       gameLoop.stop();
@@ -261,17 +289,32 @@ public class GameManager extends Application {
     System.out.println("Game stopped and cleaned up successfully.");
   }
 
-  private void startBossSequence() {
-    bossSequenceActive = true;
+  /**
+   * Start the boss sequence: enable sequence flag and reset spawn index/time.
+   * <p>
+   * This prepares the manager to spawn bricks that will move as part of the boss sequence.
+   * </p>
+   */
+  private void startBoss() {
+    BossActive = true;
     currentBrickIndex = 0;
     lastBrickSpawnTime = System.currentTimeMillis();
   }
 
 
+  /**
+   * Spawn the next brick for the boss sequence.
+   * <p>
+   * This method randomly decides (by probability) whether to start movement on the next brick. If
+   * the selected brick is valid and not already moving, it will be instructed to start moving
+   * towards the paddle position.
+   * </p>
+   */
   private void spawnNextBrick() {
-    if (Math.random() * 2 < 0.5) { // 50% tỉ lệ
-      if (currentBrickIndex >= stage.getBricks().size())
+    if (Math.random() * 3 < 0.5) { // 50% tỉ lệ
+      if (currentBrickIndex >= stage.getBricks().size()) {
         return;
+      }
 
       Brick brick = stage.getBricks().get(currentBrickIndex);
       if (!brick.isDestroy() && !brick.isMovementActivated()) {
@@ -288,6 +331,13 @@ public class GameManager extends Application {
     }
   }
 
+  /**
+   * Render the current game state.
+   * <p>
+   * This method handles scaling the canvas to the current window size and delegates drawing to the
+   * appropriate UI/renderer for the current {@link GameState}.
+   * </p>
+   */
   public void render() {
     double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;
     double scaleY = canvas.getHeight() / Basis.SCREEN_HEIGHT;
@@ -338,16 +388,19 @@ public class GameManager extends Application {
   }
 
   private void handleInput(Scene scene) {
+    //Keyboard input tracking
     scene.setOnKeyPressed(event -> pressedKeys.add(event.getCode()));
     scene.setOnKeyReleased(event -> pressedKeys.remove(event.getCode()));
 
-    canvas.setOnMouseClicked(event -> {
+    //Mouse input
+    canvas.setOnMousePressed(event -> {
       double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;
       double scaleY = canvas.getHeight() / Basis.SCREEN_HEIGHT;
       double mouseX = event.getX() / scaleX;
       double mouseY = event.getY() / scaleY;
       System.out.println(mouseX + " " + mouseY);
 
+      GameState beforeState = currentState;
       if (currentState == GameState.MENU) {
         currentState = renderMenu.handleClick(mouseX, mouseY, stage);
       } else if (currentState == GameState.PAUSED) {
@@ -360,7 +413,7 @@ public class GameManager extends Application {
           currentLevel = Level.STAGE_1;
         } else if (level == 2) {
           currentLevel = Level.STAGE_2;
-        } else if (level == 3){
+        } else if (level == 3) {
           currentLevel = Level.STAGE_3;
         } else if (level == 4) {
           currentState = GameState.MENU;
@@ -374,16 +427,18 @@ public class GameManager extends Application {
         currentState = GameState.PLAYING;
       } else if (currentState == GameState.PLAYING) {
         // add ammo by clicking
-        if(stage.getScore() >= 20) {
+        if (stage.getScore() >= 20) {
           stage.getAmmos().add(new Ammo(stage.getPaddles().get(0).getX()
-              + stage.getPaddles().get(0).getWidth() /2 - 10,
+              + stage.getPaddles().get(0).getWidth() / 2 - 10,
               stage.getPaddles().get(0).getY(),
               30, 30));
           stage.setScore(stage.getScore() - 20);
         }
       } else if (currentState == GameState.SETTING) {
         if (Setting.back(mouseX, mouseY)) {
-          currentState = GameState.MENU;
+          currentState = previousState;
+        } else {
+          currentState = renderSetting.handleClick(mouseX, mouseY, stage);
         }
       } else if (currentState == GameState.INSTRUCTION) {
         currentState = renderInstruction.handleClick(mouseX, mouseY, stage);
@@ -398,9 +453,42 @@ public class GameManager extends Application {
       } else if (currentState == GameState.CHEST_MENU) {
         currentState = renderChestMenu.handleClick(mouseX, mouseY, stage);
       }
+
+      if (beforeState != currentState) {
+        previousState = beforeState;
+      }
+    });
+
+    canvas.setOnMouseDragged(event -> {
+      if (currentState == GameState.SETTING) {
+        double scaleX = canvas.getWidth() / Basis.SCREEN_WIDTH;
+        double scaleY = canvas.getHeight() / Basis.SCREEN_HEIGHT;
+        double mouseX = event.getX() / scaleX;
+        double mouseY = event.getY() / scaleY;
+        renderSetting.handleMouseDrag(mouseX, mouseY);
+      }
+    });
+
+    // Mouse release (stop dragging)
+    canvas.setOnMouseReleased(event -> {
+      if (currentState == GameState.SETTING) {
+        renderSetting.handleMouseRelease();
+      }
     });
   }
 
+  /**
+   * Process keyboard and movement input, update paddle/ball controls and toggle states.
+   * <p>
+   * This reads the pressedKeys set and:
+   * <ul>
+   *   <li>Toggles auto-move with S</li>
+   *   <li>Toggles pause with ESCAPE</li>
+   *   <li>Applies player or AI movement strategy to the paddle</li>
+   *   <li>Handles reset (R) and launch (SPACE)</li>
+   * </ul>
+   * </p>
+   */
   private void processInput() {
     Paddle paddle = stage.getPaddles().get(0);
     Ball ball = stage.getBalls().get(0);
@@ -447,7 +535,8 @@ public class GameManager extends Application {
     }
 
     if (pressedKeys.contains(KeyCode.R)) {
-      ball.setCenter(Basis.SCREEN_WIDTH + Basis.BALL_DIAMETER/2 + 100, Basis.SCREEN_HEIGHT + Basis.BALL_DIAMETER/2 + 100 );
+      ball.setCenter(Basis.SCREEN_WIDTH + Basis.BALL_DIAMETER / 2 + 100,
+          Basis.SCREEN_HEIGHT + Basis.BALL_DIAMETER / 2 + 100);
     }
 
     if (pressedKeys.contains(KeyCode.SPACE)) {

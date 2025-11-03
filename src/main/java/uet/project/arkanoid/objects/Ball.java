@@ -52,6 +52,8 @@ public class Ball extends MovableObject {
 
   private Circle hitbox;
 
+  private Thunder thunder;
+
   /**
    * Constructs a new Ball with specified parameters.
    *
@@ -74,6 +76,7 @@ public class Ball extends MovableObject {
     this.visualAngle = 0; // Default visual angle (straight)
     this.defaultRadius = radius;
     this.defaultSpeed = speed;
+    this.thunder = stage.getThunder();
   }
 
   /**
@@ -274,11 +277,25 @@ public class Ball extends MovableObject {
 
   }
 
+  private boolean collisionThunder() {
+    int[] position = thunder.getPosition();
+    int n = thunder.getAmount();
+    for (int i = 0; i < n; i++) {
+        double condition1 = Math.abs(centerX - position[i] + thunder.getThunderWidth() / 2);
+        double condition2 = Math.abs(centerX - position[i] - thunder.getThunderWidth() / 2);
+
+        if ((condition1 < radius || condition2 < radius) && thunder.getShowThunder()) {
+            return true;
+        }
+    }
+    return false;
+  }
+
   /**
    * Checks if the ball is dead (fell below the stage) and handles consequences.
    */
   public void ifDead() {
-    if (getY() > Basis.STAGE_Y + Basis.STAGE_HEIGHT) {
+    if (getY() > Basis.STAGE_Y + Basis.STAGE_HEIGHT || collisionThunder()) {
       if (mainBall) {
         hasLaunch = false;
         setDx(0);

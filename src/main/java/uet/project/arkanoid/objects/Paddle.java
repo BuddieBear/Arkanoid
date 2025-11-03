@@ -32,6 +32,10 @@ public class Paddle extends MovableObject {
   private MovementStrategy movementStrategy;
 
   private GameSetup stage;
+  private Thunder thunder;
+
+  private long currentTime;
+  private boolean subtracted = false;
 
   /**
    * Constructs a new Paddle with specified parameters.
@@ -50,6 +54,8 @@ public class Paddle extends MovableObject {
     originalHeight = height;
     this.stage = stage;
     this.hitbox = new Rectangle(x + width / 2.0, y + height / 2.0, width, height, 0);
+    this.thunder = stage.getThunder();
+    this.currentTime = System.nanoTime();
   }
 
   /**
@@ -109,6 +115,33 @@ public class Paddle extends MovableObject {
     if (movementStrategy instanceof PlayerMovement) {
       setDx(0);
     }
+
+    if (collisionThunder()) {
+      if (!subtracted) {
+        stage.setLives((stage.getLives() - 1));
+        subtracted = true;
+        currentTime = System.nanoTime();
+      }
+      if ((System.nanoTime() - currentTime) / 1_000_000_000.0 >= 0.5 && subtracted) {
+        subtracted = false;
+      }
+    }
+  }
+
+  private boolean collisionThunder() {
+    int[] position = thunder.getPosition();
+    int n = thunder.getAmount();
+    for (int i = 0; i < n; i++) {
+      int condition1 = position[i] + thunder.getThunderWidth() / 2;
+      int condition2 = position[i] - thunder.getThunderWidth() / 2;
+      if (((condition1 >= getX() && position[i] < getX())
+      || (condition2 <= getX() + getWidth() && position[i] > getX() + getWidth())
+      || (position[i] <= getX() + getWidth() && position[i] >= getX()))
+      && thunder.getShowThunder()){
+          return true;
+      }
+    }
+    return false;
   }
 
   public void Collision(List<? extends GameObject> others) {

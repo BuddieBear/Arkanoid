@@ -25,9 +25,9 @@ public class FloatingText {
   /**
    * Constructs a new FloatingText with specified parameters.
    *
-   * @param text the text content to display
-   * @param x the initial x-coordinate of the text
-   * @param y the initial y-coordinate of the text
+   * @param text  the text content to display
+   * @param x     the initial x-coordinate of the text
+   * @param y     the initial y-coordinate of the text
    * @param color the color of the text
    */
   public FloatingText(String text, double x, double y, Color color) {

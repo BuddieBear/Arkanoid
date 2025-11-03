@@ -12,8 +12,9 @@ module uet.project.arkanoid {
     requires java.desktop;
     requires java.naming;
     requires jdk.jfr;
+  requires uet.project.arkanoid;
 
-    opens uet.project.arkanoid to javafx.fxml;
+  opens uet.project.arkanoid to javafx.fxml;
     exports uet.project.arkanoid;
     exports uet.project.arkanoid.objects;
     opens uet.project.arkanoid.objects to javafx.fxml;

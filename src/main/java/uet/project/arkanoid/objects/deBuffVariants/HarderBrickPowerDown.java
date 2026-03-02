@@ -23,7 +23,7 @@ public class HarderBrickPowerDown extends PowerUp {
 	public void removeEffect() {
 		for (Brick brick : stage.getBricks()) {
 			if (!(brick instanceof IndestructibleBrick)) {
-				brick.setHitPoints(brick.getHitPoints() + 1);
+				brick.setHitPoints(brick.getHitPoints() - 1);
 			}
 		}
 		alive = false;

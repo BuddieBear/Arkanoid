@@ -299,13 +299,13 @@ public class GameManager extends Application {
 	 * </p>
 	 */
 	private void spawnNextBrick() {
-		if (Math.random() * 4 < 0.5) { // 50% tỉ lệ
+		if (Math.random() * 4 < 0.5) { // 25% tỉ lệ
 			if (currentBrickFalls >= stage.getBricks().size()) {
 				return;
 			}
 
 			Brick brick = stage.getBricks().get(currentBrickFalls);
-			if (!brick.isDestroy() && !brick.isMovementActivated()) {
+			if (!brick.isDestroy() && !brick.isMovementActive()) {
 				Paddle paddle = stage.getPaddles().get(0);
 
 				brick.startBossMovement(

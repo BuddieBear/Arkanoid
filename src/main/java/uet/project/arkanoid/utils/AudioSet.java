@@ -154,7 +154,7 @@ public class AudioSet {
 			powerUpSound.setVolume(soundVolume);
 		}
 		if (thunderSound != null) {
-			thunderSound.setVolume(soundVolume);
+			thunderSound.setVolume(soundVolume * 3);
 		}
 	}
 

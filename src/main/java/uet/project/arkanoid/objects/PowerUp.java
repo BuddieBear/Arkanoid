@@ -46,7 +46,7 @@ public abstract class PowerUp extends GameObject {
 		super(object.getX() + object.getWidth() / 2 - width / 2,
 				object.getY(), width, height);
 		this.stage = stage;
-		this.type = type; // ✅ FIXED — always initialized
+		this.type = type;
 
 		this.hitbox = new Rectangle(
 				getX() + width / 2.0,
@@ -101,7 +101,7 @@ public abstract class PowerUp extends GameObject {
 	 */
 	public boolean isDead() {
 		return !alive || this.getY() > Basis.STAGE_Y + Basis.STAGE_HEIGHT ||
-				(catchedPowerUp && startTime == 0);
+				(catchedPowerUp && startTime <= 0);
 	}
 
 	public boolean isCatchedPowerUp() {
@@ -141,8 +141,7 @@ public abstract class PowerUp extends GameObject {
 							Color.GREEN));
 				}
 				// Check if this is an instant-effect powerup
-				if (type == PowerUpType.EXTRA_LIFE || type == PowerUpType.DOUBLE_SCORE
-						|| type == PowerUpType.RESPAWN_FREE) {
+				if (type == PowerUpType.EXTRA_LIFE || type == PowerUpType.DOUBLE_SCORE) {
 					startTime = 0;
 				} else {
 					startTime = System.currentTimeMillis();

@@ -142,11 +142,11 @@ public class Ball extends MovableObject {
 					if (!invincible) {
 						brick.takeHit();
 						bounceOff(obj);
+                        AudioSet.collisionBrickSound.play();
 					} else if (!(brick instanceof IndestructibleBrick)) {
 						brick.setHitPoints(0);
 					}
 
-					AudioSet.collisionBrickSound.play();
 				} else if (obj instanceof Paddle) {
 					bounceOff(obj);
 					AudioSet.collisionPaddleSound.play();

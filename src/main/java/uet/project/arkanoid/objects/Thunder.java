@@ -11,7 +11,7 @@ public class Thunder {
 	private boolean showAimPoint = false;
 	private boolean condition = false;
 	private long currentTime;
-	private int amount = 1;
+	private int amount = 2;
 	private int[] position;
 
 	private double showTime = 0.5;
@@ -32,7 +32,7 @@ public class Thunder {
 	 */
 	public void randPosition() {
 		for (int i = 0; i < amount; i++) {
-			position[i] = (int) (Math.random() * Basis.SCREEN_WIDTH) - 200;
+            position[i] = Basis.STAGE_X + (int)(Basis.STAGE_WIDTH * Math.random());
 		}
 	}
 

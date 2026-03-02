@@ -116,10 +116,10 @@ public class Paddle extends MovableObject {
 					Brick brick = (Brick) obj;
 
 					// CHỈ reset khi brick đang di chuyển
-					if (brick.isMovementActivated()) {
+					if (brick.isMovementActive()) {
 						stage.setLives(stage.getLives() - 1);
 						brick.resetToOriginalPosition();
-						brick.setMovementActivated(false);
+						brick.setMovementActive(false);
 						AudioSet.collisionBrickSound.play();
 
 						System.out.println("Paddle hit moving brick - life lost");

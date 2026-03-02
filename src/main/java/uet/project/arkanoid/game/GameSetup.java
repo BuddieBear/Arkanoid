@@ -72,7 +72,7 @@ public class GameSetup {
 		//TODO: Switch - Case to create different Stage
 
 		if (lvl == Level.STAGE_1) {
-			lives = 5;
+			lives = 10;
 			paddles.add(new Paddle(Basis.STAGE_X, Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED,
 					this));  // 33 is padding
 			Paddle paddleMain = paddles.get(0);
@@ -83,18 +83,17 @@ public class GameSetup {
 
 			MapLoader.loadBricksFromTiled(this, Basis.STAGE_1);
 		} else if (lvl == Level.STAGE_2) {
-			lives = 8;
+			lives = 10;
 			paddles.add(new Paddle(Basis.STAGE_X, Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED,
 					this));  // 33 is padding
 			Paddle paddleMain = paddles.get(0);
-
 			balls.add(new Ball(paddleMain.getX() + paddleMain.getWidth() / 2,
 					paddleMain.getY() - (double) Basis.BALL_DIAMETER / 2 - 10,
 					(double) Basis.BALL_DIAMETER / 2, Basis.BALL_SPEED, this));
 
 			MapLoader.loadBricksFromTiled(this, Basis.STAGE_2);
 		} else if (lvl == Level.STAGE_3) {
-			lives = 5;
+			lives = 10;
 			paddles.add(new Paddle(Basis.STAGE_X, Basis.SCREEN_HEIGHT - 40, 150, 20, Basis.PADDLE_SPEED,
 					this));  // 33 is padding
 			Paddle paddleMain = paddles.get(0);

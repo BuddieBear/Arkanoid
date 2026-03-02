@@ -9,11 +9,11 @@ public class RespawnFreePowerUp extends PowerUp {
     private int oldLives;
     public RespawnFreePowerUp(GameObject object, double width, double height, GameSetup stage) {
         super(object, width, height, stage, PowerUpType.RESPAWN_FREE);
+        oldLives = stage.getLives();
     }
 
     public void applyEffect() {
-        oldLives = stage.getLives();
-        stage.setLives(100000);
+        stage.setLives(2 + oldLives);
     }
 
     public void update(double deltaTime) {

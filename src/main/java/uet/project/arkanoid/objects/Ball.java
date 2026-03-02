@@ -336,7 +336,7 @@ public class Ball extends MovableObject {
 		if (!hasLaunch) {
 			prepareLaunch();
 		} else {
-			rotationAngle = (rotationAngle + speed - 200) % 360;
+			rotationAngle = (rotationAngle + speed - 200)*1.5 % 360;
 			move(deltaTime);
 			ifDead();
 		}

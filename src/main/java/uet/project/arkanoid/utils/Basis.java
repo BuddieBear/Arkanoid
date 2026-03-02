@@ -18,18 +18,6 @@ public class Basis {
 	public static final String STAGE_1 = "src/main/resources/Stages/Stage_1.tmx";
 	public static final String STAGE_2 = "src/main/resources/Stages/Stage_2.tmx";
 	public static final String STAGE_3 = "src/main/resources/Stages/Stage_3.tmx";
-	private static long lastTime = System.nanoTime();
-	private static double deltaTime = 0;
-
-	public static void updateDeltaTime() {
-		long currentTime = System.nanoTime();
-		deltaTime = (currentTime - lastTime) / 1_000_000_000.0;
-		lastTime = currentTime;
-	}
-
-	public static double getDeltaTime() {
-		return deltaTime;
-	}
 
 	// Fixed width, height
 	public static final int ARROW_WIDTH = 45;
@@ -43,8 +31,8 @@ public class Basis {
 	public static final int OBJECTIVE_BOARD_Y = 230;
 
 	// Base stats
-	public static final int BALL_SPEED = 180;
-	public static final int PADDLE_SPEED = 300;
+	public static final int BALL_SPEED = 100;
+	public static final int PADDLE_SPEED = 200;
 
 	// Menu
 	public static final int PLAY_X = SCREEN_WIDTH / 2 - 100 - 35;
